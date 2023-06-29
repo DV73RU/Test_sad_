@@ -146,43 +146,9 @@ class BasePage():
             )
             agree_button.click()
 
-    #//  TODO Метод - ну такое себе
-    def parsing_product_2(self):
-        product_links = self.driver.find_elements(By.XPATH, "//a[@class='prod-name js-prod-link-list']") # Локатор информации о продукте
-        # Вывести количество товара на странице
-        print(f"Количество товара на странице: {len(product_links)}")
-        # Создать словарь для хранения ID и названий продуктов
-        product_info = {}
-        product_prices_list = []  # Список цен.
-        product_names = []  # Создание списка названий продуктов
-
-        # Пройти по каждой ссылке и получить ID, название и цену продукта
-        for link in product_links:
-            product_id = link.get_attribute('data-id')
-            product_position = link.get_attribute('data-position')
-            product_name = link.text  # Название продукта.
-            product_price = link.get_attribute('data-price')
-            product_prices_list.append(float(product_price))    # Формирование списка цен.
-            product_info[product_id] = {"№": product_position, "Название": product_name, "Цена": product_price}      # Добавление названия в список
-
-        # Вывести словарь с информацией о продуктах
-        for product_id, info in product_info.items():
-            print(f"№: {info['№']}, ID: {product_id}, Название: {info['Название']}, Цена: {info['Цена']}")
-
-        # self.add_products_to_cart(button_add_to_cart_locator, product_price_locator, product_names)  # Передача списка названий в метод
-
-        # Посчитать общую сумму товаров на странице
-        total_price = sum(product_prices_list)
-        print(f"Общая сумма товаров на странице: {total_price}")
-        if total_price < 1000:
-            print("Сумма товаров на странице меньше 1000.")
-        else:
-            print("Сумма товаров на странице больше или равна 1000.")
-
     """
     Функция проверки иконки корзина на присутствие там суммы заказа.
     """
-
     def is_cart_empty(self):
         try:
             self.wait.until(
