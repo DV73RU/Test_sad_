@@ -158,13 +158,6 @@ class BasePage():
             return False
 
     """
-    Метод добавление в корзину со странице каталога.
-    """
-    # def add_to_card(self):
-
-
-
-    """
     Метод парсинга товаров на странице каталога.
     """
     def parsing_product(self):
