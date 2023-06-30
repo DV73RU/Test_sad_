@@ -16,7 +16,7 @@ options.add_argument('--headless')  # Безголовый режим(без з�
 #     driver.maximize_window()
 #     driver.get("https://sad-i-ogorod.ru/")
 
-@pytest.fixture()
+# @pytest.fixture()
 def test_login(set_group):
     service = Service('H:\\Python.Selenium_lesson-1\\Python_selenium\\chromedriver.exe')
     driver = webdriver.Chrome(service=service, options=options)
