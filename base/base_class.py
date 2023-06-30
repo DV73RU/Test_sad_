@@ -190,7 +190,7 @@ class BasePage():
             products_list.append(product_info)
 
         # Вывести список товаров
-        # Цикл обходит по каждому элемента и извлекаме инфу о товаре.
+        # Цикл обходит по каждому элемента и извлекаем данные о товаре.
         for product_info in products_list:
             product_number = product_info['№']
             product_name = product_info['Название']
