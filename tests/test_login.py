@@ -8,7 +8,7 @@ from pages.main_page import MainPage
 
 options = webdriver.ChromeOptions()
 options.add_experimental_option("detach", True)
-options.add_argument('--headless')  # Безголовый режим(без запуска браузера)
+# options.add_argument('--headless')  # Безголовый режим(без запуска браузера)
 
 
 # def browser():
@@ -22,10 +22,9 @@ def test_login(set_group):
     driver = webdriver.Chrome(service=service, options=options)
     print("Старт теста")
     login_page = LoginPage(driver)
-    # Логин
     login_page.authorization()
 
     main_page = MainPage(driver)
-
     main_page.go_novinki()
+    main_page.go_to_card()
 
