@@ -274,3 +274,45 @@ class BasePage():
             time.sleep(1)
 
         print("Товары успешно добавлены в корзину.")
+
+    """
+    Метод парсинга товаров на странице корзины.
+    """
+
+    def parsing_product_card(self, locator):  # локатор карточки товара.
+        products = self.driver.find_elements(By.XPATH, locator)
+        if len(products) == 0:
+            print("На странице нет товаров.")
+            return
+        # Создать список для товаров
+        products_list = []
+
+        # Получить информацию о каждом товаре и добавить в список
+        for product in products:
+            # Получить номер товара
+            product_number = product.get_attribute("data-id")
+
+            # Получить название товара
+            product_name = product.text
+
+            # Получить цену товара
+            product_price = product.get_attribute("data-price")
+
+            # Создать словарь с информацией о товаре
+            product_info = {
+                "№": product_number,
+                "Название": product_name,
+                "Цена": product_price
+            }
+
+            # Добавить словарь в список товаров
+            products_list.append(product_info)
+
+        # Вывести список товаров
+        # Цикл обходит по каждому элемента и извлекаем данные о товаре.
+        for product_info in products_list:
+            product_number = product_info['№']
+            product_name = product_info['Название']
+            product_price = product_info['Цена']
+
+            print(f"№:{product_number}, Название:{product_name}, Цена:{product_price}")
