@@ -161,8 +161,8 @@ class BasePage():
     """
     Метод парсинга товаров на странице каталога.
     """
-    def parsing_product(self):
-        products = self.driver.find_elements(By.XPATH, "//a[@class='prod-name js-prod-link-list']")
+    def parsing_product(self, locator):     # локатор карточки товара.
+        products = self.driver.find_elements(By.XPATH, locator)
         if len(products) == 0:
             print("На странице нет товаров.")
             return
@@ -223,7 +223,7 @@ class BasePage():
 
     def add_to_cart(self):
         # Найти все кнопки "Добавить в корзину"
-        add_to_cart_buttons = self.driver.find_elements(By.XPATH, "//button[@class='to-cart-btn elem-to_cart']")
+        add_to_cart_buttons = self.get_element("//button[@class='to-cart-btn elem-to_cart']")
 
         # Проверить наличие товаров на странице
         if len(add_to_cart_buttons) == 0:
