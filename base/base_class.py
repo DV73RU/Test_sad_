@@ -279,40 +279,35 @@ class BasePage():
     Метод парсинга товаров на странице корзины.
     """
 
-    def parsing_product_card(self, locator):  # локатор карточки товара.
-        products = self.driver.find_elements(By.XPATH, locator)
-        if len(products) == 0:
-            print("На странице нет товаров.")
-            return
-        # Создать список для товаров
+    def parse_products_card(self):
+        # Находим все товары на странице
+        products = self.driver.find_elements(By.XPATH, "//tr[@class='bask-page-item bask-item']")
+
+        # Создаем список для хранения информации о товарах
         products_list = []
 
-        # Получить информацию о каждом товаре и добавить в список
+        # Проходимся по каждому товару и извлекаем информацию
         for product in products:
-            # Получить номер товара
-            product_number = product.get_attribute("data-id")
+            # Получаем информацию о товаре
+            product_name = product.find_element(By.XPATH, ".//a[@class='prod-name js-prod-link-list']").text
+            product_price = product.find_element(By.XPATH, ".//td[@data-title='Цена']/span[@class='value nowrap']").text
+            product_quantity = product.find_element(By.XPATH,
+                                                    ".//td[@data-title='Количество']/div[@class='value']/div[@class='elem-counter']/input[@type='number']").get_attribute(
+                "value")
+            product_total_price = product.find_element(By.XPATH,
+                                                       ".//td[@data-title='Стоимость']/span[@class='value nowrap']").text
 
-            # Получить название товара
-            product_name = product.text
-
-            # Получить цену товара
-            product_price = product.get_attribute("data-price")
-
-            # Создать словарь с информацией о товаре
+            # Создаем словарь с информацией о товаре
             product_info = {
-                "№": product_number,
                 "Название": product_name,
-                "Цена": product_price
+                "Цена": product_price,
+                "Количество": product_quantity,
+                "Стоимость": product_total_price
             }
 
-            # Добавить словарь в список товаров
+            # Добавляем словарь в список товаров
             products_list.append(product_info)
 
-        # Вывести список товаров
-        # Цикл обходит по каждому элемента и извлекаем данные о товаре.
-        for product_info in products_list:
-            product_number = product_info['№']
-            product_name = product_info['Название']
-            product_price = product_info['Цена']
+        # Возвращаем список товаров
+        return products_list
 
-            print(f"№:{product_number}, Название:{product_name}, Цена:{product_price}")
