@@ -5,6 +5,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from  selenium.webdriver.chrome.options import Options
 
 """ Класс BasePage служит в качестве базового класса, который содержит 
 общие методы и функциональность.
@@ -146,43 +147,9 @@ class BasePage():
             )
             agree_button.click()
 
-    #//  TODO Метод - ну такое себе
-    def parsing_product_2(self):
-        product_links = self.driver.find_elements(By.XPATH, "//a[@class='prod-name js-prod-link-list']") # Локатор информации о продукте
-        # Вывести количество товара на странице
-        print(f"Количество товара на странице: {len(product_links)}")
-        # Создать словарь для хранения ID и названий продуктов
-        product_info = {}
-        product_prices_list = []  # Список цен.
-        product_names = []  # Создание списка названий продуктов
-
-        # Пройти по каждой ссылке и получить ID, название и цену продукта
-        for link in product_links:
-            product_id = link.get_attribute('data-id')
-            product_position = link.get_attribute('data-position')
-            product_name = link.text  # Название продукта.
-            product_price = link.get_attribute('data-price')
-            product_prices_list.append(float(product_price))    # Формирование списка цен.
-            product_info[product_id] = {"№": product_position, "Название": product_name, "Цена": product_price}      # Добавление названия в список
-
-        # Вывести словарь с информацией о продуктах
-        for product_id, info in product_info.items():
-            print(f"№: {info['№']}, ID: {product_id}, Название: {info['Название']}, Цена: {info['Цена']}")
-
-        # self.add_products_to_cart(button_add_to_cart_locator, product_price_locator, product_names)  # Передача списка названий в метод
-
-        # Посчитать общую сумму товаров на странице
-        total_price = sum(product_prices_list)
-        print(f"Общая сумма товаров на странице: {total_price}")
-        if total_price < 1000:
-            print("Сумма товаров на странице меньше 1000.")
-        else:
-            print("Сумма товаров на странице больше или равна 1000.")
-
     """
     Функция проверки иконки корзина на присутствие там суммы заказа.
     """
-
     def is_cart_empty(self):
         try:
             self.wait.until(
@@ -190,84 +157,6 @@ class BasePage():
             return True
         except TimeoutException:
             return False
-
-
-    #// TODO Метод херня костыль на костыле.
-    """
-    Метод добавление товара в корзину
-    Со страниц с карточками товаров.
-    """
-    button_add_to_cart_locator = "//button[@class='to-cart-btn elem-to_cart']"  # Локатор кнопки добавить в корзину
-    product_price_locator = "//div[@class='prod-price ']"  # Локатор цены продукта.
-    total_price_locator = "//span[@class='price']"  # Локатор общей стоимости товаров добавленных в корзину
-    none_total_price_locator = "//span[@class='no-product']"  # Локатор пустой корзины.
-    popup_locator = "//div[contains(@class, 'box-cart-popup') and contains(@class, 'js-added-product')]"  # Локатор pop-up сообщения о добовлении товара в корзину
-
-
-    def add_products_to_cart_2(self, button_add_to_cart_locator, product_price_locator, product_names):
-        self.button_add_to_cart_locator = "//button[@class='to-cart-btn elem-to_cart']"
-        self.product_price_locator = "//div[@class='prod-price ']"
-        total_price_locator = "//span[@class='price']"  # Локатор общей стоимости товаров добавленных в корзину
-        none_total_price_locator = "//span[@class='no-product']"  # Локатор пустой корзины
-        popup_locator = "//div[contains(@class, 'box-cart-popup') and contains(@class, 'js-added-product')]"  # Локатор pop-up сообщения о добавлении товара в корзину
-
-        total_price_element = None
-
-        if self.is_cart_empty():
-            total_price_element = self.driver.find_element(By.XPATH, none_total_price_locator)
-            total_price = 0
-        else:
-            total_price_element = self.driver.find_element(By.XPATH, total_price_locator)
-            total_price_text = total_price_element.text
-            total_price = process_total_price(total_price_text)
-
-        if total_price >= 800:
-            print("Сумма товаров в корзине достигла 800 или превысила её.")
-            return
-
-        added_products = []
-
-        while total_price < 800:
-            product_elements = self.driver.find_elements(By.XPATH, self.button_add_to_cart_locator)
-
-            if not product_elements:
-                print("На странице больше нет товаров для добавления в корзину.")
-                break
-
-            product_element = product_elements[0]  # Берем первый элемент из списка
-
-            product_price_element = product_element.find_element(By.XPATH, self.product_price_locator)
-            product_price = process_total_price(product_price_element.text)
-
-            self.driver.execute_script("arguments[0].click();", product_element)
-            total_price += product_price
-
-            added_products.append({"Название": product_names.pop(0) if product_names else "", "Цена": product_price})  # Извлечение названия из списка
-
-            self.wait.until(EC.visibility_of_element_located((By.XPATH, self.popup_locator)))
-            self.wait.until(EC.invisibility_of_element_located((By.XPATH, self.popup_locator)))
-
-            product_elements = self.driver.find_elements(By.XPATH, self.button_add_to_cart_locator)
-
-        print("Добавленные товары:")
-        for product in added_products:
-            product_name = product["Название"]
-            product["Название"] = product_name
-            print(f"Название: {product['Название']}, Цена: {product['Цена']}")
-
-        print(f"Общая сумма товаров в корзине: {total_price}")
-        if total_price < 800:
-            print("Сумма товаров в корзине меньше 800.")
-        else:
-            print("Сумма товаров в корзине достигла или превысила 800.")
-
-
-    """
-    Метод добавление в корзину со странице каталога.
-    """
-    # def add_to_card(self):
-
-
 
     """
     Метод парсинга товаров на странице каталога.
@@ -302,7 +191,7 @@ class BasePage():
             products_list.append(product_info)
 
         # Вывести список товаров
-        # Цикл обходит по каждому элемента и извлекаме инфу о товаре.
+        # Цикл обходит по каждому элемента и извлекаем данные о товаре.
         for product_info in products_list:
             product_number = product_info['№']
             product_name = product_info['Название']
