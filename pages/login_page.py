@@ -61,7 +61,7 @@ class LoginPage(BasePage):
         self.driver.get(self.url)
         self.driver.maximize_window()
         self.assert_url_2('https://sad-i-ogorod.ru/')  # Проверка ожидаемой url
-        # self.click_button_modal()   # Клик на кнопку "Согласен" модального окна.
+        # self.click_button_modal()  # Клик на кнопку "Согласен" модального окна.
         self.click_login()  # Кликаем на кнопку "Личный кабинет"
         self.check_page_header(self.login_title, "Вход")  # Проверяем значение заголовка странице авторизации.
         self.input_user_name('testlessdns@gmail.com')
