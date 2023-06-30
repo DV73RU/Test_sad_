@@ -28,3 +28,4 @@ def test_login(set_group):
     main_page = MainPage(driver)
 
     main_page.go_novinki()
+
