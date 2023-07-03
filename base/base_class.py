@@ -276,7 +276,8 @@ class BasePage():
         print("Товары успешно добавлены в корзину.")
 
     """
-    Метод парсинга товаров на странице корзины.
+    Метод парсинга товаров на странице корзины
+    Сравнение суммы покупки на странице корзины с расчётной.
     """
 
     def parse_products_card(self):
@@ -333,6 +334,12 @@ class BasePage():
         order_total_price = order_total_price_element.text.replace('.00 i', '')
         print(f"Общая стоимость заказа (на странице): {order_total_price}")
         print(f"Общая стоимость заказа (рассчитанная): {total_order_price}")
+
+        # Проверяем равенство общих стоимостей заказа
+        if order_total_price == total_order_price:
+            print("Общая стоимость заказа совпадает.")
+        else:
+            print("Общая стоимость заказа не совпадает.")
 
         return products_list  # Возвращаем список товаров
 
