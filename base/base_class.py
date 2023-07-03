@@ -335,6 +335,12 @@ class BasePage():
         print(f"Общая стоимость заказа (на странице): {order_total_price}")
         print(f"Общая стоимость заказа (рассчитанная): {total_order_price}")
 
+        # Проверяем равенство общих стоимостей заказа
+        if order_total_price == total_order_price:
+            print("Общая стоимость заказа совпадает.")
+        else:
+            print("Общая стоимость заказа не совпадает.")
+
         return products_list  # Возвращаем список товаров
 
     """
