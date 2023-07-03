@@ -286,16 +286,25 @@ class BasePage():
         # Создаем список для хранения информации о товарах
         products_list = []
 
+        # Инициализируем переменную для общей стоимости заказа
+        total_order_price = 0
+
         # Проходимся по каждому товару и извлекаем информацию
         for product in products:
             # Получаем информацию о товаре
             product_name = product.find_element(By.XPATH, ".//td/a").text
-            product_price = product.find_element(By.XPATH, ".//td[@data-title='Цена']/span[@class='value nowrap']").text.replace('.00 i', '')
+            product_price_element = product.find_element(By.XPATH,
+                                                         ".//td[@data-title='Цена']/span[@class='value nowrap']")
+            product_price = product_price_element.text.replace('.00 i', '')
             product_quantity = product.find_element(By.XPATH,
                                                     ".//td[@data-title='Количество']/div[@class='value']/div[@class='elem-counter']/input[@type='number']").get_attribute(
                 "value")
-            product_total_price = product.find_element(By.XPATH,
-                                                       ".//td[@data-title='Стоимость']/span[@class='value nowrap']").text.replace('.00 i', '')
+            product_total_price_element = product.find_element(By.XPATH,
+                                                               ".//td[@data-title='Стоимость']/span[@class='value nowrap']")
+            product_total_price = product_total_price_element.text.replace('.00 i', '')
+
+            # Добавляем цену товара к общей стоимости заказа
+            total_order_price += float(product_total_price)
 
             # Создаем словарь с информацией о товаре
             product_info = {
@@ -308,17 +317,24 @@ class BasePage():
             # Добавляем словарь в список товаров
             products_list.append(product_info)
 
-
-        # Вывести список товаров
-        # Цикл обходит по каждому элемента и извлекаем данные о товаре.
+        # Выводим список товаров
         for product_info in products_list:
             product_name = product_info['Название']
             product_price = product_info['Цена']
             product_quantity = product_info['Количество']
             product_total_price = product_info['Стоимость']
 
-            print(f"Название: {product_name}, Цена: {product_price}, Количество: {product_quantity}, Стоимость: {product_total_price}")
-        return products_list    # Возвращаем список товаров
+            print(
+                f"Название: {product_name}, Цена: {product_price}, Количество: {product_quantity}, Стоимость: {product_total_price}")
+
+        # Выводим общую стоимость заказа
+        order_total_price_element = self.driver.find_element(By.XPATH,
+                                                             "//span[@class='bask-page__orderTotal-price']/span")
+        order_total_price = order_total_price_element.text.replace('.00 i', '')
+        print(f"Общая стоимость заказа (на странице): {order_total_price}")
+        print(f"Общая стоимость заказа (рассчитанная): {total_order_price}")
+
+        return products_list  # Возвращаем список товаров
 
     """
     Метод сравнения цен и названий.
