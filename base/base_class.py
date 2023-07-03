@@ -11,7 +11,9 @@ from selenium.webdriver.chrome.options import Options
 общие методы и функциональность.
 """
 
-"""Функция удаляет всё лишние элементы от цены товара"""
+""" v.3
+Функция удаляет всё лишние элементы от цены товара
+"""
 
 
 def process_total_price(price_text):
