@@ -289,7 +289,6 @@ class BasePage():
         # Проходимся по каждому товару и извлекаем информацию
         for product in products:
             # Получаем информацию о товаре
-            # // TODO Найти локатор название продукта.
             product_name = product.find_element(By.XPATH, ".//td/a").text
             product_price = product.find_element(By.XPATH, ".//td[@data-title='Цена']/span[@class='value nowrap']").text.replace('.00 i', '')
             product_quantity = product.find_element(By.XPATH,
@@ -321,5 +320,9 @@ class BasePage():
             print(f"Название: {product_name}, Цена: {product_price}, Количество: {product_quantity}, Стоимость: {product_total_price}")
         return products_list    # Возвращаем список товаров
 
+    """
+    Метод сравнения цен и названий.
+    Сравниваем то что кликнули добавить товар корзину с тем что отобразилось в корзине.
+    """
 
 
