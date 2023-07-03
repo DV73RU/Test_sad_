@@ -281,7 +281,7 @@ class BasePage():
 
     def parse_products_card(self):
         # Находим все товары на странице
-        products = self.driver.find_elements(By.XPATH, "//tr[@class='bask-page-item bask-item']")
+        products = self.driver.find_elements(By.XPATH, "//tr[contains(@class, 'bask-item')]")
 
         # Создаем список для хранения информации о товарах
         products_list = []
@@ -290,7 +290,7 @@ class BasePage():
         for product in products:
             # Получаем информацию о товаре
             # // TODO Найти локатор название продукта.
-            # product_name = product.find_element(By.XPATH, ".//a[@class='prod-name js-prod-link-list']").text
+            product_name = product.find_element(By.XPATH, ".//td/a").text
             product_price = product.find_element(By.XPATH, ".//td[@data-title='Цена']/span[@class='value nowrap']").text.replace('.00 i', '')
             product_quantity = product.find_element(By.XPATH,
                                                     ".//td[@data-title='Количество']/div[@class='value']/div[@class='elem-counter']/input[@type='number']").get_attribute(
@@ -300,7 +300,7 @@ class BasePage():
 
             # Создаем словарь с информацией о товаре
             product_info = {
-                # "Название": product_name,
+                "Название": product_name,
                 "Цена": product_price,
                 "Количество": product_quantity,
                 "Стоимость": product_total_price
@@ -313,13 +313,13 @@ class BasePage():
         # Вывести список товаров
         # Цикл обходит по каждому элемента и извлекаем данные о товаре.
         for product_info in products_list:
-            # product_number = product_info['№']
+            product_name = product_info['Название']
             product_price = product_info['Цена']
             product_quantity = product_info['Количество']
             product_total_price = product_info['Стоимость']
 
-            print(f"Цена:{product_price}, Количество:{product_quantity}, Стоимость:{product_total_price}")
-            return products_list    # Возвращаем список товаров
+            print(f"Название: {product_name}, Цена: {product_price}, Количество: {product_quantity}, Стоимость: {product_total_price}")
+        return products_list    # Возвращаем список товаров
 
 
 
