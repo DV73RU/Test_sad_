@@ -307,7 +307,7 @@ class BasePage():
             product_total_price = product_total_price_element.text.replace('.00 i', '')
 
             # Добавляем цену товара к общей стоимости заказа
-            total_order_price += float(product_total_price)
+            total_order_price += int(product_total_price)
 
             # Создаем словарь с информацией о товаре
             product_info = {
@@ -326,18 +326,22 @@ class BasePage():
             product_price = product_info['Цена']
             product_quantity = product_info['Количество']
             product_total_price = product_info['Стоимость']
-
+            # // TODO добавить опцию выключение и выключения вывода спарсенных товаров в корзине.
             print(
                 f"Название: {product_name}, Цена: {product_price}, Количество: {product_quantity}, Стоимость: {product_total_price}")
 
         # Выводим общую стоимость заказа
         order_total_price_element = self.driver.find_element(By.XPATH,
                                                              "//span[@class='bask-page__orderTotal-price']/span")
-        order_total_price = order_total_price_element.text.replace('.00 i', '')
+        order_total_price = order_total_price_element.text.replace(" ", "", 1).replace(".00 i", "")     # Удаленгие пробела и лишних знаков после цены.
         print(f"Общая стоимость заказа (на странице): {order_total_price}")
         print(f"Общая стоимость заказа (рассчитанная): {total_order_price}")
+        print("Тип данных order_total_price:", type(order_total_price))
+        print("Тип данных total_order_price:", type(total_order_price))
+
 
         # Проверяем равенство общих стоимостей заказа
+        order_total_price = int(order_total_price)  # Из строки в число.
         if order_total_price == total_order_price:
             print("Общая стоимость заказа совпадает.")
         else:
