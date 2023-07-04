@@ -26,7 +26,7 @@ class MainPage(BasePage):
     # Сумма заказа.
     button_novelties1 = "/html/body/div[1]/div[1]/div[4]/div/div/div[1]/a/span"  # Кнопка Новинки.
     button_novelties = "//a[@href='/catalog/novinki.html' and span[text()='Новинки']]"  # Кнопка Новинки.
-    header = "//h1[@style='margin-bottom: 0px;']"  # Заголовок станице Новинки.
+    header_news = "//h1[@style='margin-bottom: 0px;']"  # Заголовок станице Новинки.
     button_add_card = "//button[@class ='to-cart-btn elem-to_cart']"  # Кнопка добавить в корзину, может пернести в base_class?
     agree_button = "//a[@class = 'cookie-msg__button']"  # Кнопка "Согласен" модального окна.
     info_wrapper = "//a[@class='prod-name js-prod-link-list']"  # Локатор карточки товара на старание продуктов.
@@ -56,20 +56,20 @@ class MainPage(BasePage):
         self.driver.maximize_window()
         self.click_butt_novel()  # Кликаем на кнопку новинки.
         self.assert_url_2('https://sad-i-ogorod.ru/catalog/novinki.html')  # Проверка ожидаемой url
-        self.check_page_header(self.header, "Новинки")  # Проверяем значение заголовка странице Новинки.
+        self.check_page_header(self.header_news, "Новинки")  # Проверяем значение заголовка странице Новинки.
         self.parse_product(self.info_wrapper)  # Парсим товары на странице
-        # self.add_products_to_cart() # Добавление всех товаров со странице
-        self.check_cart()  # Проверяем состояние корзины
-        # self.add_to_cart()  # Добавляем все товары со странице в корзину
-        self.check_cart()  # Проверка состояние корзины
 
-    """Метод перехода в корзину"""
+        self.check_cart()  # Проверяем состояние иконнки корзины
+
+
+    """
+    Метод перехода в корзину
+    """
+
     def go_to_card(self):
         self.driver.get(self.url)
         self.driver.maximize_window()
         self.click_butt_card()
         self.assert_url_2('https://sad-i-ogorod.ru/cart/')
-        # self.check_page_header(self.header, "Корзина")  # Проверяем значение заголовка странице Новинки.
-        self.parse_products_card()
 
 
