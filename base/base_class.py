@@ -278,11 +278,13 @@ class BasePage():
         print("Товары успешно добавлены в корзину.")
 
     """
-    Метод парсинга товаров на странице корзины
+    Метод парсинга товаров на странице корзины.
     Сравнение суммы покупки на странице корзины с расчётной.
+    Опции: print_products=False - Не выводить спарсенный список товаров
+            compare_prices=False - Не выводить сравнение цен на странице и расчётные.
     """
 
-    def parse_products_card(self):
+    def parse_products_card(self, print_products=False, compare_prices=False):
         # Находим все товары на странице
         products = self.driver.find_elements(By.XPATH, "//tr[contains(@class, 'bask-item')]")
 
@@ -320,15 +322,16 @@ class BasePage():
             # Добавляем словарь в список товаров
             products_list.append(product_info)
 
-        # Выводим список товаров
-        for product_info in products_list:
-            product_name = product_info['Название']
-            product_price = product_info['Цена']
-            product_quantity = product_info['Количество']
-            product_total_price = product_info['Стоимость']
-            # // TODO добавить опцию выключение и выключения вывода спарсенных товаров в корзине.
-            print(
-                f"Название: {product_name}, Цена: {product_price}, Количество: {product_quantity}, Стоимость: {product_total_price}")
+        # Вывести список товаров, если print_products=True
+        if print_products:
+            for product_info in products_list:
+                product_name = product_info['Название']
+                product_price = product_info['Цена']
+                product_quantity = product_info['Количество']
+                product_total_price = product_info['Стоимость']
+
+                print(
+                    f"Название: {product_name}, Цена: {product_price}, Количество: {product_quantity}, Стоимость: {product_total_price}")
 
         # Выводим общую стоимость заказа
         order_total_price_element = self.driver.find_element(By.XPATH,
@@ -336,18 +339,17 @@ class BasePage():
         order_total_price = order_total_price_element.text.replace(" ", "", 1).replace(".00 i", "")     # Удаленгие пробела и лишних знаков после цены.
         print(f"Общая стоимость заказа (на странице): {order_total_price}")
         print(f"Общая стоимость заказа (рассчитанная): {total_order_price}")
-        print("Тип данных order_total_price:", type(order_total_price))
-        print("Тип данных total_order_price:", type(total_order_price))
 
-
-        # Проверяем равенство общих стоимостей заказа
-        order_total_price = int(order_total_price)  # Из строки в число.
-        if order_total_price == total_order_price:
-            print("Общая стоимость заказа совпадает.")
-        else:
-            print("Общая стоимость заказа не совпадает.")
+        # Сравнить цены, если compare_prices=True
+        if compare_prices:
+            order_total_price = int(order_total_price)  # Из строки в число.
+            if order_total_price == total_order_price:
+                print("Общая стоимость заказа совпадает.")
+            else:
+                print("Общая стоимость заказа не совпадает.")
 
         return products_list  # Возвращаем список товаров
+
 
     """
     Метод сравнения цен и названий.
