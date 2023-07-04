@@ -20,6 +20,4 @@
 Для того чтобы установить пакеты из requirements.txt, необходимо открыть командную строку, перейти в каталог проекта;
 и ввести следующую команду: `pip install -r requirements.txt`
 
-Запуск `python -m pytest -s -v
-`
-
+Запуск `python -m pytest -s -v`
