@@ -161,9 +161,10 @@ class BasePage():
             return False
 
     """
-    Метод парсинга товаров на странице каталога.
+    Метод парсинга товаров на странице каталога
+    show_list=False - Параметр скрывает список спарсенных товаров.
     """
-    def parse_product(self, locator):     # локатор карточки товара.
+    def parse_product(self, locator, show_list=False):     # локатор карточки товара.
         products = self.driver.find_elements(By.XPATH, locator)
         if len(products) == 0:
             print("На странице нет товаров.")
@@ -192,14 +193,19 @@ class BasePage():
             # Добавить словарь в список товаров
             products_list.append(product_info)
 
-        # Вывести список товаров
-        # Цикл обходит по каждому элемента и извлекаем данные о товаре.
-        for product_info in products_list:
-            product_number = product_info['№']
-            product_name = product_info['Название']
-            product_price = product_info['Цена']
+        if show_list:
+            # Вывести список товаров
+            # Цикл обходит по каждому элемента и извлекаем данные о товаре.
+            for product_info in products_list:
+                product_number = product_info['№']
+                product_name = product_info['Название']
+                product_price = product_info['Цена']
 
-            print(f"№:{product_number}, Название:{product_name}, Цена:{product_price}")
+                print(f"№:{product_number}, Название:{product_name}, Цена:{product_price}")
+
+            # Вывести количество найденных товаров
+            total_products = len(products_list)
+            print(f"Количество найденных товаров на странице :{total_products}")
 
     """
     Метод проверки корзины на наличие в ней товаров
@@ -235,7 +241,7 @@ class BasePage():
         # Кликнуть на каждую кнопку "Добавить в корзину"
         for button in add_to_cart_buttons:
             # Найти родительский элемент кнопки "Добавить в корзину"
-            parent_element = button.find_element(By.XPATH, ".//ancestor::form[@class='info-wrapper add-bask-form-list ']")
+            parent_element = self.get_element(".//ancestor::form[@class='info-wrapper add-bask-form-list ']")
 
             # Получить информацию о товаре из родительского элемента
             product_name = parent_element.find_element(By.XPATH, ".//a[@class='prod-name js-prod-link-list']").get_attribute("data-name")
@@ -268,9 +274,6 @@ class BasePage():
 
             except TimeoutException:
                 print("Pop-up окно не появилось или не закрылось для товара:", product_name)
-
-            # Восстановить видимость элемента после клика
-            # self.driver.execute_script("arguments[0].style.visibility='visible';", button)
 
             # Добавить небольшую паузу перед следующим кликом
             time.sleep(1)
@@ -349,11 +352,5 @@ class BasePage():
                 print("Общая стоимость заказа не совпадает.")
 
         return products_list  # Возвращаем список товаров
-
-
-    """
-    Метод сравнения цен и названий.
-    Сравниваем то что кликнули добавить товар корзину с тем что отобразилось в корзине.
-    """
 
 
