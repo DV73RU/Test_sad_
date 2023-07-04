@@ -9,6 +9,15 @@ class CardPage(BasePage):
         self.driver = driver
 
 
-# Локаторы элементов страницы.
-cart_header = "//div[@class='cart']/h1[text()='Корзина']"  # Заголовок станице Корзина
-total_price_card = "//div[@class='bask-page__parcelTotal']/span[@class='bask-page__parcelTotal-price']"     # Итоговая сумма в корзине
+    # Локаторы элементов страницы.
+    header_card = "//div[@class = 'elem-heading']/h1"  # Заголовок станице Корзина
+    total_price_card = "//div[@class='bask-page__parcelTotal']/span[@class='bask-page__parcelTotal-price']"  # Итоговая сумма в корзине
+    # // TODO Перенести все локаторы корзины.
+
+    """
+    Метод проверки корзины
+    """
+
+    def check_card(self):
+        self.check_page_header(self.header_card, "Корзина")  # Проверяем значение заголовка странице Корзина.
+        self.parse_products_card(compare_prices=True)
