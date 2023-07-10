@@ -1,7 +1,7 @@
 
 from base.base_class import BasePage
 
-
+# // TODO написать описание
 class LoginPage(BasePage):
     url = 'https://sad-i-ogorod.ru/'
 
