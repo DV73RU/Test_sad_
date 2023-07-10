@@ -227,11 +227,12 @@ class BasePage():
 
     """
     Метод добавления товара в корзину
+    
     """
 
     def add_to_cart(self):
         # Найти все кнопки "Добавить в корзину"
-        add_to_cart_buttons = self.get_element("//button[@class='to-cart-btn elem-to_cart']")
+        add_to_cart_buttons = self.driver.find_elements(By.XPATH, "//button[@class='to-cart-btn elem-to_cart']")
 
         # Проверить наличие товаров на странице
         if len(add_to_cart_buttons) == 0:
@@ -241,7 +242,7 @@ class BasePage():
         # Кликнуть на каждую кнопку "Добавить в корзину"
         for button in add_to_cart_buttons:
             # Найти родительский элемент кнопки "Добавить в корзину"
-            parent_element = self.get_element(".//ancestor::form[@class='info-wrapper add-bask-form-list ']")
+            parent_element = self.driver.find_element(By.XPATH, ".//ancestor::form[@class='info-wrapper add-bask-form-list ']")
 
             # Получить информацию о товаре из родительского элемента
             product_name = parent_element.find_element(By.XPATH, ".//a[@class='prod-name js-prod-link-list']").get_attribute("data-name")
