@@ -1,5 +1,10 @@
+"""
+Класс странице Корзина
+"""
 from base.base_class import BasePage
 
+
+# // TODO написать описание
 
 class CardPage(BasePage):
     url = 'https://sad-i-ogorod.ru/cart/?login=yes'
@@ -8,10 +13,11 @@ class CardPage(BasePage):
         super().__init__(driver)
         self.driver = driver
 
-
+    # max_total_price = 800    # Минимальная сумма для заказа.
     # Локаторы элементов страницы.
     header_card = "//div[@class = 'elem-heading']/h1"  # Заголовок станице Корзина
     total_price_card = "//div[@class='bask-page__parcelTotal']/span[@class='bask-page__parcelTotal-price']"  # Итоговая сумма в корзине
+    button_order = "//button[@class = 'bask-page__orderTotal-btn']"  # Кнопка "Оформить заказ"
     # // TODO Перенести все локаторы корзины.
 
     """
@@ -20,4 +26,21 @@ class CardPage(BasePage):
 
     def check_card(self):
         self.check_page_header(self.header_card, "Корзина")  # Проверяем значение заголовка странице Корзина.
-        self.parse_products_card(compare_prices=True)
+        self.parse_products_card(compare_prices=True)  # Парсим добавленные товары на странице
+
+    # def click_button_order(self):
+    #     self.click_element(self.button_order)  # Клик на кнопку Оформить заказ
+
+    def click_button_order2(self): # Клик на кнопку Оформить ордер если мешает pop-ap
+        self.click_element(self.button_order)
+
+    """
+    Метод переход на станицу Оформление заказа.
+    """
+
+    def go_to_order(self):
+        self.driver.get(self.url)
+        # self.driver.maximize_window()
+        self.click_button_order2()  # Кликаем на кнопку Ордер.
+        self.assert_url_2('https://sad-i-ogorod.ru/cart/order/')  # Проверка ожидаемой url
+
