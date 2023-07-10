@@ -6,9 +6,12 @@ from selenium.webdriver.chrome.options import Options
 from pages.card_pages import CardPage
 from pages.login_page import LoginPage
 from pages.main_page import MainPage
+from pages.order_pages import OrderPage
 
 options = webdriver.ChromeOptions()
 options.add_experimental_option("detach", True)
+
+
 # options.add_argument('--headless')  # Безголовый режим(без запуска браузера)
 
 # @pytest.fixture()
@@ -20,11 +23,13 @@ def test_login(set_group):
     login_page.authorization()  # Авторизация на странице.
 
     main_page = MainPage(driver)
-    main_page.go_novinki()  # Переход на страницу "Новинки"
+    main_page.go_news_page()  # Переход на страницу "Новинки"
+    main_page.add_to_cart()  # Добавление в корзину
     main_page.go_to_card()  # Переход на станицу "Корзина"
 
     card_page = CardPage(driver)
     card_page.check_card()  # Проверка странице "Корзина"
+    card_page.go_to_order()     # Переход на страницу Оформление заказа
 
-
-
+    order_page = OrderPage(driver)
+    order_page.check_order()    # Проверка станице Оформление заказа
