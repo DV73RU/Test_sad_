@@ -1,5 +1,7 @@
+from selenium.webdriver.support.wait import WebDriverWait
 
 from base.base_class import BasePage
+
 
 # // TODO написать описание
 class LoginPage(BasePage):
@@ -8,7 +10,9 @@ class LoginPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
-
+        self.url = 'https://sad-i-ogorod.ru/'
+        wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
+        self.wait = WebDriverWait(self.driver, wait_timeout)
 
     # Локаторы элементов страницы.
     username_input = "//input[@name='USER_LOGIN']"  # Локатор поля ввода логина.
@@ -20,8 +24,8 @@ class LoginPage(BasePage):
     label_login = "//div[@class='form-email form-group']//label[contains(@class, 'form-label')]"  # Локатор название поля логин.
 
     label_pass = "//div[@class='form-pass form-group mb_15']//label[contains(@class, 'form-label')]"  # Локатор название поля пароль.
-    button_add_card = "//button[@class ='to-cart-btn elem-to_cart']"    # Кнопка добавить в корзину.
-    agree_button = "//a[@class = 'cookie-msg__button']" # Кнопка "Согласен" модального окна.
+    button_add_card = "//button[@class ='to-cart-btn elem-to_cart']"  # Кнопка добавить в корзину.
+    agree_button = "//a[@class = 'cookie-msg__button']"  # Кнопка "Согласен" модального окна.
 
     # Getters
     # def get_enter_username(self):   # Возвращает локатор поля ввода логина.
@@ -55,6 +59,7 @@ class LoginPage(BasePage):
 
     def click_submit_button(self):
         self.click_element(self.submit_button)
+
     # def
 
     def authorization(self):
@@ -66,11 +71,11 @@ class LoginPage(BasePage):
         self.check_page_header(self.login_title, "Вход")  # Проверяем значение заголовка странице авторизации.
         self.input_user_name('testlessdns@gmail.com')
         self.input_user_password('zaqwsx123')
-        self.get_text(self.label_login)   # Значение название поля Логин
-        self.get_text(self.label_pass)    # Значение название поля Пароль
+        self.get_text(self.label_login)  # Значение название поля Логин
+        self.get_text(self.label_pass)  # Значение название поля Пароль
         self.click_submit_button()  # Клик на кнопку "Войти"
-        self.assert_url_2('https://sad-i-ogorod.ru/?login=yes')     # Проверка ожидаемой URL
-        self.get_text(self.name_button_login)     # Проверка название кнопки Личный кабинет.
+        self.assert_url_2('https://sad-i-ogorod.ru/?login=yes')  # Проверка ожидаемой URL
+        self.get_text(self.name_button_login)  # Проверка название кнопки Личный кабинет.
         # self.value_element(self.name_button_login)  # Проверка имя на кнопки "Личный кабинет"
 
     # def add_products_to_cart(self):
