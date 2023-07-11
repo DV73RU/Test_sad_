@@ -13,7 +13,7 @@ class MainPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
-        # self.url = 'https://sad-i-ogorod.ru/catalog/novinki.html'
+        self.url = 'https://sad-i-ogorod.ru/'
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
@@ -29,7 +29,6 @@ class MainPage(BasePage):
     # // TODO button_add_card  перенести в base_class?
     button_add_card = "//button[@class ='to-cart-btn elem-to_cart']"  # Кнопка добавить в корзину, может пернести в base_class?
     agree_button = "//a[@class = 'cookie-msg__button']"  # Кнопка "Согласен" модального окна.
-
 
     # Меню Семена
     # Меню Плодовые
@@ -51,14 +50,17 @@ class MainPage(BasePage):
     Добавляем товары с этой странице.
     """
 
+
+
     def go_news_page(self):
         self.driver.get(self.url)
         self.driver.maximize_window()
         self.click_butt_novel()  # Кликаем на кнопку новинки.
         self.assert_url_2('https://sad-i-ogorod.ru/catalog/novinki.html')  # Проверка ожидаемой url
 
-        # self.check_cart()  # Проверяем состояние иконнки корзины
 
+
+        # self.check_cart()  # Проверяем состояние иконнки корзины
 
     """
     Метод перехода в корзину
@@ -69,5 +71,3 @@ class MainPage(BasePage):
         # self.driver.maximize_window()
         self.click_butt_card()
         self.assert_url_2('https://sad-i-ogorod.ru/cart/')
-
-
