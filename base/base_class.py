@@ -35,7 +35,7 @@ class BasePage():
 
     def get_element(self, locator):
         try:
-            element = WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, locator)))
+            element = self.wait.until(EC.visibility_of_element_located((By.XPATH, locator)))
             return element
         except TimeoutException:
             raise NoSuchElementException(f"Элемент не найден: {locator}!")
@@ -152,6 +152,7 @@ class BasePage():
     """
     Функция проверки иконки корзина на присутствие там суммы заказа.
     """
+
     def is_cart_empty(self):
         try:
             self.wait.until(
@@ -161,10 +162,20 @@ class BasePage():
             return False
 
     """
+    Метод перехода на страницу.
+    """
+    def go_to_pages(self, url, locator):
+        self.driver.get(url)
+        self.driver.maximize_window()
+        self.click_element(locator)  # Кликаем на кнопку перехода на страницу
+        # self.assert_url_2(url)  # Проверка ожидаемой url странице
+
+    """
     Метод парсинга товаров на странице каталога
     show_list=False - Параметр скрывает список спарсенных товаров.
     """
-    def parse_product(self, locator, show_list=False):     # локатор карточки товара.
+
+    def parse_product(self, locator, show_list=True):  # локатор карточки товара.
         products = self.driver.find_elements(By.XPATH, locator)
         if len(products) == 0:
             print("На странице нет товаров.")
@@ -196,6 +207,7 @@ class BasePage():
         if show_list:
             # Вывести список товаров
             # Цикл обходит по каждому элемента и извлекаем данные о товаре.
+            print(f"Список товаров на странице: ")
             for product_info in products_list:
                 product_number = product_info['№']
                 product_name = product_info['Название']
@@ -210,6 +222,7 @@ class BasePage():
     """
     Метод проверки корзины на наличие в ней товаров
     """
+
     def check_cart(self):
         # Проверка наличия пустой корзины
         empty_cart_elements = self.driver.find_elements(By.XPATH, "//span[@class='no-product']")
@@ -220,17 +233,19 @@ class BasePage():
         # Проверка наличия товаров и получение суммы в корзине
         price_elements = self.driver.find_elements(By.XPATH, "//span[@class='price']")
         if price_elements:
-            total_price = price_elements[0].text.replace('.00 i', '')   # Избавляемся от лишних элементов в значение цены.
+            total_price = price_elements[0].text.replace('.00 i',
+                                                         '')  # Избавляемся от лишних элементов в значение цены.
             print(f"Сумма добавленного товара в корзине: {total_price}")
         else:
             print("В корзине нет товаров.")
 
     """
-    Метод добавления товара в корзину
-    
+    Метод добавления товара в корзину 
     """
 
     def add_to_cart(self):
+        total_price = 0
+        added_products = []
         # Найти все кнопки "Добавить в корзину"
         add_to_cart_buttons = self.driver.find_elements(By.XPATH, "//button[@class='to-cart-btn elem-to_cart']")
 
@@ -242,16 +257,31 @@ class BasePage():
         # Кликнуть на каждую кнопку "Добавить в корзину"
         for button in add_to_cart_buttons:
             # Найти родительский элемент кнопки "Добавить в корзину"
-            parent_element = self.driver.find_element(By.XPATH, ".//ancestor::form[@class='info-wrapper add-bask-form-list ']")
+            parent_element = self.driver.find_element(By.XPATH, ".//ancestor::form[@class='info-wrapper "
+                                                                "add-bask-form-list ']")
 
             # Получить информацию о товаре из родительского элемента
-            product_name = parent_element.find_element(By.XPATH, ".//a[@class='prod-name js-prod-link-list']").get_attribute("data-name")
+            product_name = parent_element.find_element(By.XPATH,
+                                                       ".//a[@class='prod-name js-prod-link-list']").get_attribute(
+                "data-name")
             product_price_element = parent_element.find_element(By.XPATH, ".//div[@class='prod-price ']")
-            product_price = product_price_element.text.replace('.00 i', '')     # Избавляемся от лишних элементов в значение цены.
+            product_price = product_price_element.text.replace('.00 i',
+                                                               '')  # Избавляемся от лишних элементов в значение цены.
 
+            if product_name in added_products:
+                print("Товар уже добавлен в корзину:", product_name)
+                continue
+
+            if total_price >= 800:
+                print("Достигнуто ограничение по сумме товаров в корзине.")
+                break
+
+            added_products.append(product_name)
+            total_price += float(product_price)
             # Скрыть элемент, перекрывающий кнопку, с помощью JavaScript
             # Pop-up окно Согласие на работу с куками
             self.driver.execute_script("arguments[0].style.visibility='hidden';", button)
+            self.driver.execute_script("arguments[0].click();", button)
 
             # Выполнить клик с помощью ActionChains
             # actions = ActionChains(self.driver)
@@ -259,8 +289,8 @@ class BasePage():
 
             try:
                 # Выполнить клик с помощью JavaScript
-                self.driver.execute_script("arguments[0].click();", button)
-
+                # self.driver.execute_script("arguments[0].click();", button)
+                print("Кнопка 'Добавить в корзину' кликнута для товара:", product_name, product_price)
                 # Дождаться появления pop-up окна
                 WebDriverWait(self.driver, 10).until(
                     EC.visibility_of_element_located((By.XPATH, "//div[@class='box-cart-popup js-added-product']")))
@@ -270,8 +300,6 @@ class BasePage():
                 WebDriverWait(self.driver, 10).until(
                     EC.invisibility_of_element_located((By.XPATH, "//div[@class='box-cart-popup js-added-product']")))
                 print("Pop-up окно закрыто для товара:", product_name)
-
-                print("Кнопка 'Добавить в корзину' кликнута для товара:", product_name, product_price)
 
             except TimeoutException:
                 print("Pop-up окно не появилось или не закрылось для товара:", product_name)
@@ -340,7 +368,8 @@ class BasePage():
         # Выводим общую стоимость заказа
         order_total_price_element = self.driver.find_element(By.XPATH,
                                                              "//span[@class='bask-page__orderTotal-price']/span")
-        order_total_price = order_total_price_element.text.replace(" ", "", 1).replace(".00 i", "")     # Удаленгие пробела и лишних знаков после цены.
+        order_total_price = order_total_price_element.text.replace(" ", "", 1).replace(".00i",
+                                                                                       "")  # Удаление пробела и лишних знаков после цены.
         print(f"Общая стоимость заказа (на странице): {order_total_price}")
         print(f"Общая стоимость заказа (рассчитанная): {total_order_price}")
 
@@ -353,5 +382,3 @@ class BasePage():
                 print("Общая стоимость заказа не совпадает.")
 
         return products_list  # Возвращаем список товаров
-
-
