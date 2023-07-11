@@ -1,6 +1,8 @@
 """
 Класс странице Ордер
 """
+from selenium.webdriver.support.wait import WebDriverWait
+
 from base.base_class import BasePage
 
 
@@ -10,7 +12,11 @@ class OrderPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
+        self.url = 'https://sad-i-ogorod.ru/'
+        wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
+        self.wait = WebDriverWait(self.driver, wait_timeout)
 
+    # Локаторы
     header_order = "//div[@class = 'h2 pt_5 mb_15']"    # Заголовок странице
     input_surname = "//input[@name = 'surname']"  # Фамилия
     input_name = "//input[@name='name']"  # Имя
@@ -20,6 +26,7 @@ class OrderPage(BasePage):
     button_next = "//div[@class = 'btn js-next']"   # Кнопка Далее
     # // TODO Проверка заполненности полей
 
+    # Actions
     """
     Метод проверки заголовка странице Ордер
     """
