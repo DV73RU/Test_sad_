@@ -1,6 +1,8 @@
 """
 Класс странице Корзина
 """
+from selenium.webdriver.support.wait import WebDriverWait
+
 from base.base_class import BasePage
 
 
@@ -12,6 +14,9 @@ class CardPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
+        self.url = 'https://sad-i-ogorod.ru/'
+        wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
+        self.wait = WebDriverWait(self.driver, wait_timeout)
 
     # max_total_price = 800    # Минимальная сумма для заказа.
     # Локаторы элементов страницы.
@@ -20,18 +25,18 @@ class CardPage(BasePage):
     button_order = "//button[@class = 'bask-page__orderTotal-btn']"  # Кнопка "Оформить заказ"
     # // TODO Перенести все локаторы корзины.
 
+    # Actions
     """
     Метод проверки корзины
     """
 
     def check_card(self):
         self.check_page_header(self.header_card, "Корзина")  # Проверяем значение заголовка странице Корзина.
-        self.parse_products_card(compare_prices=True)  # Парсим добавленные товары на странице
 
-    # def click_button_order(self):
-    #     self.click_element(self.button_order)  # Клик на кнопку Оформить заказ
+    def parse_products(self):
+        self.parse_products_card()  # Парсим товары на странице
 
-    def click_button_order2(self): # Клик на кнопку Оформить ордер если мешает pop-ap
+    def click_button_order2(self):  # Клик на кнопку Оформить ордер если мешает pop-ap
         self.click_element(self.button_order)
 
     """
@@ -43,4 +48,3 @@ class CardPage(BasePage):
         # self.driver.maximize_window()
         self.click_button_order2()  # Кликаем на кнопку Ордер.
         self.assert_url_2('https://sad-i-ogorod.ru/cart/order/')  # Проверка ожидаемой url
-
