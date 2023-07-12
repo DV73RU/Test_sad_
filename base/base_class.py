@@ -25,7 +25,7 @@ def process_total_price(price_text):
 
 
 class BasePage():
-    TIMEOUT = 20  # Время ожидания доступности элемента.
+    TIMEOUT = 30  # Время ожидания доступности элемента.
 
     def __init__(self, driver):
         self.driver = driver
@@ -316,9 +316,9 @@ class BasePage():
             compare_prices=False - Не выводить сравнение цен на странице и расчётные.
     """
 
-    def parse_products_card(self, print_products=False, compare_prices=False):
+    def parse_products_card(self, locator, print_products=False, compare_prices=False):
         # Находим все товары на странице
-        products = self.driver.find_elements(By.XPATH, "//tr[contains(@class, 'bask-item')]")
+        products = self.driver.find_elements(By.XPATH, locator)
 
         # Создаем список для хранения информации о товарах
         products_list = []
@@ -329,16 +329,17 @@ class BasePage():
         # Проходимся по каждому товару и извлекаем информацию
         for product in products:
             # Получаем информацию о товаре
-            product_name = product.find_element(By.XPATH, ".//td/a").text
+            product_name = product.find_element(By.XPATH, ".//td/a").text # Локатор название продукта.
             product_price_element = product.find_element(By.XPATH,
-                                                         ".//td[@data-title='Цена']/span[@class='value nowrap']")
-            product_price = product_price_element.text.replace('.00 i', '')
+                                                         ".//td[@data-title='Цена']/span[@class='value nowrap']")   # Локатор цены продукта
+            product_price = product_price_element.text.replace('.00 i', '')     # Удаление лишних элементов в цене продукта.
             product_quantity = product.find_element(By.XPATH,
                                                     ".//td[@data-title='Количество']/div[@class='value']/div[@class='elem-counter']/input[@type='number']").get_attribute(
-                "value")
+                "value")    # Локатор количества добавленного продукта.
             product_total_price_element = product.find_element(By.XPATH,
-                                                               ".//td[@data-title='Стоимость']/span[@class='value nowrap']")
-            product_total_price = product_total_price_element.text.replace('.00 i', '')
+                                                               ".//td[@data-title='Стоимость']/span[@class='value nowrap']")    # Локатор общей стоимости продукта.
+            product_total_price = product_total_price_element.text.replace('.00 i', '')     # Удаление лишний
+            # элементов из цены продукта.
 
             # Добавляем цену товара к общей стоимости заказа
             total_order_price += int(product_total_price)
@@ -367,7 +368,7 @@ class BasePage():
 
         # Выводим общую стоимость заказа
         order_total_price_element = self.driver.find_element(By.XPATH,
-                                                             "//span[@class='bask-page__orderTotal-price']/span")
+                                                             "//span[@class='bask-page__orderTotal-price']/span")    # Локатор общей суммы заказа
         order_total_price = order_total_price_element.text.replace(" ", "", 1).replace(".00i",
                                                                                        "")  # Удаление пробела и лишних знаков после цены.
         print(f"Общая стоимость заказа (на странице): {order_total_price}")
