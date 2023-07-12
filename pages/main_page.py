@@ -67,7 +67,7 @@ class MainPage(BasePage):
     """
 
     def go_to_card(self):
-        self.driver.get(self.url)
+        # self.driver.get(self.url)
         # self.driver.maximize_window()
         self.click_butt_card()
         self.assert_url_2('https://sad-i-ogorod.ru/cart/')
