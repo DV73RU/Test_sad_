@@ -23,6 +23,7 @@ class CardPage(BasePage):
     header_card = "//div[@class = 'elem-heading']/h1"  # Заголовок станице Корзина
     total_price_card = "//div[@class='bask-page__parcelTotal']/span[@class='bask-page__parcelTotal-price']"  # Итоговая сумма в корзине
     button_order = "//button[@class = 'bask-page__orderTotal-btn']"  # Кнопка "Оформить заказ"
+    product_list = "//tr[contains(@class, 'bask-item')]" # Локатор товаров козины
     # // TODO Перенести все локаторы корзины.
 
     # Actions
@@ -34,7 +35,7 @@ class CardPage(BasePage):
         self.check_page_header(self.header_card, "Корзина")  # Проверяем значение заголовка странице Корзина.
 
     def parse_products(self):
-        self.parse_products_card()  # Парсим товары на странице
+        self.parse_products_card(self.product_list)  # Парсим товары на странице Корзины
 
     def click_button_order2(self):  # Клик на кнопку Оформить ордер если мешает pop-ap
         self.click_element(self.button_order)
