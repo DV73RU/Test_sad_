@@ -29,10 +29,13 @@ def test_login(set_group):
     news_pages = NewsPage(driver)
     # news_pages.check_page_header()  # Проверяем заголовок странице Новинки
     news_pages.check_news()  # Чекаем товары на странице Новинки.
-    # news_pages.go_
+    news_pages.parse_news()
+    news_pages.add_to_cart()
+    main_page.go_to_card()
 
-    # card_page = CardPage(driver)
-    # card_page.check_card()  # Проверка странице "Корзина"
+    card_page = CardPage(driver)
+    card_page.parse_products_card("//tr[contains(@class, 'bask-item')]", print_products=True)
+
     # card_page.go_to_order()     # Переход на страницу Оформление заказа
 
     # order_page = OrderPage(driver)
