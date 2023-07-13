@@ -21,7 +21,8 @@ class MainPage(BasePage):
     button_add_to_cart_locator = "//button[@class='to-cart-btn elem-to_cart']"
     product_price_locator = "//div[@class='prod-price ']"
     product_names = [...]  # Список названий продуктов
-    button_card = "//span[@class = 'price']"  # Кнопка Корзина.
+    button_card = "//span[@class = 'price']"# Кнопка Корзина если в ней есть товары
+    button_card_f = "//span[@class='no-product']" # Кнопка Корзины если в ней нет товаров
     # Количество товара в корзине.
     # Сумма заказа.
     button_novelties1 = "/html/body/div[1]/div[1]/div[4]/div/div/div[1]/a/span"  # Кнопка Новинки.
