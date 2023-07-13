@@ -221,7 +221,7 @@ class BasePage():
             print(f"Количество найденных товаров на странице :{total_products}")
 
     """
-    Метод проверки корзины на наличие в ней товаров
+    Метод проверка иконки корзины на наличие в ней суммы товаров
     """
 
     def check_cart(self):
@@ -324,6 +324,11 @@ class BasePage():
 
     def add_to_cart(self):
         # Найти все кнопки "Добавить в корзину"
+
+        global cart_price_value
+        # cart_price = self.driver.find_element(By.XPATH,
+        #                                       "//span[@class='price' or @class='no-product']")  # Локатор Суммы заказа в корзине
+
         add_to_cart_buttons = self.driver.find_elements(By.XPATH, "//button[@class='to-cart-btn elem-to_cart']")
 
         # Проверить наличие товаров на странице
@@ -332,7 +337,11 @@ class BasePage():
             return
 
         # Кликнуть на каждую кнопку "Добавить в корзину"
+        # Проверить доступность каждой кнопки "Добавить в корзину"
         for button in add_to_cart_buttons:
+            if not button.is_enabled():
+                print("Кнопка 'Добавить в корзину' недоступна")
+                continue
             # Найти родительский элемент кнопки "Добавить в корзину"
             parent_element = button.find_element(By.XPATH,
                                                  ".//ancestor::form[@class='info-wrapper add-bask-form-list ']")
@@ -353,9 +362,17 @@ class BasePage():
             # actions = ActionChains(self.driver)
             # actions.move_to_element(button).click().perform()
 
+            # Выполнить клик с помощью JavaScript
+            self.driver.execute_script("arguments[0].click();", button)
+
+            # Ограничить сумму в корзине до 800
+
+            # // TODO написать ожидание локатора с общей суммы.
+            cart_price = self.driver.find_element(By.XPATH, "//span[@class='price']")  # Локатор Суммы заказа в корзине
+            cart_price_value = float(cart_price.text.replace('.00 i', ''))
             try:
-                # Выполнить клик с помощью JavaScript
-                self.driver.execute_script("arguments[0].click();", button)
+                # # Выполнить клик с помощью JavaScript
+                # self.driver.execute_script("arguments[0].click();", button)
 
                 # Дождаться появления pop-up окна
                 WebDriverWait(self.driver, 10).until(
@@ -378,4 +395,4 @@ class BasePage():
             # Добавить небольшую паузу перед следующим кликом
             time.sleep(1)
 
-        print("Товары успешно добавлены в корзину.")
+        print(f"Товары успешно добавлены в корзину на сумму: {cart_price_value}")
