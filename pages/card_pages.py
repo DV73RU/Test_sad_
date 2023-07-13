@@ -34,8 +34,8 @@ class CardPage(BasePage):
     def check_card(self):
         self.check_page_header(self.header_card, "Корзина")  # Проверяем значение заголовка странице Корзина.
 
-    def parse_products(self):
-        self.parse_products_card(self.product_list)  # Парсим товары на странице Корзины
+    def parse_card(self):
+        self.parse_products_card(self.product_list, print_products= True)  # Парсим товары на странице Корзины
 
     def click_button_order2(self):  # Клик на кнопку Оформить ордер если мешает pop-ap
         self.click_element(self.button_order)
