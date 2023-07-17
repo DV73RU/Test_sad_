@@ -21,8 +21,8 @@ class MainPage(BasePage):
     button_add_to_cart_locator = "//button[@class='to-cart-btn elem-to_cart']"
     product_price_locator = "//div[@class='prod-price ']"
     product_names = [...]  # Список названий продуктов
-    button_card = "//span[@class = 'price']"# Кнопка Корзина если в ней есть товары
-    button_card_f = "//span[@class='no-product']" # Кнопка Корзины если в ней нет товаров
+    button_card = "//span[@class = 'price']"  # Кнопка Корзина если в ней есть товары
+    button_card_f = "//span[@class='no-product']"  # Кнопка Корзины если в ней нет товаров
     # Количество товара в корзине.
     # Сумма заказа.
     button_novelties1 = "/html/body/div[1]/div[1]/div[4]/div/div/div[1]/a/span"  # Кнопка Новинки.
@@ -51,15 +51,11 @@ class MainPage(BasePage):
     Добавляем товары с этой странице.
     """
 
-
-
     def go_news_page(self):
         self.driver.get(self.url)
         self.driver.maximize_window()
         self.click_butt_novel()  # Кликаем на кнопку новинки.
         self.assert_url_2('https://sad-i-ogorod.ru/catalog/novinki.html')  # Проверка ожидаемой url
-
-
 
         # self.check_cart()  # Проверяем состояние иконнки корзины
 
