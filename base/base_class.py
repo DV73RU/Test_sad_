@@ -7,7 +7,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 
-""" Класс BasePage служит в качестве базового класса, который содержит 
+""" 
+Класс BasePage служит в качестве базового класса, который содержит 
 общие методы и функциональность.
 """
 
@@ -316,12 +317,6 @@ class BasePage():
 
         return products_list  # Возвращаем список товаров
 
-        # Находим кнопку "Добавить в корзину" для первого товара
-
-    """
-    Метод добавление товара в корзину. V3
-    """
-
     def add_to_cart(self):
         # Найти все кнопки "Добавить в корзину"
 
@@ -357,23 +352,19 @@ class BasePage():
             # Скрыть элемент, перекрывающий кнопку, с помощью JavaScript
             # Pop-up окно Согласие на работу с куками
             self.driver.execute_script("arguments[0].style.visibility='hidden';", button)
-
-            # Выполнить клик с помощью ActionChains
-            # actions = ActionChains(self.driver)
-            # actions.move_to_element(button).click().perform()
+            print("Закрыто окно 'Работа с куками'")
 
             # Выполнить клик с помощью JavaScript
-            self.driver.execute_script("arguments[0].click();", button)
+            # self.driver.execute_script("arguments[0].click();", button)
 
             # Ограничить сумму в корзине до 800
 
-            # // TODO написать ожидание локатора с общей суммы.
-            cart_price = self.driver.find_element(By.XPATH, "//span[@class='price']")  # Локатор Суммы заказа в корзине
-            cart_price_value = float(cart_price.text.replace('.00 i', ''))
+            time.sleep(5)
+
             try:
                 # # Выполнить клик с помощью JavaScript
-                # self.driver.execute_script("arguments[0].click();", button)
-
+                self.driver.execute_script("arguments[0].click();", button)
+                print("Кнопка 'Добавить в корзину' кликнута для товара:", product_name, product_price)
                 # Дождаться появления pop-up окна
                 WebDriverWait(self.driver, 10).until(
                     EC.visibility_of_element_located((By.XPATH, "//div[@class='box-cart-popup js-added-product']")))
@@ -381,10 +372,18 @@ class BasePage():
 
                 # Дождаться закрытия pop-up окна
                 WebDriverWait(self.driver, 10).until(
-                    EC.invisibility_of_element_located((By.XPATH, "//div[@class='box-cart-popup js-added-product']")))
+                    EC.invisibility_of_element_located(
+                        (By.XPATH, "//div[@class='box-cart-popup js-added-product']")))
                 print("Pop-up окно закрыто для товара:", product_name)
 
-                print("Кнопка 'Добавить в корзину' кликнута для товара:", product_name, product_price)
+                cart_total_element = self.driver.find_element(By.XPATH,
+                                                      "//span[@class='price']")  # Локатор Суммы заказа в корзине
+                cart_total_text = cart_total_element.text
+                cart_price_value = int(cart_total_text.replace('.00 i', '').replace(' ', ''))
+
+                if cart_price_value > 1000:
+                    print("Общая сумма заказа превышает 1000, добавление товаров в корзину остановлено")
+                    return
 
             except TimeoutException:
                 print("Pop-up окно не появилось или не закрылось для товара:", product_name)
@@ -396,3 +395,16 @@ class BasePage():
             time.sleep(1)
 
         print(f"Товары успешно добавлены в корзину на сумму: {cart_price_value}")
+
+    """
+	Скролим до элемента
+	"""
+
+    def scroll_pages_to_element(self, locator):
+        try:
+            action = ActionChains(self.driver)
+            element = self.driver.find_element(locator)
+            action.move_to_element(locator).perform()
+            print(f"Скрол до элемента: {locator}")
+        except NoSuchElementException:
+            print(f"Элемент с локатором: {locator} не найден! ")
