@@ -31,12 +31,13 @@ def test_login(set_group):
     news_pages.check_news()  # Чекаем товары на странице Новинки.
     news_pages.parse_news()
     news_pages.add_to_cart()
-    # main_page.go_to_card()
+    main_page.go_to_card()
 
-    # card_page = CardPage(driver)
-    # card_page.parse_card()
+    card_page = CardPage(driver)
+    card_page.parse_card()
 
-    # card_page.go_to_order()     # Переход на страницу Оформление заказа
+    card_page.go_to_order()     # Переход на страницу Оформление заказа
 
-    # order_page = OrderPage(driver)
-    # order_page.check_order()    # Проверка станице Оформление заказа
+    order_page = OrderPage(driver)
+    order_page.check_order()    # Проверка станице Оформление заказа
+    order_page.authorization()
