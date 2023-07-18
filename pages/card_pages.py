@@ -26,6 +26,8 @@ class CardPage(BasePage):
     button_order = "//button[@class = 'bask-page__orderTotal-btn']"  # Кнопка "Оформить заказ - активна"
     button_order_not = "//button[@class = 'bask-page__orderTotal-btn  bask-page__orderTotal-btn--disable']" 	#
     # Кнопка Оформить заказ - не активна
+    value_min_price = "//span[@class = 'bask-page__parcelTotal-minPrice']" 	# Локатор суммы для заказа.
+
     product_list = "//tr[contains(@class, 'bask-item')]" 	# Локатор товаров козины
 
     # // TODO Перенести все локаторы корзины.
@@ -41,11 +43,14 @@ class CardPage(BasePage):
     def parse_card(self):
         self.parse_products_card(self.product_list, print_products=True)  # Парсим товары на странице Корзины
 
-    def click_button_order2(self):  # Клик на кнопку Оформить ордер если мешает pop-ap
-        self.click_element(self.button_order)
+    # def click_button_order2(self):  # Клик на кнопку Оформить ордер если мешает pop-ap
+    #     self.click_element(self.button_order)
 
     def click_button_order3(self):  # Клик на кнопку Оформить ордер
-        self.click_checkout(self.button_order, self.button_order_not)
+        self.check_order_total(self.value_min_price)
+        self.click_checkout(self.button_order, self.button_order_not, self.value_min_price)
+
+
 
     """
     Метод переход на станицу Оформление заказа.
@@ -56,4 +61,5 @@ class CardPage(BasePage):
         # self.driver.maximize_window()
         # self.scroll_pages_to_element(self.button_order)
         self.click_button_order3()  # Кликаем на кнопку Ордер если активна.
+
         self.assert_url_2('https://sad-i-ogorod.ru/cart/order/')  # Проверка ожидаемой url
