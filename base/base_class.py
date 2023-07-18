@@ -248,7 +248,7 @@ class BasePage():
             compare_prices=False - Не выводить сравнение цен на странице и расчётные.
     """
 
-    def parse_products_card(self, locator, print_products=False, compare_prices=False):
+    def parse_products_card(self, locator, print_products=True, compare_prices=True):
         # Находим все товары на странице
         products = self.driver.find_elements(By.XPATH, locator)
 
@@ -302,7 +302,7 @@ class BasePage():
         # Выводим общую стоимость заказа
         order_total_price_element = self.driver.find_element(By.XPATH,
                                                              "//span[@class='bask-page__orderTotal-price']/span")  # Локатор общей суммы заказа
-        order_total_price = order_total_price_element.text.replace(" ", "", 1).replace(".00i",
+        order_total_price = order_total_price_element.text.replace(" ", "", 1).replace(".00 i",
                                                                                        "")  # Удаление пробела и лишних знаков после цены.
         print(f"Общая стоимость заказа (на странице): {order_total_price}")
         print(f"Общая стоимость заказа (рассчитанная): {total_order_price}")
@@ -317,7 +317,13 @@ class BasePage():
 
         return products_list  # Возвращаем список товаров
 
-    def add_to_cart(self):
+
+    """
+    Метод добавления товара в козину.
+    max_cart_total=1000 - сумма по умолчанию добавления товара в корзину
+    """
+    def add_to_cart(self, max_cart_total=1000):
+
         # Найти все кнопки "Добавить в корзину"
 
         global cart_price_value
@@ -381,8 +387,8 @@ class BasePage():
                 cart_total_text = cart_total_element.text
                 cart_price_value = int(cart_total_text.replace('.00 i', '').replace(' ', ''))
 
-                if cart_price_value > 1000:
-                    print("Общая сумма заказа превышает 1000, добавление товаров в корзину остановлено")
+                if cart_price_value > max_cart_total: 	# Прекращение добавление товара в корзину до суммы заказа.
+                    print(f"Общая сумма заказа превышает {max_cart_total}, добавление товаров в корзину остановлено")
                     return
 
             except TimeoutException:
