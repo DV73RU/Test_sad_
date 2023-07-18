@@ -101,13 +101,34 @@ class BasePage():
 
     # // TODO Написать сравнение ожидаемых названий и фактических.
     def click_element(self, locator):
+        value_button = None
         try:
             element = self.get_element(locator)
             value_button = element.text  # Забираем название элемента.
             element.click()
             print(f"Нажата кнопка: {value_button}")
         except NoSuchElementException:
-            print(f"Элемент с локатором: {locator} не найден! ")
+            print(f"Элемент {value_button} с локатором: {locator} не найден! ")
+
+    """Метод проверки активной кнопки 'Оформить заказ'"""
+
+    def click_checkout(self, locator_active, locator_inactive):
+        value_button = None
+        try:
+            element_active = self.get_element(locator_active)
+            value_button = element_active.text  # Забираем название элемента.
+            if element_active.is_enabled():
+                element_active.click()
+                print(f"Нажата активная кнопка: {value_button}")
+            else:
+                print(f"Кнопка {value_button} не активна.")
+        except NoSuchElementException:
+            try:
+                element_inactive = self.get_element(locator_inactive)
+                value_button = element_inactive.text  # Забираем название элемента.
+                print(f"Кнопка {value_button} не активна.")
+            except NoSuchElementException:
+                print(f"Элемент с локатором: {locator_active} или {locator_inactive} не найден! ")
 
     """
     Метод возврата текста элемента.
@@ -317,11 +338,11 @@ class BasePage():
 
         return products_list  # Возвращаем список товаров
 
-
     """
     Метод добавления товара в козину.
     max_cart_total=1000 - сумма по умолчанию добавления товара в корзину
     """
+
     def add_to_cart(self, max_cart_total=1000):
 
         # Найти все кнопки "Добавить в корзину"
@@ -383,11 +404,11 @@ class BasePage():
                 print("Pop-up окно закрыто для товара:", product_name)
 
                 cart_total_element = self.driver.find_element(By.XPATH,
-                                                      "//span[@class='price']")  # Локатор Суммы заказа в корзине
+                                                              "//span[@class='price']")  # Локатор Суммы заказа в корзине
                 cart_total_text = cart_total_element.text
                 cart_price_value = int(cart_total_text.replace('.00 i', '').replace(' ', ''))
 
-                if cart_price_value > max_cart_total: 	# Прекращение добавление товара в корзину до суммы заказа.
+                if cart_price_value > max_cart_total:  # Прекращение добавление товара в корзину до суммы заказа.
                     print(f"Общая сумма заказа превышает {max_cart_total}, добавление товаров в корзину остановлено")
                     return
 
