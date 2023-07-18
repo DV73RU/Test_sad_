@@ -12,7 +12,7 @@ class OrderPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
-        self.url = 'https://sad-i-ogorod.ru/'
+        self.url = 'https://sad-i-ogorod.ru/cart/order/'
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
