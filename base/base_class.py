@@ -110,25 +110,31 @@ class BasePage():
         except NoSuchElementException:
             print(f"Элемент {value_button} с локатором: {locator} не найден! ")
 
-    """Метод проверки активной кнопки 'Оформить заказ'"""
+    """Метод проверки условия активной кнопки 'Оформить заказ'"""
 
-    def click_checkout(self, locator_active, locator_inactive):
-        value_button = None
+    # // TODO Перенести метод в cared_pages.py
+    def click_checkout(self, button_order, button_order_not, locator_min_price):
+        order_total = 0  # Инициализация order_total перед блоком try
         try:
-            element_active = self.get_element(locator_active)
+            element_active = self.get_element(button_order)
             value_button = element_active.text  # Забираем название элемента.
-            if element_active.is_enabled():
+            order_total = self.check_order_total(locator_min_price)
+
+            if order_total < 800:
+                print(f"Кнопка {value_button} не активна, так как сумма заказа: {order_total} меньше 800.")
+            else:
                 element_active.click()
                 print(f"Нажата активная кнопка: {value_button}")
-            else:
-                print(f"Кнопка {value_button} не активна.")
+                if order_total < 800:
+                    print(f"Сумма заказа {order_total} меньше 800, но кнопка всё равно активна.")
         except NoSuchElementException:
             try:
-                element_inactive = self.get_element(locator_inactive)
-                value_button = element_inactive.text  # Забираем название элемента.
-                print(f"Кнопка {value_button} не активна.")
+                element_inactive = self.get_element(button_order_not)
+                value_button = element_inactive.text
+                order_total = self.check_order_total(locator_min_price)  # Обновление order_total
+                print(f"Кнопка {value_button} не активна, сумма заказа: {order_total} меньше 800.")
             except NoSuchElementException:
-                print(f"Элемент с локатором: {locator_active} или {locator_inactive} не найден! ")
+                print(f"Не удалось найти кнопку оформления заказа на странице.")
 
     """
     Метод возврата текста элемента.
@@ -332,9 +338,9 @@ class BasePage():
         if compare_prices:
             order_total_price = int(order_total_price)  # Из строки в число.
             if order_total_price == total_order_price:
-                print("Общая стоимость заказа совпадает.")
+                print("Общая стоимость заказа совпадает c расчётной стоимостью заказа.")
             else:
-                print("Общая стоимость заказа не совпадает.")
+                print("Общая стоимость заказа не совпадает с расчётной стоимостью заказа.")
 
         return products_list  # Возвращаем список товаров
 
@@ -410,6 +416,7 @@ class BasePage():
 
                 if cart_price_value > max_cart_total:  # Прекращение добавление товара в корзину до суммы заказа.
                     print(f"Общая сумма заказа превышает {max_cart_total}, добавление товаров в корзину остановлено")
+                    print(f"Товары успешно добавлены в корзину на сумму: {cart_price_value}")
                     return
 
             except TimeoutException:
@@ -421,11 +428,9 @@ class BasePage():
             # Добавить небольшую паузу перед следующим кликом
             time.sleep(1)
 
-        print(f"Товары успешно добавлены в корзину на сумму: {cart_price_value}")
-
     """
-	Скролим до элемента
-	"""
+    Скролим до элемента
+    """
 
     def scroll_pages_to_element(self, locator):
         try:
@@ -435,3 +440,14 @@ class BasePage():
             print(f"Скрол до элемента: {locator}")
         except NoSuchElementException:
             print(f"Элемент с локатором: {locator} не найден! ")
+
+    """
+    Чекаем сумму возможную для продолжения заказа
+	"""
+
+    def check_order_total(self, locator_min_price):
+        min_price_element = self.driver.find_element(By.XPATH, locator_min_price)
+        min_price_text = min_price_element.text
+        min_price = int(min_price_text.replace('.00 i', ''))
+
+        return min_price
