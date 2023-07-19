@@ -21,5 +21,4 @@
 и ввести следующую команду: `pip install -r requirements.txt`
 
 [![wakatime](https://wakatime.com/badge/user/5f6bd917-a873-40c5-b6dd-4ef1d5b0d747/project/f33a513f-b554-49db-9ebe-d25fdda53e9c.svg)](https://wakatime.com/badge/user/5f6bd917-a873-40c5-b6dd-4ef1d5b0d747/project/f33a513f-b554-49db-9ebe-d25fdda53e9c)
-                                        
-                                                [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fgjbae1212%2Fhit-counter)](https://hits.seeyoufarm.com)                                                               
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FDV73RU%2FTest_sad_&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)                                                            
