@@ -24,11 +24,14 @@ class CardPage(BasePage):
     total_price_card = "//div[@class='bask-page__parcelTotal']/span[@class='bask-page__parcelTotal-price']"  #
     # Итоговая сумма в корзине
     button_order = "//button[@class = 'bask-page__orderTotal-btn']"  # Кнопка "Оформить заказ - активна"
-    button_order_not = "//button[@class = 'bask-page__orderTotal-btn  bask-page__orderTotal-btn--disable']" 	#
+    button_order_not = "//button[@class = 'bask-page__orderTotal-btn  bask-page__orderTotal-btn--disable']"  #
     # Кнопка Оформить заказ - не активна
-    value_min_price = "//span[@class = 'bask-page__parcelTotal-minPrice']" 	# Локатор суммы для заказа.
+    value_min_price = "//span[@class = 'bask-page__parcelTotal-minPrice']"  # Локатор минимальной суммы для заказа.
+    value_price = "//span[@class = 'bask-page__orderTotal-price']"  # Локатор суммы заказа Семена.
+    value_total_price = "//span[@class = 'bask-page__orderTotal-price']"  # Локатор общей суммы заказа
+    free_shipping = "//span[@class = 'bask-page__parcelTotal-freeship']" # Локатор текста бесплатной доставки
 
-    product_list = "//tr[contains(@class, 'bask-item')]" 	# Локатор товаров козины
+    product_list = "//tr[contains(@class, 'bask-item')]"  # Локатор товаров козины
 
     # // TODO Перенести все локаторы корзины.
 
@@ -47,10 +50,8 @@ class CardPage(BasePage):
     #     self.click_element(self.button_order)
 
     def click_button_order3(self):  # Клик на кнопку Оформить ордер
-        self.check_order_total(self.value_min_price)
+        self.get_order_min(self.value_min_price)
         self.click_checkout(self.button_order, self.button_order_not, self.value_min_price)
-
-
 
     """
     Метод переход на станицу Оформление заказа.

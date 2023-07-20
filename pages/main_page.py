@@ -30,8 +30,7 @@ class MainPage(BasePage):
     # // TODO button_add_card  перенести в base_class?
     button_add_card = "//button[@class ='to-cart-btn elem-to_cart']"  # Кнопка добавить в корзину, может пернести в base_class?
     agree_button = "//a[@class = 'cookie-msg__button']"  # Кнопка "Согласен" модального окна.
-
-    # Меню Семена
+    button_seeds = "//a[@href='/catalog/semena.html' and span[text()='Семена']]" 	# Меню Семена
     # Меню Плодовые
     # Меню Декоративные
     # Меню Луковичные
@@ -41,6 +40,9 @@ class MainPage(BasePage):
 
     def click_butt_novel(self):
         self.click_element(self.button_novelties1)  # Клик на кнопку Новинки в обход окна
+
+    def click_butt_seeds(self):
+        self.click_element(self.button_seeds)
 
     def click_butt_card(self):
         self.click_element(self.button_card)
@@ -58,6 +60,16 @@ class MainPage(BasePage):
         self.assert_url_2('https://sad-i-ogorod.ru/catalog/novinki.html')  # Проверка ожидаемой url
 
         # self.check_cart()  # Проверяем состояние иконнки корзины
+
+    """
+    Метод перехода на старницу Семена
+    """
+    def go_seeds_pages(self):
+        self.driver.get(self.url)
+        self.driver.maximize_window()
+        # self.click_butt_seeds()  # Кликаем на кнопку новинки.
+        self.assert_url_2('https://sad-i-ogorod.ru/catalog/semena.html')  # Проверка ожидаемой url
+
 
     """
     Метод перехода в корзину
