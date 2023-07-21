@@ -12,18 +12,6 @@ from selenium.webdriver.chrome.options import Options
 общие методы и функциональность.
 """
 
-""" v.3
-Функция удаляет всё лишние элементы от цены товара
-"""
-
-
-def process_total_price(price_text):
-    price_text = price_text.strip().replace(' ', '')  # Удаляем пробелы и лишние символы из начала и конца строки
-    price_text = price_text.replace(',', '.')  # Заменяем запятую на точку
-    price_text = price_text[:-1]  # Удаляем последний символ 'i'
-    return float(price_text)
-    # return float(processed_price)
-
 
 class BasePage():
     TIMEOUT = 30  # Время ожидания доступности элемента.
@@ -52,35 +40,20 @@ class BasePage():
 
     def check_page_header(self, header_locator, expected_header):
         try:
-            # wait = WebDriverWait(driver, 10)
             header_element = self.get_element(header_locator)
             header_text = header_element.text  # Фактический заголовок.
-            if header_text == expected_header:  # Сравнение с ожидаемым.
-                print(f"Заголовок страницы '{header_text}' успешно отображается")
-            else:
-                print(f"Заголовок страницы '{header_text}' не соответствует ожидаемому {expected_header}!")
-        except TimeoutException:
-            print("Заголовок страницы не найден или не видим!")
-
-    """
-    Не используется
-    """
-
-    def check_page_title(self, expected_title):
-        try:
-            self.wait.until(EC.visibility_of_element_located(expected_title))
-            print(f"Заголовок страницы '{expected_title}' успешно отображается")
+            assert header_text == expected_header, f"Ошибка: Заголовок страницы '{header_text}' не соответствует ожидаемому '{expected_header}'"
+            print(f"Успех: Заголовок страницы '{header_text}' соответствует ожидаемому '{expected_header}'")
             return True
         except TimeoutException:
-            print(f"Заголовок страницы '{expected_title}' не найден или не соответствует ожидаемому!")
+            print("Ошибка: Заголовок страницы не найден или не видим!")
             return False
-
-    """Метод проверки url"""
-
-    def assert_url(self, result):
-        get_url = self.driver.current_url
-        assert get_url == result
-        print(f"Good value url: {get_url}")
+        except NoSuchElementException as e:
+            print(f"Ошибка: Элемент с локатором '{header_locator}' не найден на странице: {e}")
+            return None
+        # except Exception as e:
+        #     print(f"Ошибка: Неожиданная ошибка при проверке заголовка страницы: {e}")
+        #     return None
 
     """
     Второй метод проверки url
@@ -88,12 +61,10 @@ class BasePage():
     current_url - Фактическое значение url
     """
 
-    def assert_url_2(self, expected_url):
+    def assert_url(self, expected_url):
         current_url = self.driver.current_url
-        if current_url == expected_url:
-            print(f"Переход на ожидаемый url: {current_url}")
-        else:
-            print(f"URL не соответствует ожидаемому: {expected_url}. Фактический: {current_url}!")
+        assert current_url == expected_url, f"URL не соответствует ожидаемому: {expected_url}. Фактический: {current_url}!"
+        print(f"Переход на ожидаемый url: {current_url}")
 
     """
     Метод нажатия на элемент.
@@ -110,7 +81,41 @@ class BasePage():
         except NoSuchElementException:
             print(f"Элемент {value_button} с локатором: {locator} не найден! ")
 
-    """Метод проверки условия активной кнопки 'Оформить заказ'"""
+    # Метод для проверки надписи на кнопке до авторизации ("Личный кабинет")
+    def check_button_text_before_authentication(self, login_button_locator, value):
+        # login_button_locator = "//span[@class='cabinet']"  # Локатор кнопки "Личный кабинет"
+        login_button_text = self.get_text(login_button_locator)  # Получаем текст кнопки
+        expected_text_before_auth = value
+        assert login_button_text == expected_text_before_auth, f"Ошибка! Текст кнопки до авторизации: {login_button_text}, ожидаемый текст: {expected_text_before_auth}"
+        print(f"Текст кнопки до авторизации соответствует ожидаемому: {login_button_text}.")
+
+    # Метод для проверки надписи на кнопке после авторизации
+    def check_button_text_after_authentication(self, logged_in_button_locator, value):
+        logged_in_button_text = self.get_text(logged_in_button_locator)  # Получаем текст кнопки после авторизации
+        expected_text_after_auth = value
+        assert logged_in_button_text == expected_text_after_auth, f"Ошибка! Текст кнопки после авторизации: {logged_in_button_text}, ожидаемый текст: {expected_text_after_auth}"
+        print(f"Текст кнопки после авторизации соответствует ожидаемому: {logged_in_button_text}.")
+
+    def get_button_text(self, button_locator, expected_text, before_auth=True):
+        try:
+            button_text = self.get_text(button_locator)  # Получаем текст кнопки
+            if before_auth:
+                assert button_text == expected_text, f"Ошибка! Текст кнопки до авторизации: {button_text}, ожидаемый текст: {expected_text}"
+                print(f"Текст кнопки до авторизации соответствует ожидаемому: {button_text}.")
+            else:
+                assert button_text == expected_text, f"Ошибка! Текст кнопки после авторизации: {button_text}, ожидаемый текст: {expected_text}"
+                print(f"Текст кнопки после авторизации соответствует ожидаемому: {button_text}.")
+            return True
+        except TimeoutException:
+            print("Ошибка: Текст кнопки не найден или не видим!")
+            return False
+        except NoSuchElementException as e:
+            print(f"Ошибка: Элемент с локатором '{button_locator}' не найден на странице: {e}")
+            return None
+
+    """
+    Метод проверки условия активной кнопки 'Оформить заказ
+    '"""
 
     # // TODO Перенести метод в cared_pages.py
     def click_checkout(self, button_order, button_order_not, locator_min_price):
@@ -143,7 +148,6 @@ class BasePage():
     def get_text(self, locator):
         element = self.get_element(locator)
         value_element = element.text
-        print(value_element)
         return value_element
 
     """
@@ -151,11 +155,38 @@ class BasePage():
     """
 
     # // TODO Написать вывод название поля ввода.
-    def input_in(self, locator, value):
+    def input_in3(self, locator, value):
         element = self.get_element(locator)  # Поле ввода
         element.clear()  # Очистить поле ввода
         element.send_keys(value)  # Ввести значение в поле ввода
         print(f"В поле ввода введено: {value}")
+
+    def input_in2(self, locator, value):
+        try:
+            element = self.get_element(locator)  # Поле ввода
+            element.clear()  # Очистить поле ввода
+            element.send_keys(value)  # Ввести значение в поле ввода
+
+            # Получить атрибут "placeholder" элемента, если он есть
+            placeholder = element.get_attribute("USER_LOGIN")
+            field_name = placeholder if placeholder else "неизвестное поле"  # Если атрибут "placeholder" не определен
+
+            print(f"В поле '{field_name}' введено: {value}")
+        except Exception as e:
+            print(f"Ошибка при вводе текста в поле: {e}")
+
+    def input_in(self, input_locator, label_locator, value):
+        try:
+            element = self.get_element(input_locator)  # Поле ввода
+            element.clear()  # Очистить поле ввода
+            element.send_keys(value)  # Ввести значение в поле ввода
+
+            # Получить название поля ввода из элемента label с помощью метода get_text
+            field_name = self.get_text(label_locator)  # Получаем текст элемента label
+
+            print(f"В поле '{field_name}' введено: {value}")
+        except Exception as e:
+            print(f"Ошибка при вводе текста в поле: {e}")
 
     """
     Метод клик на элемент. 
@@ -193,10 +224,9 @@ class BasePage():
     Метод перехода на страницу.
     """
 
-    def go_to_pages(self, url, locator):
-        self.driver.get(url)
+    def go_to_pages(self, url):
+        self.driver.get(self.url)
         self.driver.maximize_window()
-        self.click_element(locator)  # Кликаем на кнопку перехода на страницу
         # self.assert_url_2(url)  # Проверка ожидаемой url странице
 
     """
@@ -451,3 +481,37 @@ class BasePage():
         min_price = int(min_price_text.replace('.00 i', ''))
 
         return min_price
+
+    def order_logic(self, order_amount):
+
+        if order_amount < 800:
+            # Ожидание текста "Минимальная стоимость заказа 800.0 р"
+            min_price_text = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located((By.XPATH, "//span[@class='bask-page__parcelTotal-minPrice']"))
+            )
+            assert min_price_text.text == "Минимальная стоимость заказа 800.0 р"
+
+            # Ожидание неактивной кнопки "Оформить заказ"
+            order_button = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located(
+                    (By.XPATH, "//button[@class='bask-page__orderTotal-btn bask-page__orderTotal-btn--disable']"))
+            )
+            assert not order_button.is_enabled()
+
+        else:
+            # Ожидание исчезновения текста "Минимальная стоимость заказа 800.0 р"
+            WebDriverWait(self.driver, 10).until_not(
+                EC.presence_of_element_located((By.XPATH, "//span[@class='bask-page__parcelTotal-minPrice']"))
+            )
+
+            # Ожидание появления текста "Бесплатная доставка от 2000 р."
+            free_shipping_text = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located((By.XPATH, "//span[@class='bask-page__parcelTotal-freeship']"))
+            )
+            assert free_shipping_text.text == "Бесплатная доставка от 2000 р."
+
+            # Ожидание активной кнопки "Оформить заказ"
+            order_button = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located((By.XPATH, "//button[@class='bask-page__orderTotal-btn']"))
+            )
+            assert order_button.is_enabled()
