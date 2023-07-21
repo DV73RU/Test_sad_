@@ -23,7 +23,7 @@ class SeedsPage(BasePage):
     # Actions
 
     def go_url_pages(self):
-        self.go_to_pages_url(self.url)
+        self.go_to_pages(self.url)
 
     #
     def check_seeds(self):
