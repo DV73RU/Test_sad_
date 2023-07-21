@@ -50,8 +50,11 @@ class CardPage(BasePage):
     #     self.click_element(self.button_order)
 
     def click_button_order3(self):  # Клик на кнопку Оформить ордер
-        self.get_order_min(self.value_min_price)
+
         self.click_checkout(self.button_order, self.button_order_not, self.value_min_price)
+
+    def check_order(self): 	# Проверка логики заказа с минимальной суммой
+        self.order_logic(800)
 
     """
     Метод переход на станицу Оформление заказа.
