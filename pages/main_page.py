@@ -13,7 +13,7 @@ class MainPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
-        self.url = 'https://sad-i-ogorod.ru/'
+        # self.url = 'https://sad-i-ogorod.ru/'
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
@@ -30,7 +30,7 @@ class MainPage(BasePage):
     # // TODO button_add_card  перенести в base_class?
     button_add_card = "//button[@class ='to-cart-btn elem-to_cart']"  # Кнопка добавить в корзину, может пернести в base_class?
     agree_button = "//a[@class = 'cookie-msg__button']"  # Кнопка "Согласен" модального окна.
-    button_seeds = "//a[@href='/catalog/semena.html' and span[text()='Семена']]" 	# Меню Семена
+    button_seeds = "//a[@href='/catalog/semena.html' and span[text()='Семена']]" 	# Кнопка Меню Семена
     # Меню Плодовые
     # Меню Декоративные
     # Меню Луковичные
@@ -42,10 +42,10 @@ class MainPage(BasePage):
         self.click_element(self.button_novelties1)  # Клик на кнопку Новинки в обход окна
 
     def click_butt_seeds(self):
-        self.click_element(self.button_seeds)
+        self.click_element(self.button_seeds)  # Клик на кнопку Семена.
 
     def click_butt_card(self):
-        self.click_element(self.button_card)
+        self.click_element(self.button_card)  # Клик на кнопку Корзина.
 
     """
     Метод переход на станицу Новинки.
@@ -57,18 +57,18 @@ class MainPage(BasePage):
         self.driver.get(self.url)
         self.driver.maximize_window()
         self.click_butt_novel()  # Кликаем на кнопку новинки.
-        self.assert_url_2('https://sad-i-ogorod.ru/catalog/novinki.html')  # Проверка ожидаемой url
+        self.assert_url('https://sad-i-ogorod.ru/catalog/novinki.html')  # Проверка ожидаемой url
 
         # self.check_cart()  # Проверяем состояние иконнки корзины
 
     """
-    Метод перехода на старницу Семена
+    Метод перехода на страницу Семена
     """
     def go_seeds_pages(self):
         self.driver.get(self.url)
         self.driver.maximize_window()
-        # self.click_butt_seeds()  # Кликаем на кнопку новинки.
-        self.assert_url_2('https://sad-i-ogorod.ru/catalog/semena.html')  # Проверка ожидаемой url
+        self.click_butt_seeds()  # Кликаем на кнопку новинки.
+        self.assert_url('https://sad-i-ogorod.ru/catalog/semena.html')  # Проверка ожидаемой url
 
 
     """
@@ -79,4 +79,4 @@ class MainPage(BasePage):
         # self.driver.get(self.url)
         # self.driver.maximize_window()
         self.click_butt_card()
-        self.assert_url_2('https://sad-i-ogorod.ru/cart/')
+        self.assert_url('https://sad-i-ogorod.ru/cart/')
