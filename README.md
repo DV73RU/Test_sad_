@@ -8,16 +8,16 @@
 
 
 `base` — Каталог с базовыми методами;
-	`base_class.py` -  
+	`base_class.py` -;
 `pages` — Каталог с методами страниц сайта;
-	`main_page.py` -
-	`login_page.py` -
-	`novinli_page.py` -
-	`seeds_page.py` - 
-	`card_pages.py` - 
-	`order_page.py` - 
+	`main_page.py` -; 
+	`login_page.py` -;
+	`novinli_page.py` -;
+	`seeds_page.py` -;
+	`card_pages.py` -;
+	`order_page.py` -;
 `tests` — Каталог с файлами авто тестов;
-	`test_login.py` -
+	`test_login.py` -;
 
 `utilites` — Каталог с внешними методами;
 
