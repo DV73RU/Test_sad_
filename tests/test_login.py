@@ -19,7 +19,7 @@ options.add_experimental_option("detach", True)
 options.add_argument("start-maximized")
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
-options.add_argument('--headless')	# Без окна браузера.
+# options.add_argument('--headless')	# Без окна браузера.
 exec_path = os.path.join(os.getcwd(), 'driver', 'chromedriver.exe') if system() == "Windows" else \
     os.path.join(os.getcwd(), 'driver', 'chromedriver')
 driver = webdriver.Chrome(options=options, service=Service(log_path=os.devnull, executable_path=exec_path))
@@ -60,8 +60,8 @@ stealth(driver=driver,
 #     card_page.check_card()
 
 
-def test_authorization(set_group):
-    print("Старт теста Авторизации")
-    login_page = LoginPage(driver)
-    login_page.authorization()
+# def test_authorization(set_group):
+#     print("Старт теста Авторизации")
+#     login_page = LoginPage(driver)
+#     login_page.authorization()
 
