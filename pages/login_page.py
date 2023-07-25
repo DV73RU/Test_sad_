@@ -44,10 +44,10 @@ class LoginPage(BasePage):
         self.click_element(self.submit_button)
 
     def check_button_text_before(self, value):
-        self.check_button_text_before_authentication(self.login_button_a, value)
+        self.get_button_text(self.login_button_a, value)
 
     def check_button_text_after(self, value):
-        self.check_button_text_after_authentication(self.login_button_b, value)
+        self.get_button_text(self.login_button_b, value, before_auth=False)
 
     # def
 
