@@ -17,6 +17,7 @@ def set_up():
 @pytest.fixture(scope="module")
 def driver():
     """Инициализация драйвера браузера перед запуском тестов."""
+    # """Методы обхода защиты от автоматизированного ПО в браузере Chrome под управлением Selenium в Python""
     options = webdriver.ChromeOptions()
     options.add_experimental_option("detach", True)
     options.add_argument("start-maximized")
