@@ -616,7 +616,7 @@ class BasePage():
     """
     Метод закрытия окна работа с куками
     """
-
+    # // TODO Найти Локатор закрытия кнопки банера
     def close_cookie_banner(self):  # продолжить работу даже в том случае, если элемент не найден.
         try:
             cookie_banner = self.driver.find_element(By.CLASS_NAME, "cookie-msg__wrapper")
