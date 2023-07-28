@@ -14,7 +14,8 @@ class CardPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
-        self.url = 'https://sad-i-ogorod.ru/cart/?login=yes'
+        self.url = 'https://sad-i-ogorod.ru/cart/?login=yes'  # Авторизованный url Корзины
+        self.url_2 = 'https://sad-i-ogorod.ru/cart/'  # Не авторизованный url корзины
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
@@ -29,7 +30,7 @@ class CardPage(BasePage):
     value_min_price = "//span[@class = 'bask-page__parcelTotal-minPrice']"  # Локатор минимальной суммы для заказа.
     value_price = "//span[@class = 'bask-page__orderTotal-price']"  # Локатор суммы заказа Семена.
     value_total_price = "//span[@class = 'bask-page__orderTotal-price']"  # Локатор общей суммы заказа
-    free_shipping = "//span[@class = 'bask-page__parcelTotal-freeship']" # Локатор текста бесплатной доставки
+    free_shipping = "//span[@class = 'bask-page__parcelTotal-freeship']"  # Локатор текста бесплатной доставки
 
     product_list = "//tr[contains(@class, 'bask-item')]"  # Локатор товаров козины
 
@@ -43,6 +44,11 @@ class CardPage(BasePage):
     def check_card(self):
         self.check_page_header(self.header_card, "Корзина")  # Проверяем значение заголовка странице Корзина.
 
+    def check_ur(self):
+        self.assert_url(self.url_2)
+        # // TODO Как проверять url если для авторизованной один не для авторизованной другой? Через параметры в тестах?
+        # //
+
     def parse_card(self):
         self.parse_products_card(self.product_list, print_products=True)  # Парсим товары на странице Корзины
 
@@ -53,7 +59,7 @@ class CardPage(BasePage):
 
         self.click_checkout(self.button_order, self.button_order_not, self.value_min_price)
 
-    def check_order(self): 	# Проверка логики заказа с минимальной суммой
+    def check_order(self):  # Проверка логики заказа с минимальной суммой
         self.order_logic(800)
 
     """
