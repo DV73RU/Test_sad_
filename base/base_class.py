@@ -616,12 +616,16 @@ class BasePage():
     """
     Метод закрытия окна работа с куками
     """
-    def close_cookie_banner(self):
+
+    def close_cookie_banner(self):  # продолжить работу даже в том случае, если элемент не найден.
         try:
             cookie_banner = self.driver.find_element(By.CLASS_NAME, "cookie-msg__wrapper")
             if cookie_banner.is_displayed():
-                # Закрыть баннер согласия на использование файлов cookie, если он видим
-                cookie_banner.find_element(By.CLASS_NAME, "cookie-msg__close").click()
+                try:
+                    # Закрыть баннер согласия на использование файлов cookie, если элемент cookie-msg__close найден
+                    cookie_banner.find_element(By.CLASS_NAME, "cookie-msg__close").click()
+                except NoSuchElementException:
+                    pass  # Если элемент cookie-msg__close не найден, проигнорировать ошибку
         except NoSuchElementException:
             pass  # Баннер с согласием на использование файлов cookie отсутствует или не виден, поэтому мы игнорируем исключение
 
