@@ -19,6 +19,7 @@ class SeedsPage(BasePage):
     # Локаторы элементов страницы.
     header_seeds = "//h1[@style='margin-bottom: 0px;']"  # Заголовок странице
     info_wrapper = "//a[@class='prod-name js-prod-link-list']"  # Локатор карточки товара на старание продуктов.
+    card_button = "//span[@class ='price']"
 
     # Actions
 
@@ -32,3 +33,9 @@ class SeedsPage(BasePage):
 
     def parse_seeds(self):
         self.parse_product(self.info_wrapper)  # Парсим товары на странице
+
+    def add_card(self):
+        self.add_to_card2()  # Добавление товара в корзину со странице семена
+
+    def click_to_card(self):
+        self.click_element(self.card_button)    # Кликаем на кнопку корзины.
