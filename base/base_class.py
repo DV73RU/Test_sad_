@@ -452,7 +452,7 @@ class BasePage():
     Ограничения в сумме заказа.
     """
 
-    def add_to_cart2(self, max_cart_total=1000):
+    def add_to_card2(self, max_cart_total=1000):
 
         # Найти все кнопки "Добавить в корзину"
 
@@ -478,7 +478,7 @@ class BasePage():
                                                        ".//a[@class='prod-name js-prod-link-list']").get_attribute(
                 "data-name")
             product_price_element = parent_element.find_element(By.XPATH, ".//div[@class='prod-price ']")
-            product_price = float(product_price_element.text.replace('.00 i', ''))
+            product_price = float(product_price_element.text.replace('.00 i', '').replace(' ', ''))
 
             # Скрыть элемент, перекрывающий кнопку, с помощью JavaScript (Pop-up окно Согласие на работу с куками)
 
@@ -496,7 +496,7 @@ class BasePage():
                 self.driver.execute_script("arguments[0].click();", button)
                 print("Кнопка 'Добавить в корзину' кликнута для товара:", product_name, product_price)
                 # Дождаться появления Pop-up окна
-                pop_up_element = WebDriverWait(self.driver, 10).until(
+                pop_up_element = WebDriverWait(self.driver, 15).until(
                     EC.visibility_of_element_located((By.XPATH, "//div[@class='box-cart-popup js-added-product']"))
                 )
                 # Получить все элементы <a> с классом "c_link" внутри Pop-up окна
@@ -507,7 +507,7 @@ class BasePage():
                 for product in products_in_pop_up:
                     product_name_in_pop_up = product.find_element(By.XPATH, ".//span[@class='name']").text
                     product_price_in_pop_up = float(
-                        product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 i', ''))
+                        product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 i', '').replace(' ', ''))
 
                     # print(f"Название в Pop-up: {product_name_in_pop_up}, цена: {product_price_in_pop_up}")
                     if product_name_in_pop_up == product_name:
