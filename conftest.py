@@ -42,4 +42,4 @@ def driver():
     yield driver
 
     # Закрытие браузера после выполнения всех тестов.
-    driver.quit()
+    # driver.quit()
