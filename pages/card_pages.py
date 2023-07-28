@@ -20,7 +20,11 @@ class CardPage(BasePage):
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
     # max_total_price = 800    # Минимальная сумма для заказа.
-    # Локаторы элементов страницы.
+
+    # +---------------------------------------------+
+    # | Локаторы элементов страницы Корзина         |
+    # +---------------------------------------------+
+
     header_card = "//div[@class = 'elem-heading']/h1"  # Заголовок станице Корзина
     total_price_card = "//div[@class='bask-page__parcelTotal']/span[@class='bask-page__parcelTotal-price']"  #
     # Итоговая сумма в корзине
@@ -35,17 +39,21 @@ class CardPage(BasePage):
     product_list = "//tr[contains(@class, 'bask-item')]"  # Локатор товаров козины
 
     # // TODO Перенести все локаторы корзины.
+    # +--------------------------------------+
+    # |            Actions                   |
+    # +--------------------------------------+
 
-    # Actions
     """
-    Метод проверки корзины
+    +----------------------------------+
+    |       Метод проверки корзины     |
+    +----------------------------------+
     """
 
     def check_card(self):
         self.check_page_header(self.header_card, "Корзина")  # Проверяем значение заголовка странице Корзина.
 
     def check_ur(self):
-        self.assert_url(self.url_2)
+        self.assert_url(self.url_2)     # Проверяем ulr корзины.
         # // TODO Как проверять url если для авторизованной один не для авторизованной другой? Через параметры в тестах?
         # //
 
@@ -61,6 +69,9 @@ class CardPage(BasePage):
 
     def check_order(self):  # Проверка логики заказа с минимальной суммой
         self.order_logic(800)
+
+    def click_button_order(self):
+        self.click_element(self.button_order)
 
     """
     Метод переход на станицу Оформление заказа.
