@@ -39,3 +39,4 @@ class SeedsPage(BasePage):
 
     def click_to_card(self):
         self.click_element(self.card_button)    # Кликаем на кнопку корзины.
+
