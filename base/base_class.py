@@ -506,7 +506,7 @@ class BasePage():
                 found_match = False
                 for product in products_in_pop_up:
                     product_name_in_pop_up = product.find_element(By.XPATH, ".//span[@class='name']").text
-                    product_price_in_pop_up = float(
+                    product_price_in_pop_up = int(
                         product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 i', '').replace(' ', ''))
 
                     # print(f"Название в Pop-up: {product_name_in_pop_up}, цена: {product_price_in_pop_up}")
