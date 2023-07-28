@@ -73,6 +73,9 @@ class CardPage(BasePage):
     def click_button_order(self):
         self.click_element(self.button_order)
 
+    def close_banner(self):
+        self.close_cookie_banner()
+
     """
     Метод переход на станицу Оформление заказа.
     """
