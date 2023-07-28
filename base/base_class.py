@@ -103,6 +103,9 @@ class BasePage():
             print(f"Ошибка: Элемент с локатором '{button_locator}' не найден на странице: {e}")
             # return None
 
+
+
+
     """
     Метод проверки условия активной кнопки 'Оформить заказ
     '"""
@@ -609,3 +612,16 @@ class BasePage():
                 EC.visibility_of_element_located((By.XPATH, "//button[@class='bask-page__orderTotal-btn']"))
             )
             assert order_button.is_enabled()
+
+    """
+    Метод закрытия окна работа с куками
+    """
+    def close_cookie_banner(self):
+        try:
+            cookie_banner = self.driver.find_element(By.CLASS_NAME, "cookie-msg__wrapper")
+            if cookie_banner.is_displayed():
+                # Закрыть баннер согласия на использование файлов cookie, если он видим
+                cookie_banner.find_element(By.CLASS_NAME, "cookie-msg__close").click()
+        except NoSuchElementException:
+            pass  # Баннер с согласием на использование файлов cookie отсутствует или не виден, поэтому мы игнорируем исключение
+
