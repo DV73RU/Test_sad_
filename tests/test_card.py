@@ -33,4 +33,6 @@ def test_add_to_card(driver):
     seed_page.add_to_card2(max_cart_total=1000)
     seed_page.click_to_card()
     card_page = CardPage(driver)
+    card_page.check_card()
+    card_page.check_ur()
     card_page.parse_card()
