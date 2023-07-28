@@ -36,4 +36,5 @@ def test_add_to_card(driver):
     card_page.check_card()
     card_page.check_ur()
     card_page.parse_card()
+    card_page.close_banner()
     card_page.click_button_order()
