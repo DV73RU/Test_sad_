@@ -1,5 +1,6 @@
 import time
 
+import pytest
 from selenium.common import TimeoutException, NoSuchElementException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
@@ -80,6 +81,7 @@ class BasePage():
             print(f"Нажата кнопка: {value_button}")
         except NoSuchElementException:
             print(f"Элемент {value_button} с локатором: {locator} не найден! ")
+            pytest.fail(f"Элемент {value_button} с локатором: {locator} не найден! ")
 
     """
 	Метод для проверки надписи на кнопке после авторизации.
@@ -102,9 +104,6 @@ class BasePage():
         except NoSuchElementException as e:
             print(f"Ошибка: Элемент с локатором '{button_locator}' не найден на странице: {e}")
             # return None
-
-
-
 
     """
     Метод проверки условия активной кнопки 'Оформить заказ
@@ -510,9 +509,9 @@ class BasePage():
                 for product in products_in_pop_up:
                     product_name_in_pop_up = product.find_element(By.XPATH, ".//span[@class='name']").text
                     product_price_in_pop_up = int(
-                        product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 i', '').replace(' ', ''))
+                        product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 i', ''))
 
-                    # print(f"Название в Pop-up: {product_name_in_pop_up}, цена: {product_price_in_pop_up}")
+                    print(f"Название в Pop-up: {product_name_in_pop_up}, цена: {product_price_in_pop_up}")
                     if product_name_in_pop_up == product_name:
                         if product_name_in_pop_up == product_name and product_price_in_pop_up == product_price:
                             print(
@@ -616,16 +615,47 @@ class BasePage():
     """
     Метод закрытия окна работа с куками
     """
-    # // TODO Найти Локатор закрытия кнопки банера
+
     def close_cookie_banner(self):  # продолжить работу даже в том случае, если элемент не найден.
         try:
             cookie_banner = self.driver.find_element(By.CLASS_NAME, "cookie-msg__wrapper")
             if cookie_banner.is_displayed():
                 try:
                     # Закрыть баннер согласия на использование файлов cookie, если элемент cookie-msg__close найден
-                    cookie_banner.find_element(By.CLASS_NAME, "cookie-msg__close").click()
+                    cookie_banner.find_element(By.XPATH, "//a[@class='cookie-msg__button']").click()
+                    print("Закрыт банер работы с куками")
                 except NoSuchElementException:
                     pass  # Если элемент cookie-msg__close не найден, проигнорировать ошибку
         except NoSuchElementException:
             pass  # Баннер с согласием на использование файлов cookie отсутствует или не виден, поэтому мы игнорируем исключение
 
+    """
+        Метод клика на radio button с помощью
+
+        """
+
+    def click_radio_registered(self):
+        try:
+            radio_button_registered = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.ID, "showTypeReg"))
+            )
+            time.sleep(2)
+            radio_button_registered.click()
+            print("Кнопка 'Я уже зарегистрирован' кликнута.")
+        except NoSuchElementException:
+            print("Кнопка 'Я уже зарегистрирован' не найдена.")
+
+    """
+    Метод клика на radio button с помощью JavaScript
+
+    """
+
+    def click_radio_registered_2(self):
+        try:
+            radio_button_registered = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.ID, "showTypeReg"))
+            )
+            self.driver.execute_script("arguments[0].click();", radio_button_registered)
+            print("Кликнуто radio button 'Я уже зарегистрирован'.")
+        except NoSuchElementException:
+            print("Кликнуто radio button 'Я уже зарегистрирован' не найдена.")
