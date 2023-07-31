@@ -16,6 +16,7 @@ class CardPage(BasePage):
         self.driver = driver
         self.url = 'https://sad-i-ogorod.ru/cart/?login=yes'  # Авторизованный url Корзины
         self.url_2 = 'https://sad-i-ogorod.ru/cart/'  # Не авторизованный url корзины
+        self.url_3 = 'https://sad-i-ogorod.ru/cart/order/'
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
@@ -53,9 +54,12 @@ class CardPage(BasePage):
         self.check_page_header(self.header_card, "Корзина")  # Проверяем значение заголовка странице Корзина.
 
     def check_ur(self):
-        self.assert_url(self.url_2)     # Проверяем ulr корзины.
+        self.assert_url(self.url_2)  # Проверяем ulr корзины.
         # // TODO Как проверять url если для авторизованной один не для авторизованной другой? Через параметры в тестах?
         # //
+
+    def check_url_order(self):
+        self.assert_url(self.url_3)
 
     def parse_card(self):
         self.parse_products_card(self.product_list, print_products=True)  # Парсим товары на странице Корзины
@@ -81,9 +85,8 @@ class CardPage(BasePage):
     """
 
     def go_to_order(self):
-        self.driver.get(self.url)
+        # self.driver.get(self.url_3)
         # self.driver.maximize_window()
         # self.scroll_pages_to_element(self.button_order)
-        self.click_button_order3()  # Кликаем на кнопку Ордер если активна.
-
-        self.assert_url_2('https://sad-i-ogorod.ru/cart/order/')  # Проверка ожидаемой url
+        self.click_button_order()  # Кликаем на кнопку Ордер если активна.
+        self.check_url_order()  # Проверка ожидаемой url
