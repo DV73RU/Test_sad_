@@ -12,8 +12,10 @@ from selenium.webdriver.support.wait import WebDriverWait
 from base.base_class import BasePage
 
 
-class OrderPage(BasePage):
+class OrderPageLogin(BasePage):
     url = 'https://sad-i-ogorod.ru/cart/order/?login=yes'
+
+    # user_
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -27,105 +29,45 @@ class OrderPage(BasePage):
     # +--------------------------------------------+
 
     header_order = "//div[@class = 'h2 pt_5 mb_15']"  # Заголовок странице
-    radio_new = "//input[@id = 'showTypeNew']"  # Радио баттон 'Я новый покупатель'
-    radio_reg = "//input[@id = 'showTypeReg']"  # Радио баттон "Я уже зарегистрирован"
-
-    # +--------------------------------------------+
-    # |         Локаторы 'Я новый покупатель'      |
-    # +--------------------------------------------+
+    label_personal_data = "//a[@class = 'order__tab order__tab--active']"  # Личные данные
     button_next = "//div[@class = 'btn js-next']"  # Кнопка Далее
     input_surname = "//input[@name = 'surname']"  # Фамилия
-    input_name = "//input[@name='name']"  # Имя
+    input_name = "//input[@name = 'name']"  # Имя
     input_father = "//input[@name = 'father']"  # Отчество
     input_phone = "//input[@name = 'phone']"  # Номер телефона
     input_email = "//input[@name = 'email']"  # email
+    input_email_2 = "//div[@class='form-group form-group--tooltip row form-block']//input[@name = 'email']"
+    # // *[ @ id = "typeNew"] / div[3] / div[4] / input
+    # / html / body / section / div / div[2] / form[1] / div / div[3] / div[4] / input
 
-    # +---------------------------------------------+
-    # |      Локаторы 'Я уже зарегистрирован'       |
-    # +---------------------------------------------+
+    label_surname = "//div[@class='form-group row form-block '][1]//label[@class='form-label required']"  # Метка поля ввода Фамилия
+    label_name = "//div[@class='form-group row form-block '][3]//label[@class='form-label required']"  # Метка поля Имя
+    label_father = "//div[@class='form-group row form-block '][4]//label[@class='form-label required']"  # Метка поля Отчество
+    label_phone = "//div[@class='form-group row form-block '][2]//label[@class='form-label required']"  # Метка поля Номер телефона
+    label_email = "//div[@class='form-group form-group--tooltip row form-block']//label[@class='form-label required']"  # Метка поля email
 
-    input_login = "//input[@name = 'USER_LOGIN']"  # Поле ввода "Логин"
-    input_pass = "//input[@name = 'USER_PASSWORD']"  # Поле ввода "Пароль"
-    label_login = "//div[@class = 'form-email form-group']//label[@class='form-label']"     # Название поля ввода login
-    label_pass = "//div[@class = 'form-pass form-group']//label[@class='form-label']"   # Название поля ввода Pass
-    button_submit = "//button[@class = 'btn btn-blue']"  # Кнопка "Войти"
+    def check_order(self, expected_header):
+        self.check_page_header(self.header_order, expected_header)  # Проверяем значение заголовка странице Корзина.
 
+    def check_input_name(self, expected_value):
+        self.check_input_value(self.input_name, self.label_name, expected_value)  # Что введено в поле имя
 
-    # Actions
-    """
-    Метод проверки заголовка странице Ордер
-    """
+    def check_input_surname(self, expected_value):
+        self.check_input_value(self.input_surname, self.label_surname, expected_value)  # Что введено в поле Фамилия
 
-    def check_order(self):
-        self.check_page_header(self.header_order, "Оформление заказа")  # Проверяем значение заголовка странице Корзина.
+    def check_input_father(self, expected_value):
+        self.check_input_value(self.input_father, self.label_father, expected_value)  # Что введено в поле отчество
 
-    def check_input_name(self):
-        self.get_text(self.input_name)  # Что введено в поле имя
+    def check_input_email(self, expected_value):
+        self.check_input_value(self.input_email_2, self.label_email, expected_value)  # Что введено в поле отчество
 
-    def check_input_surname(self):
-        self.get_text(self.input_surname)  # Что введено в поле Фамилия
+    def check_input_phone(self, expected_value):
+        self.check_input_value(self.input_phone, self.label_phone, expected_value)  # Что введено в поле отчество
 
-    def check_input_father(self):
-        self.get_text(self.input_father)  # Что введено в поле отчество
-
-    def check_input_email(self):
-        self.get_text(self.input_email)  # Что введено в поле отчество
-
-    def check_input_phone(self):
-        self.get_text(self.input_phone)  # Что введено в поле отчество
-
-    def input_user_name(self, login):  # Ввод Логина
-        self.input_in(self.input_login, self.label_login, login)  # Водим логин
-
-    def input_password(self, password):  # Водим пароль
-        self.input_in(self.input_pass, self.label_pass, password)
-
-    def click_button_submit(self):
-        self.click_element(self.button_submit)  # Кликаем на кнопку "Войти"
-
-    def click_radio_new(self):  # Кликаем на "Я новый покупатель"
-        self.click_element(self.radio_new)
-
-    def click_radio_reg(self):  # Кликаем на "Я уже зарегистрирован"
-        self.click_element(self.radio_reg)
-
-    def close_pop_up_cooke(self):
-        self.close_cookie_banner()
-
-    """
-    Метод клика на radio button с помощью
-
-    """
-    # def click_radio_registered(self):
-    #     try:
-    #         radio_button_registered = WebDriverWait(self.driver, 50).until(
-    #             EC.presence_of_element_located((By.ID, "showTypeReg"))
-    #         )
-    #         time.sleep(2)
-    #         radio_button_registered.click()
-    #         print("Кнопка 'Я уже зарегистрирован' кликнута.")
-    #     except NoSuchElementException:
-    #         print("Кнопка 'Я уже зарегистрирован' не найдена.")
-    #
-    # """
-    # Метод клика на radio button с помощью JavaScript
-    #
-    # """
-    # def click_radio_registered_2(self):
-    #     try:
-    #         radio_button_registered = WebDriverWait(self.driver, 50).until(
-    #             EC.presence_of_element_located((By.ID, "showTypeReg"))
-    #         )
-    #         self.driver.execute_script("arguments[0].click();", radio_button_registered)
-    #         print("Кликнуто radio button 'Я уже зарегистрирован' кликнута.")
-    #     except NoSuchElementException:
-    #         print("Кликнуто radio button 'Я уже зарегистрирован' не найдена.")
-
-    def authorization(self):
-        self.check_order()
-        # self.close_pop_up_cooke()
-        self.click_radio_registered_2()
-        self.input_user_name('testlessdns@gmail.com')
-        self.input_password('zaqwsx123')
-        self.click_button_submit()
-
+    def check_pages(self):
+        self.check_order("Оформление заказа")
+        self.check_input_father('Тестотчество')
+        self.check_input_name('Тестимя')  # Проверяем что введено в поле ввода Имя
+        self.check_input_surname('Тестфамилия')
+        # self.check_input_email('testlessdns@gmail.com') #// TODO не наход локатор поля ввода :(
+        self.check_input_phone('+7 (927) 816-47-86')
