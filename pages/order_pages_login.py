@@ -37,6 +37,7 @@ class OrderPageLogin(BasePage):
     input_phone = "//input[@name = 'phone']"  # Номер телефона
     input_email = "//input[@name = 'email']"  # email
     input_email_2 = "//div[@class='form-group form-group--tooltip row form-block']//input[@name = 'email']"
+
     # // *[ @ id = "typeNew"] / div[3] / div[4] / input
     # / html / body / section / div / div[2] / form[1] / div / div[3] / div[4] / input
 
