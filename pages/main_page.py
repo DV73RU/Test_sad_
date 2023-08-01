@@ -66,7 +66,7 @@ class MainPage(BasePage):
     """
     def go_seeds_pages(self):
         self.driver.get(self.url)
-        self.driver.maximize_window()
+        # self.driver.maximize_window()
         self.click_butt_seeds()  # Кликаем на кнопку новинки.
         self.assert_url('https://sad-i-ogorod.ru/catalog/semena.html')  # Проверка ожидаемой url
 
