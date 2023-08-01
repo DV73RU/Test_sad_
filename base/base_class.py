@@ -15,7 +15,7 @@ from selenium.webdriver.chrome.options import Options
 
 
 class BasePage():
-    TIMEOUT = 30  # Время ожидания доступности элемента.
+    TIMEOUT = 20  # Время ожидания доступности элемента.
 
     def __init__(self, driver):
         self.driver = driver
@@ -646,6 +646,7 @@ class BasePage():
 
     """
     Метод клика на radio button с помощью JavaScript
+    
     """
 
     def click_radio_registered_2(self):
@@ -654,14 +655,14 @@ class BasePage():
                 EC.presence_of_element_located((By.ID, "showTypeReg"))
             )
             self.driver.execute_script("arguments[0].click();", radio_button_registered)
-            print("Кликнуто radio button 'Я уже зарегистрирован'.")
+            print("Кликнуто radio button 'Я уже зарегистрирован'.") #// TODO Забрать название лейбла из локатора
         except NoSuchElementException:
             print("Кликнуто radio button 'Я уже зарегистрирован' не найдена.")
 
     """
     Метод проверки введённых значений в поля ввода
     input_locator - Локатор поля ввода
-    label_locator - Локатор названия поля ввода
+    label_locator - Локатор метка поля ввода
     expected_value - Проверяемое значение в поле ввода
     
     """
@@ -678,10 +679,13 @@ class BasePage():
 
                 # Проверяем, соответствует ли введенное значение ожидаемому
                 if input_value == expected_value:
-                    print("PASS: Значение в поле ввода соответствует ожидаемому.")
+                    print(f"Значение: '{input_value}' в поле ввода: '{label_text}' соответствует ожидаемому: '{expected_value}'.")
                 else:
-                    print("FAIL: Значение в поле ввода не соответствует ожидаемому.")
+                    print(f"Значение: '{input_value}' в поле ввода: '{label_text}' не соответствует ожидаемому: '{expected_value}'.")
+                    pytest.fail(f"Значение: '{input_value}' в поле ввода: '{label_text}' не соответствует ожидаемому: '{expected_value}'.")  # Тест помечается как FAILED
             else:
-                print(f"Метка с локатором {label_locator} не найдена.")
+                print(f"Метка с локатором: {label_locator} не найдена.")
+                pytest.fail(f"Метка не найдена: {label_locator}.")  # Тест помечается как FAILED
         except NoSuchElementException:
-            print(f"Поле с локатором {input_locator} не найдено.")
+            print(f"Поле с локатором: {input_locator} не найдено.")
+            pytest.fail(f"Поле не найдено: {input_locator}.")  # Тест помечается как FAILED
