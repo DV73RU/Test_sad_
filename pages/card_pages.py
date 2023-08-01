@@ -50,8 +50,8 @@ class CardPage(BasePage):
     +----------------------------------+
     """
 
-    def check_card(self):
-        self.check_page_header(self.header_card, "Корзина")  # Проверяем значение заголовка странице Корзина.
+    def check_card(self, expected_header):
+        self.check_page_header(self.header_card, expected_header)  # Проверяем значение заголовка странице Корзина.
 
     def check_ur(self):
         self.assert_url(self.url_2)  # Проверяем ulr корзины.
