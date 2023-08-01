@@ -46,18 +46,20 @@ class OrderPage(BasePage):
 
     input_login = "//input[@name = 'USER_LOGIN']"  # Поле ввода "Логин"
     input_pass = "//input[@name = 'USER_PASSWORD']"  # Поле ввода "Пароль"
-    label_login = "//div[@class = 'form-email form-group']//label[@class='form-label']"     # Название поля ввода login
-    label_pass = "//div[@class = 'form-pass form-group']//label[@class='form-label']"   # Название поля ввода Pass
+    label_login = "//div[@class = 'form-email form-group']//label[@class='form-label']"  # Название поля ввода login
+    label_pass = "//div[@class = 'form-pass form-group']//label[@class='form-label']"  # Название поля ввода Pass
     button_submit = "//button[@class = 'btn btn-blue']"  # Кнопка "Войти"
 
-
     # Actions
-    """
-    Метод проверки заголовка странице Ордер
-    """
 
-    def check_order(self):
-        self.check_page_header(self.header_order, "Оформление заказа")  # Проверяем значение заголовка странице Корзина.
+    def click_radio_bt_reg(self):
+        self.click_radio(self.radio_reg)    # Клик радиобутнон "Я зарегистрирован"
+
+    def click_radio_bt_new(self):
+        self.click_radio(self.radio_new)  # Клик радиобутон "Я новый покупатель"
+
+    def check_order(self, expected_header):
+        self.check_page_header(self.header_order, expected_header)  # Проверяем значение заголовка странице Корзина.
 
     def check_input_name(self):
         self.get_text(self.input_name)  # Что введено в поле имя
@@ -93,10 +95,9 @@ class OrderPage(BasePage):
         self.close_cookie_banner()
 
     def authorization(self):
-        self.check_order()
-        # self.close_pop_up_cooke()
-        self.click_radio_registered_2()
+        self.check_order('Оформление заказа')
+        self.close_pop_up_cooke()
+        self.click_radio_bt_reg()
         self.input_user_name('testlessdns@gmail.com')
         self.input_password('zaqwsx123')
         self.click_button_submit()
-
