@@ -50,19 +50,19 @@ class OrderPageLogin(BasePage):
         self.check_page_header(self.header_order, expected_header)  # Проверяем значение заголовка странице Корзина.
 
     def check_input_name(self, expected_value):
-        self.check_input_value(self.input_name, self.label_name, expected_value)  # Что введено в поле имя
+        self.check_input_value_2(self.input_name, self.label_name, expected_value)  # Что введено в поле имя
 
     def check_input_surname(self, expected_value):
-        self.check_input_value(self.input_surname, self.label_surname, expected_value)  # Что введено в поле Фамилия
+        self.check_input_value_2(self.input_surname, self.label_surname, expected_value)  # Что введено в поле Фамилия
 
     def check_input_father(self, expected_value):
-        self.check_input_value(self.input_father, self.label_father, expected_value)  # Что введено в поле отчество
+        self.check_input_value_2(self.input_father, self.label_father, expected_value)  # Что введено в поле отчество
 
     def check_input_email(self, expected_value):
-        self.check_input_value(self.input_email_2, self.label_email, expected_value)  # Что введено в поле отчество
+        self.check_input_value_2(self.input_email_2, self.label_email, expected_value)  # Что введено в поле отчество
 
     def check_input_phone(self, expected_value):
-        self.check_input_value(self.input_phone, self.label_phone, expected_value)  # Что введено в поле отчество
+        self.check_input_value_2(self.input_phone, self.label_phone, expected_value)  # Что введено в поле отчество
 
     def check_pages(self):
         self.check_order("Оформление заказа")
