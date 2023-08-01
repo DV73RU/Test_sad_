@@ -9,6 +9,7 @@ from selenium_stealth import stealth
 from pages.card_pages import CardPage
 from pages.main_page import MainPage
 from pages.order_pages import OrderPage
+from pages.order_pages_login import OrderPageLogin
 from pages.seeds_page import SeedsPage
 
 
@@ -31,13 +32,15 @@ def test_add_to_card(driver):
     seed_page = SeedsPage(driver)
     seed_page.check_seeds()
     seed_page.parse_seeds()
-    seed_page.add_to_card2(max_cart_total=2000)
+    seed_page.add_to_card2(max_cart_total=1000)
     seed_page.click_to_card()
     card_page = CardPage(driver)
-    card_page.check_card()
+    card_page.check_card("Корзина")
     card_page.check_ur()
     card_page.parse_card()
     card_page.close_banner()
     card_page.go_to_order()
     order_page = OrderPage(driver)
     order_page.authorization()
+    order_page_login = OrderPageLogin(driver)
+    order_page_login.check_pages()
