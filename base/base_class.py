@@ -21,17 +21,16 @@ class BasePage():
         self.driver = driver
         self.wait = WebDriverWait(driver, self.TIMEOUT)
 
-    """Метод возвращает локатор элемента."""
+    """
+    Метод возвращает локатор элемента.
+    """
 
-    def get_element(self, locator):
+    def get_element(self, locator):  # Возвращает элемент
         try:
             element = self.wait.until(EC.visibility_of_element_located((By.XPATH, locator)))
             return element
         except TimeoutException:
             raise NoSuchElementException(f"Элемент не найден: {locator}!")
-
-    def get_url(self):
-        return self.driver.current_url
 
     """
     Метод проверки фактического заголовка странице с ожидаемым.
@@ -39,7 +38,7 @@ class BasePage():
     expected_header - Ожидаемое значение заголовка.
     """
 
-    def check_page_header(self, header_locator, expected_header):   # Проверка заголовка странице
+    def check_page_header(self, header_locator, expected_header):  # Проверка заголовка странице
         try:
             header_element = self.get_element(header_locator)
             header_text = header_element.text  # Фактический заголовок.
@@ -106,7 +105,7 @@ class BasePage():
             # return None
 
     """
-    Метод проверки условия активной кнопки 'Оформить заказ
+    Метод проверки условия активной кнопки 'Оформить заказ'
     '"""
 
     # // TODO Перенести метод в cared_pages.py
@@ -145,27 +144,6 @@ class BasePage():
     """
     Метод ввода в поле ввода.
     """
-
-    # // TODO Написать вывод название поля ввода.
-    def input_in3(self, locator, value):
-        element = self.get_element(locator)  # Поле ввода
-        element.clear()  # Очистить поле ввода
-        element.send_keys(value)  # Ввести значение в поле ввода
-        print(f"В поле ввода введено: {value}")
-
-    def input_in2(self, locator, value):
-        try:
-            element = self.get_element(locator)  # Поле ввода
-            element.clear()  # Очистить поле ввода
-            element.send_keys(value)  # Ввести значение в поле ввода
-
-            # Получить атрибут "placeholder" элемента, если он есть
-            placeholder = element.get_attribute("USER_LOGIN")
-            field_name = placeholder if placeholder else "неизвестное поле"  # Если атрибут "placeholder" не определен
-
-            print(f"В поле '{field_name}' введено: {value}")
-        except Exception as e:
-            print(f"Ошибка при вводе текста в поле: {e}")
 
     def input_in(self, input_locator, label_locator, value):
         try:
@@ -219,7 +197,7 @@ class BasePage():
     def go_to_pages(self, url):
         self.driver.get(self.url)
         self.driver.maximize_window()
-        # self.assert_url_2(url)  # Проверка ожидаемой url странице
+
 
     """
     Метод парсинга товаров на странице каталога
@@ -294,7 +272,7 @@ class BasePage():
     Метод парсинга товаров на странице корзины.
     Сравнение суммы покупки на странице корзины с расчётной.
     Опции: print_products=False - Не выводить спарсенный список товаров
-            compare_prices=False - Не выводить сравнение цен на странице и расчётные.
+           compare_prices=False - Не выводить сравнение цен на странице и расчётные.
     """
 
     def parse_products_card(self, locator, print_products=True, compare_prices=True):
@@ -630,47 +608,50 @@ class BasePage():
             pass  # Баннер с согласием на использование файлов cookie отсутствует или не виден, поэтому мы игнорируем исключение
 
     """
-    Метод клика на radio button с помощью
+    Метод клика на radio button
     """
 
-    def click_radio_registered(self):
+    def click_radio_2(self, locator):
         try:
             radio_button_registered = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.ID, "showTypeReg"))
+                EC.presence_of_element_located((By.XPATH, locator))  #   // TODO использовать универсальный локатаор ID
             )
+            button_text = self.get_text(locator)
             time.sleep(2)
             radio_button_registered.click()
-            print("Кнопка 'Я уже зарегистрирован' кликнута.")
+            print(f"Кнопка '{button_text}' кликнута.")
         except NoSuchElementException:
-            print("Кнопка 'Я уже зарегистрирован' не найдена.")
+            print(f"Кнопка c локатором: {locator} не найдена.")
 
     """
     Метод клика на radio button с помощью JavaScript
     
     """
 
-    def click_radio_registered_2(self):
+    def click_radio(self, locator):
         try:
-            radio_button_registered = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.ID, "showTypeReg"))
+            radio_button_registered = WebDriverWait(self.driver, 25).until(
+                EC.presence_of_element_located((By.XPATH, locator))
             )
+            # button_text = self.get_text(locator)
             self.driver.execute_script("arguments[0].click();", radio_button_registered)
-            print("Кликнуто radio button 'Я уже зарегистрирован'.") #// TODO Забрать название лейбла из локатора
+            print(f"Кликнута radio button ''.")  # // TODO Забрать название метки из локатора
         except NoSuchElementException:
-            print("Кликнуто radio button 'Я уже зарегистрирован' не найдена.")
-
-
-    """
-    Метод проверки введённых значений в поля ввода
-    input_locator - Локатор поля ввода
-    label_locator - Локатор метка поля ввода
-    expected_value - Проверяемое значение в поле ввода
+            pytest.fail(f"radio button '{locator}' не найдена.")
 
     """
+    +=====================================================+
+    |  Метод проверки введённых значений в поля ввода     |
+    |  input_locator - Локатор поля ввода                 |
+    |  label_locator - Локатор метка поля ввода           |
+    |  expected_value - Проверяемое значение в поле ввода |
+    ======================================================+
+    """
+
     def check_input_value_2(self, input_locator, label_locator, expected_value):
         try:
             input_element = self.get_element(input_locator)  # Находим элемент поля ввода
-            actual_value = input_element.get_attribute("value")     # Получаем значение поля ввода
+            actual_value = input_element.get_attribute("value")  # Получаем значение поля ввода
 
             # Получаем текст метки с помощью метода get_text, передавая локатор метки
             label_text = self.get_text(label_locator)
