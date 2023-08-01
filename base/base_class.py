@@ -39,7 +39,7 @@ class BasePage():
     expected_header - Ожидаемое значение заголовка.
     """
 
-    def check_page_header(self, header_locator, expected_header):
+    def check_page_header(self, header_locator, expected_header):   # Проверка заголовка странице
         try:
             header_element = self.get_element(header_locator)
             header_text = header_element.text  # Фактический заголовок.
@@ -659,33 +659,24 @@ class BasePage():
         except NoSuchElementException:
             print("Кликнуто radio button 'Я уже зарегистрирован' не найдена.")
 
+
     """
     Метод проверки введённых значений в поля ввода
     input_locator - Локатор поля ввода
     label_locator - Локатор метка поля ввода
     expected_value - Проверяемое значение в поле ввода
-    
+
     """
-    def check_input_value(self, input_locator, label_locator, expected_value):
+    def check_input_value_2(self, input_locator, label_locator, expected_value):
         try:
             input_element = self.get_element(input_locator)  # Находим элемент поля ввода
-            input_value = input_element.get_attribute("value")  # Получаем значение поля ввода
+            actual_value = input_element.get_attribute("value")     # Получаем значение поля ввода
 
             # Получаем текст метки с помощью метода get_text, передавая локатор метки
             label_text = self.get_text(label_locator)
 
-            if label_text is not None:
-                print(f"В поле '{label_text}' введено: {input_value}")
-
-                # Проверяем, соответствует ли введенное значение ожидаемому
-                if input_value == expected_value:
-                    print(f"Значение: '{input_value}' в поле ввода: '{label_text}' соответствует ожидаемому: '{expected_value}'.")
-                else:
-                    print(f"Значение: '{input_value}' в поле ввода: '{label_text}' не соответствует ожидаемому: '{expected_value}'.")
-                    pytest.fail(f"Значение: '{input_value}' в поле ввода: '{label_text}' не соответствует ожидаемому: '{expected_value}'.")  # Тест помечается как FAILED
-            else:
-                print(f"Метка с локатором: {label_locator} не найдена.")
-                pytest.fail(f"Метка не найдена: {label_locator}.")  # Тест помечается как FAILED
+            # Проверяем, соответствует ли введенное значение ожидаемому
+            assert actual_value == expected_value, f"Значение поля '{label_text}' не соответствует ожидаемому: {expected_value}"
+            print(f"Значение поля '{label_text}' соответствует ожидаемому: {expected_value}")
         except NoSuchElementException:
-            print(f"Поле с локатором: {input_locator} не найдено.")
-            pytest.fail(f"Поле не найдено: {input_locator}.")  # Тест помечается как FAILED
+            pytest.fail(f"Поле не найдено: {input_locator}.")
