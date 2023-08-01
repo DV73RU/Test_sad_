@@ -630,9 +630,8 @@ class BasePage():
             pass  # Баннер с согласием на использование файлов cookie отсутствует или не виден, поэтому мы игнорируем исключение
 
     """
-        Метод клика на radio button с помощью
-
-        """
+    Метод клика на radio button с помощью
+    """
 
     def click_radio_registered(self):
         try:
@@ -647,7 +646,6 @@ class BasePage():
 
     """
     Метод клика на radio button с помощью JavaScript
-
     """
 
     def click_radio_registered_2(self):
@@ -659,3 +657,31 @@ class BasePage():
             print("Кликнуто radio button 'Я уже зарегистрирован'.")
         except NoSuchElementException:
             print("Кликнуто radio button 'Я уже зарегистрирован' не найдена.")
+
+    """
+    Метод проверки введённых значений в поля ввода
+    input_locator - Локатор поля ввода
+    label_locator - Локатор названия поля ввода
+    expected_value - Проверяемое значение в поле ввода
+    
+    """
+    def check_input_value(self, input_locator, label_locator, expected_value):
+        try:
+            input_element = self.get_element(input_locator)  # Находим элемент поля ввода
+            input_value = input_element.get_attribute("value")  # Получаем значение поля ввода
+
+            # Получаем текст метки с помощью метода get_text, передавая локатор метки
+            label_text = self.get_text(label_locator)
+
+            if label_text is not None:
+                print(f"В поле '{label_text}' введено: {input_value}")
+
+                # Проверяем, соответствует ли введенное значение ожидаемому
+                if input_value == expected_value:
+                    print("PASS: Значение в поле ввода соответствует ожидаемому.")
+                else:
+                    print("FAIL: Значение в поле ввода не соответствует ожидаемому.")
+            else:
+                print(f"Метка с локатором {label_locator} не найдена.")
+        except NoSuchElementException:
+            print(f"Поле с локатором {input_locator} не найдено.")
