@@ -18,7 +18,7 @@ class OrderPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
-        self.url = 'https://sad-i-ogorod.ru/cart/order/'
+        # self.url = 'https://sad-i-ogorod.ru/cart/order/'
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
@@ -52,14 +52,17 @@ class OrderPage(BasePage):
 
     # Actions
 
+    def check_url_order(self):
+        self.assert_url(self.url)   # Проверяем url странице Ордер
+
+    def check_order_header(self, expected_header):
+        self.check_page_header(self.header_order, expected_header)  # Проверяем значение заголовка странице Корзина.
+
     def click_radio_bt_reg(self):
         self.click_radio(self.radio_reg)    # Клик радиобутнон "Я зарегистрирован"
 
     def click_radio_bt_new(self):
         self.click_radio(self.radio_new)  # Клик радиобутон "Я новый покупатель"
-
-    def check_order(self, expected_header):
-        self.check_page_header(self.header_order, expected_header)  # Проверяем значение заголовка странице Корзина.
 
     def check_input_name(self):
         self.get_text(self.input_name)  # Что введено в поле имя
@@ -94,8 +97,11 @@ class OrderPage(BasePage):
     def close_pop_up_cooke(self):
         self.close_cookie_banner()
 
+    def check_url_order(self):
+        self.assert_url(self.url)
+
     def authorization(self):
-        self.check_order('Оформление заказа')
+        self.check_order_header('Оформление заказа')
         self.close_pop_up_cooke()
         self.click_radio_bt_reg()
         self.input_user_name('testlessdns@gmail.com')
