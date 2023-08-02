@@ -13,18 +13,8 @@ from pages.order_pages_login import OrderPageLogin
 from pages.seeds_page import SeedsPage
 
 
-# def test_add_to_card(driver):
-#     print("Старт теста Добавление товаров в корзину")
-#
-#     main_page = MainPage(driver)
-#     main_page.go_seeds_pages()
-#     seed_page = SeedsPage(driver)
-#     seed_page.check_seeds()
-#     seed_page.parse_seeds()
-#     seed_page.add_to_cart2(max_cart_total=1500)
-
-# @pytest.mark.parametrize("max_cart_total", [700, 1000, 2200])
-def test_add_to_card(driver):
+@pytest.mark.parametrize("max_cart_total", [700, 1000, 2200])
+def test_add_to_card(driver, max_cart_total):
     print(f"Старт теста Добавление товаров в корзину")
 
     main_page = MainPage(driver)
