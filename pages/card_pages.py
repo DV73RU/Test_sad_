@@ -46,16 +46,16 @@ class CardPage(BasePage):
 
     """
     +----------------------------------+
-    |       Метод проверки корзины     |
+    |       Методы корзины             |
     +----------------------------------+
     """
 
-    def check_card(self, expected_header):
+    def check_card_header(self, expected_header):
         self.check_page_header(self.header_card, expected_header)  # Проверяем значение заголовка странице Корзина.
 
-    def check_ur(self):
+    def check_ur_card(self):
         self.assert_url(self.url_2)  # Проверяем ulr корзины.
-        # // TODO Как проверять url если для авторизованной один не для авторизованной другой? Через параметры в тестах?
+        # // TODO Как проверять url если для авторизованной один, не для авторизованной другой? Через параметры в тестах?
         # //
 
     def check_url_order(self):
@@ -64,11 +64,7 @@ class CardPage(BasePage):
     def parse_card(self):
         self.parse_products_card(self.product_list, print_products=True)  # Парсим товары на странице Корзины
 
-    # def click_button_order2(self):  # Клик на кнопку Оформить ордер если мешает pop-ap
-    #     self.click_element(self.button_order)
-
     def click_button_order3(self):  # Клик на кнопку Оформить ордер
-
         self.click_checkout(self.button_order, self.button_order_not, self.value_min_price)
 
     def check_order(self):  # Проверка логики заказа с минимальной суммой
@@ -80,6 +76,9 @@ class CardPage(BasePage):
     def close_banner(self):
         self.close_cookie_banner()
 
+
+
+
     """
     Метод переход на станицу Оформление заказа.
     """
@@ -90,3 +89,6 @@ class CardPage(BasePage):
         # self.scroll_pages_to_element(self.button_order)
         self.click_button_order()  # Кликаем на кнопку Ордер если активна.
         self.check_url_order()  # Проверка ожидаемой url
+
+    # def check_feature(self):
+
