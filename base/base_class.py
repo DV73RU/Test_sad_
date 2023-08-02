@@ -14,12 +14,32 @@ from selenium.webdriver.chrome.options import Options
 """
 
 
-class BasePage():
+class BasePage:
     TIMEOUT = 20  # Время ожидания доступности элемента.
 
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, self.TIMEOUT)
+
+    """
+    Метод перехода на URL
+    """
+
+    def go_to_url(self, url):
+        return self.driver.get(url)
+
+    """
+    Метод видимости элемента
+    """
+
+    def is_element_visible(self, locator):
+        try:
+            element = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located(locator)
+            )
+            return element.is_displayed()
+        except:
+            return False
 
     """
     Метод возвращает локатор элемента.
@@ -198,7 +218,6 @@ class BasePage():
         self.driver.get(self.url)
         self.driver.maximize_window()
 
-
     """
     Метод парсинга товаров на странице каталога
     show_list=False - Параметр скрывает список спарсенных товаров.
@@ -298,7 +317,8 @@ class BasePage():
                 "value")  # Локатор количества добавленного продукта.
             product_total_price_element = product.find_element(By.XPATH,
                                                                ".//td[@data-title='Стоимость']/span[@class='value nowrap']")  # Локатор общей стоимости продукта.
-            product_total_price = product_total_price_element.text.replace('.00 i', '')  # Удаление лишний
+            product_total_price = product_total_price_element.text.replace('.00 i', '').replace(' ',
+                                                                                                '')  # Удаление лишний
             # элементов из цены продукта.
 
             # Добавляем цену товара к общей стоимости заказа
@@ -432,7 +452,7 @@ class BasePage():
     Ограничения в сумме заказа.
     """
 
-    def add_to_card2(self, max_cart_total=1000):
+    def add_to_card2(self, max_cart_total):
 
         # Найти все кнопки "Добавить в корзину"
 
@@ -546,6 +566,59 @@ class BasePage():
             print(f"Элемент с локатором: {locator} не найден! ")
 
     """
+    Метод проверки функциональности ограничения суммы заказа
+    """
+    def check_order_total_2(self, total):
+        # Получаем элемент, содержащий информацию о стоимости заказа
+        total_element = self.driver.find_element(By.XPATH, "//span[@class='price']")
+
+        # Получаем текст элемента суммы заказа
+        order_total_text = total_element.text
+
+        # Преобразуем текст суммы заказа в числовое значение
+        order_total = float(order_total_text.replace('.00 i', '').replace(' ', ''))
+
+        # Проверяем условия и выполняем соответствующие действия
+        if order_total <= 800:
+            # Проверяем отображение текста "Минимальная стоимость посылки 800.0"
+            assert "Минимальная стоимость посылки 800.0" in total_element.text
+
+            # Проверяем кликабельность кнопки "Перейти в каталог семян"
+            catalog_button = self.driver.find_element(By.XPATH,
+                                                      "//button[contains(text(), 'Перейти в каталог семян')]")
+            assert catalog_button.is_enabled()
+
+            # Проверяем, что кнопка "Оформить заказ" не кликабельна
+            order_button = self.driver.find_element(By.XPATH, "//button[contains(text(), 'Оформить заказ')]")
+            assert not order_button.is_enabled()
+
+        elif 800 < order_total < 2000:
+            # Проверяем отображение текста "Бесплатная доставка от 2 000"
+            assert "Бесплатная доставка от 2 000" in total_element.text
+
+            # Проверяем, что кнопка "Перейти в каталог семян" скрыта
+            catalog_button = self.driver.find_element(By.XPATH,
+                                                      "//button[contains(text(), 'Перейти в каталог семян')]")
+            assert not catalog_button.is_displayed()
+
+            # Проверяем кликабельность кнопки "Оформить заказ"
+            order_button = self.driver.find_element(By.XPATH, "//button[contains(text(), 'Оформить заказ')]")
+            assert order_button.is_enabled()
+
+        elif order_total >= 2000:
+            # Проверяем отображение текста "Бесплатная доставка"
+            assert "Бесплатная доставка" in total_element.text
+
+            # Проверяем, что кнопка "Перейти в каталог семян" скрыта
+            catalog_button = self.driver.find_element(By.XPATH,
+                                                      "//button[contains(text(), 'Перейти в каталог семян')]")
+            assert not catalog_button.is_displayed()
+
+            # Проверяем кликабельность кнопки "Оформить заказ"
+            order_button = self.driver.find_element(By.XPATH, "//button[contains(text(), 'Оформить заказ')]")
+            assert order_button.is_enabled()
+
+    """
     Чекаем сумму возможную для продолжения заказа
 	"""
 
@@ -614,7 +687,7 @@ class BasePage():
     def click_radio_2(self, locator):
         try:
             radio_button_registered = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, locator))  #   // TODO использовать универсальный локатаор ID
+                EC.presence_of_element_located((By.XPATH, locator))  # // TODO использовать универсальный локатаор ID
             )
             button_text = self.get_text(locator)
             time.sleep(2)
