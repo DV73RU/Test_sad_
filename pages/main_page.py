@@ -13,7 +13,6 @@ class MainPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
-        # self.url = 'https://sad-i-ogorod.ru/'
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
@@ -30,13 +29,17 @@ class MainPage(BasePage):
     # // TODO button_add_card  перенести в base_class?
     button_add_card = "//button[@class ='to-cart-btn elem-to_cart']"  # Кнопка добавить в корзину, может пернести в base_class?
     agree_button = "//a[@class = 'cookie-msg__button']"  # Кнопка "Согласен" модального окна.
-    button_seeds = "//a[@href='/catalog/semena.html' and span[text()='Семена']]" 	# Кнопка Меню Семена
+    button_seeds = "//a[@href='/catalog/semena.html' and span[text()='Семена']]"  # Кнопка Меню Семена
+
     # Меню Плодовые
     # Меню Декоративные
     # Меню Луковичные
     # Кнопка Лук, чеснок
     # Кнопка Чай
     # Меню Сопутка
+
+    def go_main_page(self):
+        self.assert_url(self.url)
 
     def click_butt_novel(self):
         self.click_element(self.button_novelties1)  # Клик на кнопку Новинки в обход окна
@@ -64,12 +67,12 @@ class MainPage(BasePage):
     """
     Метод перехода на страницу Семена
     """
+
     def go_seeds_pages(self):
         self.driver.get(self.url)
         # self.driver.maximize_window()
         self.click_butt_seeds()  # Кликаем на кнопку новинки.
         self.assert_url('https://sad-i-ogorod.ru/catalog/semena.html')  # Проверка ожидаемой url
-
 
     """
     Метод перехода в корзину
