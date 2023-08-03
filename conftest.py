@@ -1,3 +1,4 @@
+# conftest.py
 import pytest
 import os
 from platform import system
