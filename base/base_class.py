@@ -49,8 +49,9 @@ class BasePage:
         try:
             element = self.wait.until(EC.visibility_of_element_located((By.XPATH, locator)))
             return element
-        except TimeoutException:
-            raise NoSuchElementException(f"Элемент не найден: {locator}!")
+        except TimeoutException as e:
+            raise NoSuchElementException(f"Элемент с локатором '{locator}' не найден {e}")
+
 
     """
     Метод проверки фактического заголовка странице с ожидаемым.
@@ -59,18 +60,18 @@ class BasePage:
     """
 
     def check_page_header(self, header_locator, expected_header):  # Проверка заголовка странице
-        try:
-            header_element = self.get_element(header_locator)
-            header_text = header_element.text  # Фактический заголовок.
-            assert header_text == expected_header, f"Ошибка: Заголовок страницы '{header_text}' не соответствует ожидаемому '{expected_header}'"
-            print(f"Успех: Заголовок страницы '{header_text}' соответствует ожидаемому '{expected_header}'")
-            return True
-        except TimeoutException:
-            print("Ошибка: Заголовок страницы не найден или не видим!")
-            return False
-        except NoSuchElementException as e:
-            print(f"Ошибка: Элемент с локатором '{header_locator}' не найден на странице: {e}")
-            return None
+        # try:
+        header_element = self.get_element(header_locator)
+        header_text = header_element.text  # Фактический заголовок.
+        assert header_text == expected_header, f"Ошибка: Заголовок страницы '{header_text}' не соответствует ожидаемому '{expected_header}'"
+        print(f"Успех: Заголовок страницы '{header_text}' соответствует ожидаемому '{expected_header}'")
+            # return True
+        # except TimeoutException:
+        #     pytest.fail("Ошибка: Заголовок страницы не найден или не видим!")
+            # return False
+        # except NoSuchElementException as e:
+        #     pytest.fail(f"Ошибка: Элемент с локатором '{header_locator}' не найден на странице: {e}")
+            # return None
         # except Exception as e:
         #     print(f"Ошибка: Неожиданная ошибка при проверке заголовка страницы: {e}")
         #     return None
@@ -375,16 +376,16 @@ class BasePage:
 
         # cart_price = self.driver.find_element(By.XPATH,"//span[@class='price' or @class='no-product']")  # Локатор Суммы заказа в корзине
 
-        add_to_cart_buttons = self.driver.find_elements(By.XPATH, "//button[@class='to-cart-btn elem-to_cart']")
+        add_to_card_buttons = self.driver.find_elements(By.XPATH, "//button[@class='to-cart-btn elem-to_cart']")
 
         # Проверить наличие товаров на странице
-        if len(add_to_cart_buttons) == 0:
+        if len(add_to_card_buttons) == 0:
             print("На странице нет товаров для добавления в корзину.")
             return
 
         # Кликнуть на каждую кнопку "Добавить в корзину"
         # Проверить доступность каждой кнопки "Добавить в корзину"
-        for button in add_to_cart_buttons:
+        for button in add_to_card_buttons:
             if not button.is_enabled():
                 print("Кнопка 'Добавить в корзину' недоступна")
                 continue
@@ -452,20 +453,21 @@ class BasePage:
     Ограничения в сумме заказа.
     """
 
-    def add_to_card2(self, max_cart_total):
+    def add_to_card2(self, max_card_total):
+        max_card_total = 2000  # Здесь укажите нужное значение
 
         # Найти все кнопки "Добавить в корзину"
 
-        add_to_cart_buttons = self.driver.find_elements(By.XPATH, "//button[@class='to-cart-btn elem-to_cart']")
+        add_to_card_buttons = self.driver.find_elements(By.XPATH, "//button[@class='to-cart-btn elem-to_cart']")
 
         # Проверить наличие товаров на странице
-        if len(add_to_cart_buttons) == 0:
+        if len(add_to_card_buttons) == 0:
             print("На странице нет товаров для добавления в корзину.")
             return
 
         # Кликнуть на каждую кнопку "Добавить в корзину"
         # Проверить доступность каждой кнопки "Добавить в корзину"
-        for button in add_to_cart_buttons:
+        for button in add_to_card_buttons:
             if not button.is_enabled():
                 print("Кнопка 'Добавить в корзину' недоступна")
                 continue
@@ -544,13 +546,109 @@ class BasePage:
                 cart_total_text = cart_total_element.text
                 cart_price_value = int(cart_total_text.replace('.00 i', '').replace(' ', ''))
 
-                if cart_price_value > max_cart_total:
-                    print(f"Общая сумма заказа превышает {max_cart_total}, добавление товаров в корзину остановлено")
+                if cart_price_value > max_card_total:
+                    print(f"Общая сумма заказа превышает {max_card_total}, добавление товаров в корзину остановлено")
                     print(f"Товары успешно добавлены в корзину на сумму: {cart_price_value}")
                     return
 
             except TimeoutException:
                 print("Pop-up окно не появилось или не закрылось для товара:", product_name)
+
+    def add_to_card3(self, max_card_total, button_add_to_card_locator, info_wrapper_locator, product_name_locator, product_price_locator):
+        # max_card_total = 2000  # Здесь укажите нужное значение
+        # Найти все кнопки "Добавить в корзину"
+        add_to_card_buttons = self.driver.find_elements(By.XPATH, button_add_to_card_locator)
+
+        # Проверить наличие товаров на странице
+        if len(add_to_card_buttons) == 0:
+            print("На странице нет товаров для добавления в корзину.")
+            return
+
+        for button in add_to_card_buttons:
+            if not button.is_enabled():
+                print("Кнопка 'Добавить в корзину' недоступна")
+                continue
+
+            # Получить информацию о товаре из кнопки "Добавить в корзину" до нажатия
+            parent_element = button.find_element(By.XPATH, info_wrapper_locator)
+
+            product_name = parent_element.find_element(By.XPATH, product_name_locator).get_attribute("data-name")
+            product_price_element = parent_element.find_element(By.XPATH, product_price_locator)
+            product_price = float(product_price_element.text.replace('.00 i', '').replace(' ', ''))
+
+            # Скрыть элемент, перекрывающий кнопку, с помощью JavaScript (Pop-up окно Согласие на работу с куками)
+            self.driver.execute_script("arguments[0].style.visibility='hidden';", button)
+            print("Закрыто окно 'Работа с куками'")
+
+            # Выполнить клик с помощью JavaScript
+            self.driver.execute_script("arguments[0].click();", button)
+
+            # Ограничить сумму в корзине до 800 (переменная max_cart_total)
+            time.sleep(5)
+
+            try:
+                self.driver.execute_script("arguments[0].click();", button)
+                print("Кнопка 'Добавить в корзину' кликнута для товара:", product_name, product_price)
+
+                # Дождаться появления Pop-up окна
+                pop_up_element = WebDriverWait(self.driver, 15).until(
+                    EC.visibility_of_element_located((By.XPATH, "//div[@class='box-cart-popup js-added-product']"))
+                )
+                # Получить все элементы <a> с классом "c_link" внутри Pop-up окна
+                products_in_pop_up = pop_up_element.find_elements(By.XPATH, ".//a[@class='c_link']")
+
+                # Найти совпадение для добавленного товара по имени и цене
+                found_match = False
+                for product in products_in_pop_up:
+                    product_name_in_pop_up = product.find_element(By.XPATH, ".//span[@class='name']").text
+                    product_price_in_pop_up = int(
+                        product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 i', ''))
+
+                    print(f"Название в Pop-up: {product_name_in_pop_up}, цена: {product_price_in_pop_up}")
+                    if product_name_in_pop_up == product_name:
+                        if product_name_in_pop_up == product_name and product_price_in_pop_up == product_price:
+                            print(
+                                "Информация о товаре в Pop-up окне соответствует информации о товаре, добавленном в корзину.")
+                            found_match = True
+                            break
+
+                        else:
+                            print(
+                                "Информация о товаре в Pop-up окне не соответствует цене товара, добавленного в корзину.")
+                            found_match = True
+                            break
+
+                if not found_match:
+                    print(
+                        "Ошибка! Информация о товаре в Pop-up окне не соответствует информации о товаре, добавленном в корзину.")
+
+                # Дождаться закрытия Pop-up окна
+                WebDriverWait(self.driver, 15).until(
+                    EC.invisibility_of_element_located((By.XPATH, "//div[@class='box-cart-popup js-added-product']"))
+                )
+                print("Pop-up окно закрыто для товара:", product_name)
+
+                # Обновить видимость элемента после клика
+                self.driver.execute_script("arguments[0].style.visibility='visible';", button)
+
+                # Добавить небольшую паузу перед следующим кликом
+                time.sleep(5)
+
+                # Обновить сумму заказа в корзине и проверить ограничение по максимальной сумме
+                cart_total_element = self.driver.find_element(By.XPATH, "//span[@class='price']")
+                cart_total_text = cart_total_element.text
+                cart_price_value = int(cart_total_text.replace('.00 i', '').replace(' ', ''))
+
+                if cart_price_value > max_card_total:
+                    print(f"Общая сумма заказа превышает {max_card_total}, добавление товаров в корзину остановлено")
+                    print(f"Товары успешно добавлены в корзину на сумму: {cart_price_value}")
+                    return
+
+            except TimeoutException:
+                print("Pop-up окно не появилось или не закрылось для товара:", product_name)
+
+    # Пример использования:
+
 
     """
     Скролим до элемента
