@@ -3,7 +3,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from base.base_class import BasePage
 
 """
-Клас авторизованной странице.
+Клас главной странице.
 """
 
 
@@ -17,9 +17,10 @@ class MainPage(BasePage):
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
     # Локаторы.
+    main_header = "//div[@class = 'main_hits_title']"
     button_add_to_cart_locator = "//button[@class='to-cart-btn elem-to_cart']"
-    product_price_locator = "//div[@class='prod-price ']"
-    product_names = [...]  # Список названий продуктов
+    # product_price_locator = "//div[@class='prod-price ']"
+    # product_names = [...]  # Список названий продуктов
     button_card = "//span[@class = 'price']"  # Кнопка Корзина если в ней есть товары
     button_card_f = "//span[@class='no-product']"  # Кнопка Корзины если в ней нет товаров
     # Количество товара в корзине.
@@ -31,6 +32,11 @@ class MainPage(BasePage):
     agree_button = "//a[@class = 'cookie-msg__button']"  # Кнопка "Согласен" модального окна.
     button_seeds = "//a[@href='/catalog/semena.html' and span[text()='Семена']]"  # Кнопка Меню Семена
 
+    # Локаторы карточки товара на странице
+    add_to_cart_locator = "//button[@class='to-cart-btn elem-to_cart']"   # Локатор Кнопки добавить в корзину
+    product_name_locator = ".//a[@class='prod-name js-prod-link-list']"   # Локатор название товара
+    product_price_locator = ".//div[@class='prod-price ']"  # Локатор цены товара
+
     # Меню Плодовые
     # Меню Декоративные
     # Меню Луковичные
@@ -38,8 +44,14 @@ class MainPage(BasePage):
     # Кнопка Чай
     # Меню Сопутка
 
-    def go_main_page(self):
+    def go_to_url_main_pages(self, url):
+        self.go_to_url(self.url)
+
+    def assert_url_main(self, expected_url):  # Проверка url главной с ожидаемым
         self.assert_url(self.url)
+
+    def check_main_header(self, expected_header):
+        self.check_page_header(self.main_header, expected_header)   # Проверка заголовка главной странице
 
     def click_butt_novel(self):
         self.click_element(self.button_novelties1)  # Клик на кнопку Новинки в обход окна
@@ -50,27 +62,12 @@ class MainPage(BasePage):
     def click_butt_card(self):
         self.click_element(self.button_card)  # Клик на кнопку Корзина.
 
-    """
-    Метод переход на станицу Новинки.
-    Парсим товары на этой станице.
-    Добавляем товары с этой странице.
-    """
-
-    def go_news_page(self):
-        self.driver.get(self.url)
-        self.driver.maximize_window()
-        self.click_butt_novel()  # Кликаем на кнопку новинки.
-        self.assert_url('https://sad-i-ogorod.ru/catalog/novinki.html')  # Проверка ожидаемой url
-
-        # self.check_cart()  # Проверяем состояние иконнки корзины
 
     """
     Метод перехода на страницу Семена
     """
 
     def go_seeds_pages(self):
-        self.driver.get(self.url)
-        # self.driver.maximize_window()
         self.click_butt_seeds()  # Кликаем на кнопку новинки.
         self.assert_url('https://sad-i-ogorod.ru/catalog/semena.html')  # Проверка ожидаемой url
 
@@ -79,7 +76,10 @@ class MainPage(BasePage):
     """
 
     def go_to_card(self):
-        # self.driver.get(self.url)
-        # self.driver.maximize_window()
-        self.click_butt_card()
-        self.assert_url('https://sad-i-ogorod.ru/cart/')
+        self.click_butt_card() # Кликаем на кнопку Корзина.
+        self.assert_url('https://sad-i-ogorod.ru/cart/')    # Проверка ожидаемой url
+
+    def check_main_page(self):
+        self.go_to_url_main_pages(self.url)
+        self.assert_url_main("https://sad-i-ogorod.ru/")
+        self.check_main_header('Хиты продаж')
