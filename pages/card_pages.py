@@ -9,14 +9,15 @@ from base.base_class import BasePage
 # // TODO написать описание
 
 class CardPage(BasePage):
-    url = 'https://sad-i-ogorod.ru/cart/?login=yes'
+    url_reg = 'https://sad-i-ogorod.ru/cart/?login=yes'
+    url = 'https://sad-i-ogorod.ru/cart/'
 
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
-        self.url = 'https://sad-i-ogorod.ru/cart/?login=yes'  # Авторизованный url Корзины
-        self.url_2 = 'https://sad-i-ogorod.ru/cart/'  # Не авторизованный url корзины
-        self.url_3 = 'https://sad-i-ogorod.ru/cart/order/'
+        self.url_reg = 'https://sad-i-ogorod.ru/cart/?login=yes'  # Авторизованный url Корзины
+        self.url = 'https://sad-i-ogorod.ru/cart/'  # Не авторизованный url корзины
+
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
@@ -53,10 +54,8 @@ class CardPage(BasePage):
     def check_card_header(self, expected_header):
         self.check_page_header(self.header_card, expected_header)  # Проверяем значение заголовка странице Корзина.
 
-    def check_ur_card(self):
-        self.assert_url(self.url_2)  # Проверяем ulr корзины.
-        # // TODO Как проверять url если для авторизованной один, не для авторизованной другой? Через параметры в тестах?
-        # //
+    def check_ur_card(self, url):
+        self.assert_url(self.url)  # Проверяем ulr корзины.
 
     def check_url_order(self):
         self.assert_url(self.url_3)
@@ -76,19 +75,20 @@ class CardPage(BasePage):
     def close_banner(self):
         self.close_cookie_banner()
 
-
-
+    """
+    Метод проверки странице Корзина 
+    """
+    def check_card_page(self):
+        self.check_ur_card("https://sad-i-ogorod.ru/cart/")
+        self.check_card_header("Корзина")
 
     """
     Метод переход на станицу Оформление заказа.
     """
 
     def go_to_order(self):
-        # self.driver.get(self.url_3)
-        # self.driver.maximize_window()
-        # self.scroll_pages_to_element(self.button_order)
         self.click_button_order()  # Кликаем на кнопку Ордер если активна.
         self.check_url_order()  # Проверка ожидаемой url
 
-    # def check_feature(self):
+
 
