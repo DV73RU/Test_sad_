@@ -15,7 +15,8 @@ def set_up():
     print("Finish test")
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")  # После каждого теста
+# @pytest.fixture(scope="module") # После всего модуля
 def driver():
     """Инициализация драйвера браузера перед запуском тестов."""
     # """Методы обхода защиты от автоматизированного ПО в браузере Chrome под управлением Selenium в Python""
