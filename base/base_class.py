@@ -312,7 +312,7 @@ class BasePage:
             product_price_element = product.find_element(By.XPATH,
                                                          ".//td[@data-title='Цена']/span[@class='value nowrap']")  # Локатор цены продукта
             product_price = product_price_element.text.replace('.00 i',
-                                                               '')  # Удаление лишних элементов в цене продукта.
+                                                               '').replace(' ', '') # Удаление лишних элементов в цене продукта.
             product_quantity = product.find_element(By.XPATH,
                                                     ".//td[@data-title='Количество']/div[@class='value']/div[@class='elem-counter']/input[@type='number']").get_attribute(
                 "value")  # Локатор количества добавленного продукта.
@@ -350,18 +350,15 @@ class BasePage:
         # Выводим общую стоимость заказа
         order_total_price_element = self.driver.find_element(By.XPATH,
                                                              "//span[@class='bask-page__orderTotal-price']/span")  # Локатор общей суммы заказа
-        order_total_price = order_total_price_element.text.replace(" ", "", 1).replace(".00 i",
+        order_total_price = order_total_price_element.text.replace(" ", "", 1).replace(".00i",
                                                                                        "")  # Удаление пробела и лишних знаков после цены.
         print(f"Общая стоимость заказа (на странице): {order_total_price}")
         print(f"Общая стоимость заказа (рассчитанная): {total_order_price}")
 
         # Сравнить цены, если compare_prices=True
         if compare_prices:
-            order_total_price = int(order_total_price)  # Из строки в число.
-            if order_total_price == total_order_price:
-                print("Общая стоимость заказа совпадает c расчётной стоимостью заказа.")
-            else:
-                print("Общая стоимость заказа не совпадает с расчётной стоимостью заказа.")
+            assert order_total_price == total_order_price, "Общая стоимость заказа не совпадает с расчётной стоимостью заказа."
+            print("Общая стоимость заказа совпадает c расчётной стоимостью заказа.")
 
         return products_list  # Возвращаем список товаров
 
@@ -370,7 +367,7 @@ class BasePage:
     max_cart_total=1000 - сумма по умолчанию добавления товара в корзину
     """
 
-    def add_to_cart(self, max_cart_total=1000):
+    def add_to_cart(self, max_cart_total=1000): #// TODO можно удалять этот метод
 
         # Найти все кнопки "Добавить в корзину"
 
@@ -453,7 +450,7 @@ class BasePage:
     Ограничения в сумме заказа.
     """
 
-    def add_to_card2(self, max_card_total):
+    def add_to_card2(self, max_card_total): #// TODO можно удалять этот метод
         max_card_total = 2000  # Здесь укажите нужное значение
 
         # Найти все кнопки "Добавить в корзину"
@@ -601,7 +598,7 @@ class BasePage:
                 for product in products_in_pop_up:
                     product_name_in_pop_up = product.find_element(By.XPATH, ".//span[@class='name']").text
                     product_price_in_pop_up = int(
-                        product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 i', ''))
+                        product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 ', '').replace('i', ''))
 
                     print(f"Название в Pop-up: {product_name_in_pop_up}, цена: {product_price_in_pop_up}")
                     if product_name_in_pop_up == product_name:
