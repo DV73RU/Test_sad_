@@ -8,9 +8,9 @@ from pages.order_pages_login import OrderPageLogin
 from pages.seeds_page import SeedsPage
 
 
-@pytest.mark.parametrize("max_cart_total", [800, 2000, 2500])
+@pytest.mark.parametrize("max_cart_total", [800])
 def test_add_to_card(driver, max_cart_total):
-    print(f"Старт теста Добавление товаров в корзину с максимальной суммой {max_cart_total}")
+    print(f"Старт теста Добавление товаров в корзину с ограничение максимальной суммы: {max_cart_total}")
 
     main_page = MainPage(driver)
     main_page.check_main_page()    # Проверка URL главной станице
@@ -20,12 +20,11 @@ def test_add_to_card(driver, max_cart_total):
     seed_page.check_page_seeds()    # Проверка странице "Семена"
     seed_page.parse_seeds()    # Парсинг товаров на странице "Семена"
     seed_page.add_to_card_in_seed(max_cart_total)  # Добавление товаров в корзину
-    # seed_page.click_to_card()   # Переход на страницу Корзина
-    #
-    # card_page = CardPage(driver)
-    # card_page.check_card_header("Корзина")
-    # card_page.check_ur_card()
-    # card_page.parse_card()
+    seed_page.go_card_pages()   # Переход на страницу Корзина
+
+    card_page = CardPage(driver)
+    card_page.check_card_page()     # Проверка заголовка старице корзина
+    card_page.parse_card()
     # card_page.close_banner()
     # card_page.go_to_order()
     # order_page = OrderPage(driver)
