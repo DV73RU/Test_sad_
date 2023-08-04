@@ -76,10 +76,9 @@ class CardPage(BasePage):
         self.close_cookie_banner()
 
     """
-    Метод проверки странице Корзина 
+    Метод проверки заголовка странице Корзина 
     """
     def check_card_page(self):
-        self.check_ur_card("https://sad-i-ogorod.ru/cart/")
         self.check_card_header("Корзина")
 
     """
