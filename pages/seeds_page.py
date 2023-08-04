@@ -47,3 +47,8 @@ class SeedsPage(BasePage):
 
     def add_to_card_in_seed(self, max_card_total):
         self.add_to_card3(max_card_total, ProductPage.button_add_to_card, ProductPage.info_wrapper, ProductPage.product_name, ProductPage.product_price)
+
+
+    def go_card_pages(self):
+        self.click_to_card()  # Кликаем на кнопку корзины.
+        self.assert_url('https://sad-i-ogorod.ru/cart/')  # Проверка ожидаемой url Корзины
