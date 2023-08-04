@@ -555,7 +555,6 @@ class BasePage:
                 print("Pop-up окно не появилось или не закрылось для товара:", product_name)
 
     def add_to_card3(self, max_card_total, button_add_to_card_locator, info_wrapper_locator, product_name_locator, product_price_locator):
-        # max_card_total = 2000  # Здесь укажите нужное значение
         # Найти все кнопки "Добавить в корзину"
         add_to_card_buttons = self.driver.find_elements(By.XPATH, button_add_to_card_locator)
 
@@ -574,7 +573,7 @@ class BasePage:
 
             product_name = parent_element.find_element(By.XPATH, product_name_locator).get_attribute("data-name")
             product_price_element = parent_element.find_element(By.XPATH, product_price_locator)
-            product_price = float(product_price_element.text.replace('.00 i', '').replace(' ', ''))
+            product_price = int(product_price_element.text.replace('.00 i', '').replace(' ', ''))
 
             # Скрыть элемент, перекрывающий кнопку, с помощью JavaScript (Pop-up окно Согласие на работу с куками)
             self.driver.execute_script("arguments[0].style.visibility='hidden';", button)
@@ -639,8 +638,9 @@ class BasePage:
                 cart_total_text = cart_total_element.text
                 cart_price_value = int(cart_total_text.replace('.00 i', '').replace(' ', ''))
 
-                if cart_price_value > max_card_total:
-                    print(f"Общая сумма заказа превышает {max_card_total}, добавление товаров в корзину остановлено")
+                # Если сумма в корзине + цена товара больше max_card_total, то остановить добавление в корзину
+                if cart_price_value + product_price > max_card_total:
+                    print(f"Следующие добавление товара в корзину превысит {max_card_total}, добавление товаров в корзину остановлено")
                     print(f"Товары успешно добавлены в корзину на сумму: {cart_price_value}")
                     return
 
