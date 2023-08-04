@@ -45,8 +45,5 @@ class SeedsPage(BasePage):
     def check_page_seeds(self):
         self.check_seeds_header("Семена почтой в интернет магазине Сады России")
 
-    def add_to_card_in_seed(self):
-        max_card_total = 2000  # Укажите нужное значение
-        product_page = ProductPage(self.driver)
-        # self.add_to_card3(self.max_card_total, product_page.button_add_to_card, product_page.info_wrapper, product_page.product_name, product_page.product_price)     # Добавляем товары со странице Семене
-        self.add_to_card3(max_card_total, ProductPage.button_add_to_card, ProductPage.product_name, ProductPage.product_price)
+    def add_to_card_in_seed(self, max_card_total):
+        self.add_to_card3(max_card_total, ProductPage.button_add_to_card, ProductPage.info_wrapper, ProductPage.product_name, ProductPage.product_price)
