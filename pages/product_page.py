@@ -15,8 +15,8 @@ class ProductPage(BasePage):
         self.driver = driver
 
     # Локаторы карточки товара на странице
-    info_wrapper = ".//ancestor::form[@class='info-wrapper add-bask-form-list ']"   # Локатор Кнопки добавить в корзину
-    button_add_to_card = "//button[@class ='to-cart-btn elem-to_cart']"
+    info_wrapper = ".//ancestor::form[@class='info-wrapper add-bask-form-list ']"  # Локатор карточки товара
+    button_add_to_card = "//button[@class ='to-cart-btn elem-to_cart']"# Локатор Кнопки добавить в корзину
     product_name = ".//a[@class='prod-name js-prod-link-list']"   # Локатор название товара
     product_price = ".//div[@class='prod-price ']"  # Локатор цены товара
     product_img = ""    # Локатор картинки товара
