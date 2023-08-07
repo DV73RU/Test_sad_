@@ -597,8 +597,11 @@ class BasePage:
                 found_match = False
                 for product in products_in_pop_up:
                     product_name_in_pop_up = product.find_element(By.XPATH, ".//span[@class='name']").text
-                    product_price_in_pop_up = int(
-                        product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 ', '').replace('i', ''))
+                    try:
+                        product_price_in_pop_up = int(product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 ', '').replace('i', ''))
+                    except ValueError:
+                        print("Ошибка: невозможно преобразовать цену товара в число")
+                        continue
 
                     print(f"Название в Pop-up: {product_name_in_pop_up}, цена: {product_price_in_pop_up}")
                     if product_name_in_pop_up == product_name:
@@ -663,15 +666,15 @@ class BasePage:
     """
     Метод проверки функциональности ограничения суммы заказа
     """
-    def check_order_total_2(self, total):
+    def check_order_total_2(self):
         # Получаем элемент, содержащий информацию о стоимости заказа
-        total_element = self.driver.find_element(By.XPATH, "//span[@class='price']")
+        total_element = self.driver.find_element(By.XPATH, "//span[@class='bask-page__parcelTotal-price']")
 
         # Получаем текст элемента суммы заказа
         order_total_text = total_element.text
 
         # Преобразуем текст суммы заказа в числовое значение
-        order_total = float(order_total_text.replace('.00 i', '').replace(' ', ''))
+        order_total = int(order_total_text.replace('.00 i', '').replace(' ', ''))
 
         # Проверяем условия и выполняем соответствующие действия
         if order_total <= 800:
