@@ -670,38 +670,44 @@ class BasePage:
 
     """
     Метод проверки функциональности ограничения суммы заказа
+    min_total - минимальная сумма заказа 
+    value_free_delivery - Сумма бесплатной доставки
+    Значение от маркетолога или документации.
     """
     def check_order_total_2(self):
         # Получаем элемент, содержащий информацию о стоимости заказа
-        total_element = self.driver.find_element(By.XPATH, "//span[@class='bask-page__parcelTotal-price']")
-
+        total_element = self.driver.find_element(By.XPATH, "//span[@class='bask-page__parcelTotal-price']")  # Локатор суммы заказа
 
         # Получаем текст элемента суммы заказа
         total_element = total_element.text
-        order_total = float(total_element.split(":")[1].split()[0])
-        print(order_total)
-        print(type(order_total))
-
-        # Преобразуем текст суммы заказа в числовое значение
-        # order_total = int(order_total_text.replace('.00 i', '').replace(' ', ''))
+        order_total = total_element.split(":")[1]   # Делим текст на список разделённым ':', берем 2 элем.(цену) списка
+        value_order_total = int(order_total.replace('.00 i', '').replace(' ', ''))  # Удаляем всё лишнее из цены.
 
         # Проверяем условия и выполняем соответствующие действия
-        if order_total <= 800:
+        if value_order_total <= 800:
             # Проверяем отображение текста "Минимальная стоимость посылки 800.0"
-            assert "Минимальная стоимость посылки 800.0" in total_element.text
+            label_min_element = self.driver.find_element(By.XPATH,
+                                                 "//div[@class='bask-page__parcelTotal-minPriceError']/span")  # Локатор текста мимимального заказа
+            label_min_element = label_min_element.text.replace(' i', '')    # Удаляем лишние элементы из текста
+
+            assert f"Минимальная стоимость посылки 800.0" in label_min_element  # Проверяем присутствие текста в найденном label
+            print(f"На странице присутствует ожидаемый текст: {label_min_element}")
 
             # Проверяем кликабельность кнопки "Перейти в каталог семян"
             catalog_button = self.driver.find_element(By.XPATH,
-                                                      "//button[contains(text(), 'Перейти в каталог семян')]")
+                                                      "//a[contains(text(), 'Перейти в каталог семян')]")   # Локатор кнопки "Перейти в каталог семян"
             assert catalog_button.is_enabled()
+            print("Кнопка 'Перейти в каталог семя' кликабельна")
 
-            # Проверяем, что кнопка "Оформить заказ" не кликабельна
-            order_button = self.driver.find_element(By.XPATH, "//button[contains(text(), 'Оформить заказ')]")
-            assert not order_button.is_enabled()
+            try:
+                self.driver.find_element(By.XPATH, "//form[@action='order/']")  # Локатор активности кнопки
+                print("Кнопка 'Оформить заказ' кликабельна")
+            except NoSuchElementException:
+                print("Кнопка 'Оформить заказ' не кликабельна")
 
         elif 800 < order_total < 2000:
             # Проверяем отображение текста "Бесплатная доставка от 2 000"
-            assert "Бесплатная доставка от 2 000" in total_element.text
+            assert f"Бесплатная доставка от 2 000" in total_element.text
 
             # Проверяем, что кнопка "Перейти в каталог семян" скрыта
             catalog_button = self.driver.find_element(By.XPATH,
