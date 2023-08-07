@@ -602,6 +602,7 @@ class BasePage:
                 found_match = False
                 for product in products_in_pop_up:
                     product_name_in_pop_up = product.find_element(By.XPATH, ".//span[@class='name']").text
+                    # Когда не возвращает цену из POP-UP окна (не разобрался с причиной)
                     try:
                         product_price_in_pop_up = int(product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 ', '').replace('i', ''))
                     except ValueError:
@@ -674,10 +675,9 @@ class BasePage:
     value_free_delivery - Сумма бесплатной доставки
     Значение от маркетолога или документации.
     """
-    def check_order_total_2(self):
+    def check_order_total_2(self):  # TODO использовать написанные методы для поиска локаторов, что бы выводить мессеги о не найденном локторе
         # Получаем элемент, содержащий информацию о стоимости заказа
         total_element = self.driver.find_element(By.XPATH, "//span[@class='bask-page__parcelTotal-price']")  # Локатор суммы заказа
-        # Локатор текста бесплатная доставка
 
         # Получаем текст элемента суммы заказа
         total_element = total_element.text
@@ -687,6 +687,7 @@ class BasePage:
 
         # Проверяем условия и выполняем соответствующие действия
         if value_order_total <= 800:
+            print("Проверка бизнес логике: Заказ меньше 800")
             # Проверяем отображение текста "Минимальная стоимость посылки 800.0"
             label_min_element = self.driver.find_element(By.XPATH,
                                                  "//div[@class='bask-page__parcelTotal-minPriceError']/span")  # Локатор текста мимимального заказа
@@ -708,12 +709,13 @@ class BasePage:
                 print("Кнопка 'Оформить заказ' не кликабельна")
 
         elif 800 < value_order_total < 2000:
+            print("Проверка бизнес логике: Заказ больше 800 и меньше 2000")
             # Проверяем отображение текста "Бесплатная доставка от 2 000"
             # assert f"Бесплатная доставка от 2 000" in total_element.text
 
             # Проверяем, что кнопка "Перейти в каталог семян" скрыта
             catalog_button = self.driver.find_element(By.XPATH,
-                                                      "//button[contains(text(), 'Перейти в каталог семян')]")
+                                                      "//a[contains(text(), 'Перейти в каталог семян')]")
             assert not catalog_button.is_displayed()
             print(f"Кнопка 'Перейти в каталог семян' Скрыта")
 
@@ -722,6 +724,7 @@ class BasePage:
             assert order_button.is_enabled()
 
         elif value_order_total >= 2000:
+            print("Проверка бизнес логике: Заказ больше или равен 2000\n =====================================")
             ship_element = self.driver.find_element(By.XPATH,
                                                      "//span[@class='bask-page__parcelTotal-freeshipe']")  # Локатор текста бесплатная доставка
             print(f"Текст ил локатора доставки : {ship_element.text}")
