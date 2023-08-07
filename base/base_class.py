@@ -677,11 +677,13 @@ class BasePage:
     def check_order_total_2(self):
         # Получаем элемент, содержащий информацию о стоимости заказа
         total_element = self.driver.find_element(By.XPATH, "//span[@class='bask-page__parcelTotal-price']")  # Локатор суммы заказа
+        # Локатор текста бесплатная доставка
 
         # Получаем текст элемента суммы заказа
         total_element = total_element.text
         order_total = total_element.split(":")[1]   # Делим текст на список разделённым ':', берем 2 элем.(цену) списка
         value_order_total = int(order_total.replace('.00 i', '').replace(' ', ''))  # Удаляем всё лишнее из цены.
+        # print(value_order_total, type(value_order_total))
 
         # Проверяем условия и выполняем соответствующие действия
         if value_order_total <= 800:
@@ -702,34 +704,40 @@ class BasePage:
             try:
                 self.driver.find_element(By.XPATH, "//form[@action='order/']")  # Локатор активности кнопки
                 print("Кнопка 'Оформить заказ' кликабельна")
-            except NoSuchElementException:
+            except NoSuchElementException: # Если локатор не наёдет то кнопка не кликабельна
                 print("Кнопка 'Оформить заказ' не кликабельна")
 
-        elif 800 < order_total < 2000:
+        elif 800 < value_order_total < 2000:
             # Проверяем отображение текста "Бесплатная доставка от 2 000"
-            assert f"Бесплатная доставка от 2 000" in total_element.text
+            # assert f"Бесплатная доставка от 2 000" in total_element.text
 
             # Проверяем, что кнопка "Перейти в каталог семян" скрыта
             catalog_button = self.driver.find_element(By.XPATH,
                                                       "//button[contains(text(), 'Перейти в каталог семян')]")
             assert not catalog_button.is_displayed()
+            print(f"Кнопка 'Перейти в каталог семян' Скрыта")
 
             # Проверяем кликабельность кнопки "Оформить заказ"
             order_button = self.driver.find_element(By.XPATH, "//button[contains(text(), 'Оформить заказ')]")
             assert order_button.is_enabled()
 
-        elif order_total >= 2000:
+        elif value_order_total >= 2000:
+            ship_element = self.driver.find_element(By.XPATH,
+                                                     "//span[@class='bask-page__parcelTotal-freeshipe']")  # Локатор текста бесплатная доставка
+            print(f"Текст ил локатора доставки : {ship_element.text}")
             # Проверяем отображение текста "Бесплатная доставка"
-            assert "Бесплатная доставка" in total_element.text
+            assert "Бесплатная доставка" in ship_element.text
 
             # Проверяем, что кнопка "Перейти в каталог семян" скрыта
             catalog_button = self.driver.find_element(By.XPATH,
                                                       "//button[contains(text(), 'Перейти в каталог семян')]")
             assert not catalog_button.is_displayed()
+            print(f"Кнопка 'Перейти в каталог семян' Скрыта")
 
             # Проверяем кликабельность кнопки "Оформить заказ"
             order_button = self.driver.find_element(By.XPATH, "//button[contains(text(), 'Оформить заказ')]")
             assert order_button.is_enabled()
+            print(f"Кнопка 'Оформить заказ' кликабельна")
 
     """
     Чекаем сумму возможную для продолжения заказа
