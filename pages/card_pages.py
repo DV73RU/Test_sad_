@@ -89,5 +89,7 @@ class CardPage(BasePage):
         self.click_button_order()  # Кликаем на кнопку Ордер если активна.
         self.check_url_order()  # Проверка ожидаемой url
 
+    def check_order_card(self):
+        self.check_order_total_2()
 
 
