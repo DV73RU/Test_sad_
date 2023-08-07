@@ -350,17 +350,22 @@ class BasePage:
         # Выводим общую стоимость заказа
         order_total_price_element = self.driver.find_element(By.XPATH,
                                                              "//span[@class='bask-page__orderTotal-price']/span")  # Локатор общей суммы заказа
-        order_total_price = order_total_price_element.text.replace(" ", "", 1).replace(".00i",
-                                                                                       "")  # Удаление пробела и лишних знаков после цены.
+        # order_total_price = order_total_price_element.text.replace(" ", "", 1).replace(".00i",
+        #                                                                                "")  # Удаление пробела и лишних знаков после цены.
+        order_total_price = order_total_price_element.text.replace(".00 i", "").replace(' ', '')  # Удаление пробела и лишних знаков после цены.
         print(f"Общая стоимость заказа (на странице): {order_total_price}")
         print(f"Общая стоимость заказа (рассчитанная): {total_order_price}")
+        # print(type(order_total_price))
+        # print(type(total_order_price))
 
         # Сравнить цены, если compare_prices=True
         if compare_prices:
+            order_total_price = int(order_total_price)
             assert order_total_price == total_order_price, "Общая стоимость заказа не совпадает с расчётной стоимостью заказа."
+            # pytest.fail("Общая стоимость заказа не совпадает с расчётной стоимостью заказа.")   # Пишем в консоль инфу о ошибке.
             print("Общая стоимость заказа совпадает c расчётной стоимостью заказа.")
 
-        return products_list  # Возвращаем список товаров
+            return products_list  # Возвращаем список товаров
 
     """
     Метод добавления товара в козину.
@@ -413,7 +418,7 @@ class BasePage:
             try:
                 # # Выполнить клик с помощью JavaScript
                 self.driver.execute_script("arguments[0].click();", button)
-                print("Кнопка 'Добавить в корзину' кликнута для товара:", product_name, product_price)
+                print(f"Кнопка 'Добавить в корзину' кликнута для товара: {product_name} : {product_price}")
                 # Дождаться появления pop-up окна
                 WebDriverWait(self.driver, 10).until(
                     EC.visibility_of_element_located((By.XPATH, "//div[@class='box-cart-popup js-added-product']")))
@@ -670,11 +675,15 @@ class BasePage:
         # Получаем элемент, содержащий информацию о стоимости заказа
         total_element = self.driver.find_element(By.XPATH, "//span[@class='bask-page__parcelTotal-price']")
 
+
         # Получаем текст элемента суммы заказа
-        order_total_text = total_element.text
+        total_element = total_element.text
+        order_total = float(total_element.split(":")[1].split()[0])
+        print(order_total)
+        print(type(order_total))
 
         # Преобразуем текст суммы заказа в числовое значение
-        order_total = int(order_total_text.replace('.00 i', '').replace(' ', ''))
+        # order_total = int(order_total_text.replace('.00 i', '').replace(' ', ''))
 
         # Проверяем условия и выполняем соответствующие действия
         if order_total <= 800:
