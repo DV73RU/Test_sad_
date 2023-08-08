@@ -823,15 +823,12 @@ class BasePage:
 
     def click_radio(self, locator_button, label_button):
         try:
-            radio_button_registered = WebDriverWait(self.driver, 25).until(
-                EC.presence_of_element_located((By.XPATH, locator_button))
-            )
-            radio_button_label_registered = WebDriverWait(self.driver, 25).until(
-                EC.presence_of_element_located((By.XPATH, label_button))
-            )
+            radio_button_registered = self.get_element(locator_button)
+            label_radio_button_registered = self.get_element(locator_button)
+
             self.driver.execute_script("arguments[0].click();", radio_button_registered)
             print(
-                f"Кликнута radio button '{self.get_text(radio_button_label_registered)}'.")  # // TODO Забрать название метки из локатора
+                f"Кликнута radio button '{self.get_text(label_radio_button_registered)}'.")  # // TODO Забрать название метки из локатора
         except NoSuchElementException:
             pytest.fail(f"radio button '{locator_button}' не найдена.")
 
@@ -862,30 +859,34 @@ class BasePage:
     """
     Разделил check_order_total_2 на разные методы
     """
+
+    # Метод ищет и проверят метку минимальной стоимости заказа.
     def check_min_order_text(self):
         try:
-            label_min_element = self.driver.find_element(By.XPATH,
-                                                         "//div[@class='bask-page__parcelTotal-minPriceError']/span")
+            label_min_element = self.get_element("//div[@class='bask-page__parcelTotal-minPriceError']/span")
             label_min_element = label_min_element.text.replace(' i', '')
             assert f"Минимальная стоимость посылки 800.0" in label_min_element
             print(f"На странице присутствует ожидаемый текст: {label_min_element}")
         except NoSuchElementException:
             print("Не найден текст 'Минимальная стоимость посылки 800.0'")
 
+    # Метод ищёт и проверяет кликабельность кнопки
     def check_catalog_button(self):
         catalog_button = self.driver.find_element(By.XPATH, "//a[contains(text(), 'Перейти в каталог семян')]")
         assert catalog_button.is_enabled()
         print("Кнопка 'Перейти в каталог семян' кликабельна")
 
+    # Метод ищёт и проверяет кликабельность кнопки "Оформить заказ"
     def check_order_button(self):
         try:
-            self.driver.find_element(By.XPATH, "//form[@action='order/']")
+            self.get_element("//form[@action='order/']")
             print("Кнопка 'Оформить заказ' кликабельна")
         except NoSuchElementException:
             print("Кнопка 'Оформить заказ' не кликабельна\n Не доступен переход на страницу 'Оформить заказ'")
 
-    def check_order_total_2_2(self):    # TODO переименовать перед релизом
-        total_element = self.driver.find_element(By.XPATH, "//span[@class='bask-page__parcelTotal-price']")
+    #   Метод проверки безнгес логики TODO Перенести в сласс card_page.py?
+    def check_order_total_2_2(self):  # TODO переименовать перед релизом
+        total_element = self.get_element("//span[@class='bask-page__parcelTotal-price']")
         total_element_text = total_element.text
         order_total = total_element_text.split(":")[1]
         value_order_total = int(order_total.replace('.00 i', '').replace(' ', ''))
@@ -900,8 +901,7 @@ class BasePage:
             self.check_order_button()
         elif value_order_total >= 2000:
             print("Проверка бизнес логике: Заказ больше или равен 2000\n=========================================")
-            ship_element = self.driver.find_element(By.XPATH, "//span[@class='bask-page__parcelTotal-freeship']")
+            ship_element = self.get_element("//span[@class='bask-page__parcelTotal-freeship']")
             assert "Бесплатная доставка" in ship_element.text
             print(f"На странице присутствует ожидаемый текст: {ship_element.text}")
             self.check_order_button()
-
