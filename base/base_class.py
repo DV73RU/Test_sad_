@@ -835,7 +835,7 @@ class BasePage:
                 EC.presence_of_element_located((By.XPATH, locator))
             )
             self.driver.execute_script("arguments[0].click();", radio_button_registered)
-            print(f"Кликнута radio button '{self.get_text(locator)}'.")  # // TODO Забрать название метки из локатора
+            print(f"Кликнута radio button ''.")  # // TODO Забрать название метки из локатора
         except NoSuchElementException:
             pytest.fail(f"radio button '{locator}' не найдена.")
 
