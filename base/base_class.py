@@ -581,7 +581,7 @@ class BasePage:
 
             # Скрыть элемент, перекрывающий кнопку, с помощью JavaScript (Pop-up окно Согласие на работу с куками)
             self.driver.execute_script("arguments[0].style.visibility='hidden';", button)
-            print("Закрыто окно 'Работа с куками'")
+            print("Закрыто окно 'Работа с куками JavaScript'")
 
             # Выполнить клик с помощью JavaScript
             self.driver.execute_script("arguments[0].click();", button)
@@ -784,6 +784,14 @@ class BasePage:
             assert order_button.is_enabled()
 
     """
+    Метод закрытия окна работа с куками JavaScript
+    """
+
+    def close_cookie_banner_javaScript(self):
+        self.driver.execute_script("arguments[0].style.visibility='hidden';", button)
+        print("Закрыто окно 'Работа с куками JavaScript'")
+
+    """
     Метод закрытия окна работа с куками
     """
 
@@ -821,7 +829,17 @@ class BasePage:
     
     """
 
-    def click_radio(self, locator_button):
+    def click_radio(self, locator):
+        try:
+            radio_button_registered = WebDriverWait(self.driver, 25).until(
+                EC.presence_of_element_located((By.XPATH, locator))
+            )
+            self.driver.execute_script("arguments[0].click();", radio_button_registered)
+            print(f"Кликнута radio button '{self.get_text(locator)}'.")  # // TODO Забрать название метки из локатора
+        except NoSuchElementException:
+            pytest.fail(f"radio button '{locator}' не найдена.")
+
+    def click_radio_3(self, locator_button):
         try:
             radio_button_registered = self.get_element(locator_button)
             # label_radio_button_registered = self.get_element(label_button)
@@ -857,10 +875,9 @@ class BasePage:
 
     # |-----------------------------------------------------------------------------------|
 
-    # Метод ищет и проверят метку минимальной стоимости заказа.
-    def check_min_order_text(self):
+    def check_min_order_text(self, locator):  # Метод ищет и проверят текст минимальной стоимости заказа.
         try:
-            label_min_element = self.get_element("//div[@class='bask-page__parcelTotal-minPriceError']/span")
+            label_min_element = self.get_element(locator)
             label_min_element = label_min_element.text.replace(' i', '')
             assert f"Минимальная стоимость посылки 800.0" in label_min_element
             print(f"На странице присутствует ожидаемый текст: {label_min_element}")
@@ -868,17 +885,15 @@ class BasePage:
             print("Не найден текст 'Минимальная стоимость посылки 800.0'")
 
     # Метод ищёт и проверяет кликабельность кнопки
-    def check_catalog_button(self):
-        catalog_button = self.driver.find_element(By.XPATH, "//a[contains(text(), 'Перейти в каталог семян')]")
+    def check_catalog_button(self, locator):
+        catalog_button = self.get_element(locator)
         assert catalog_button.is_enabled()
         print("Кнопка 'Перейти в каталог семян' кликабельна")
 
     # Метод ищёт и проверяет кликабельность кнопки "Оформить заказ"
-    def check_order_button(self):
+    def check_order_button(self, locator):
         try:
-            self.get_element("//form[@action='order/']")
+            self.get_element(locator)
             print("Кнопка 'Оформить заказ' кликабельна")
         except NoSuchElementException:
             print("Кнопка 'Оформить заказ' не кликабельна\n Не доступен переход на страницу 'Оформить заказ'")
-
-
