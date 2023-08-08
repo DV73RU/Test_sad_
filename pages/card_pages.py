@@ -11,6 +11,7 @@ from base.base_class import BasePage
 class CardPage(BasePage):
     url_reg = 'https://sad-i-ogorod.ru/cart/?login=yes'
     url = 'https://sad-i-ogorod.ru/cart/'
+    url_order = 'https://sad-i-ogorod.ru/cart/order/'
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -58,7 +59,7 @@ class CardPage(BasePage):
         self.assert_url(self.url)  # Проверяем ulr корзины.
 
     def check_url_order(self):
-        self.assert_url(self.url_3)
+        self.assert_url(self.url_order)
 
     def parse_card(self):
         self.parse_products_card(self.product_list, print_products=True)  # Парсим товары на странице Корзины
