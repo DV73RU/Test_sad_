@@ -105,6 +105,7 @@ class OrderPage(BasePage):
     def authorization(self):
         self.check_order_header('Оформление заказа')
         self.close_pop_up_cooke()
+        time.sleep(2)
         self.click_radio_bt_reg()
         self.input_user_name('testlessdns@gmail.com')
         self.input_password('zaqwsx123')
