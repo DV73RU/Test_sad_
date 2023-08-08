@@ -821,14 +821,14 @@ class BasePage:
     
     """
 
-    def click_radio(self, locator_button, label_button):
+    def click_radio(self, locator_button):
         try:
             radio_button_registered = self.get_element(locator_button)
-            label_radio_button_registered = self.get_element(label_button)
+            # label_radio_button_registered = self.get_element(label_button)
 
             self.driver.execute_script("arguments[0].click();", radio_button_registered)
             print(
-                f"Кликнута radio button '{self.get_text(label_radio_button_registered)}'.")  # // TODO Забрать название метки из локатора
+                f"Кликнута radio button ''.")  # // TODO Забрать название метки из локатора
         except NoSuchElementException:
             pytest.fail(f"radio button '{locator_button}' не найдена.")
 
