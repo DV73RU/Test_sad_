@@ -93,4 +93,28 @@ class CardPage(BasePage):
     def check_order_card(self):
         self.check_order_total_2()
 
+    """
+    Метод проверки бизнес логики
+    """
+    def check_order_total_2_2(self):  # TODO переименовать перед релизом
+        total_element = self.get_element("//span[@class='bask-page__parcelTotal-price']")
+        total_element_text = total_element.text
+        order_total = total_element_text.split(":")[1]
+        value_order_total = int(order_total.replace('.00 i', '').replace(' ', ''))
+
+        if value_order_total <= 800:
+            print("Проверка бизнес логике: Заказ меньше 800\n==========================================")
+            self.check_min_order_text()
+            self.check_catalog_button()
+            self.check_order_button()
+        elif 800 < value_order_total < 2000:
+            print("Проверка бизнес логике: Заказ больше 800 и меньше 2000\n==========================================")
+            self.check_order_button()
+        elif value_order_total >= 2000:
+            print("Проверка бизнес логике: Заказ больше или равен 2000\n=========================================")
+            ship_element = self.get_element("//span[@class='bask-page__parcelTotal-freeship']")
+            assert "Бесплатная доставка" in ship_element.text
+            print(f"На странице присутствует ожидаемый текст: {ship_element.text}")
+            self.check_order_button()
+
 
