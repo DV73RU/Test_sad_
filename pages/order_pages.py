@@ -61,10 +61,10 @@ class OrderPage(BasePage):
         self.check_page_header(self.header_order, expected_header)  # Проверяем значение заголовка странице Корзина.
 
     def click_radio_bt_reg(self):
-        self.click_radio(self.radio_reg, self.label_radio_reg)    # Клик радиобутнон "Я зарегистрирован"
+        self.click_radio(self.radio_reg)    # Клик радиобутнон "Я зарегистрирован"
 
     def click_radio_bt_new(self):
-        self.click_radio(self.radio_new, self.label_radio_new)  # Клик радиобутон "Я новый покупатель"
+        self.click_radio(self.radio_new)  # Клик радиобутон "Я новый покупатель"
 
     def check_input_name(self):
         self.get_text(self.input_name)  # Что введено в поле имя
