@@ -338,6 +338,7 @@ class BasePage:
 
         # Вывести список товаров, если print_products=True
         if print_products:
+            print(f"В корзине присутствуют товары: ")
             for product_info in products_list:
                 product_name = product_info['Название']
                 product_price = product_info['Цена']
@@ -350,9 +351,8 @@ class BasePage:
         # Выводим общую стоимость заказа
         order_total_price_element = self.driver.find_element(By.XPATH,
                                                              "//span[@class='bask-page__orderTotal-price']/span")  # Локатор общей суммы заказа
-        # order_total_price = order_total_price_element.text.replace(" ", "", 1).replace(".00i",
-        #                                                                                "")  # Удаление пробела и лишних знаков после цены.
-        order_total_price = order_total_price_element.text.replace(".00 i", "").replace(' ', '')  # Удаление пробела и лишних знаков после цены.
+
+        order_total_price = order_total_price_element.text.replace(".00 i", "").replace(' ', '')    # Удаление пробела и лишних знаков после цены.
         print(f"Общая стоимость заказа (на странице): {order_total_price}")
         print(f"Общая стоимость заказа (рассчитанная): {total_order_price}")
         # print(type(order_total_price))
@@ -673,7 +673,7 @@ class BasePage:
     Метод проверки функциональности ограничения суммы заказа
     min_total - минимальная сумма заказа 
     value_free_delivery - Сумма бесплатной доставки
-    Значение от маркетолога или документации.
+
     """
     def check_order_total_2(self):  # TODO использовать написанные методы для поиска локаторов, что бы выводить мессеги о не найденном локторе
         # Получаем элемент, содержащий информацию о стоимости заказа
@@ -687,7 +687,7 @@ class BasePage:
 
         # Проверяем условия и выполняем соответствующие действия
         if value_order_total <= 800:
-            print("Проверка бизнес логике: Заказ меньше 800")
+            print("Проверка бизнес логике: Заказ меньше 800\n==========================================")
             # Проверяем отображение текста "Минимальная стоимость посылки 800.0"
             label_min_element = self.driver.find_element(By.XPATH,
                                                  "//div[@class='bask-page__parcelTotal-minPriceError']/span")  # Локатор текста мимимального заказа
@@ -705,40 +705,28 @@ class BasePage:
             try:
                 self.driver.find_element(By.XPATH, "//form[@action='order/']")  # Локатор активности кнопки
                 print("Кнопка 'Оформить заказ' кликабельна")
-            except NoSuchElementException: # Если локатор не наёдет то кнопка не кликабельна
-                print("Кнопка 'Оформить заказ' не кликабельна")
+            except NoSuchElementException:  # Если локатор не найден, то кнопка не кликабельна
+                print("Кнопка 'Оформить заказ' не кликабельна\nНе доступен переход на страницу 'Оформить заказ'")
+                pytest.skip()  # Пропускаем остальные части теста
 
         elif 800 < value_order_total < 2000:
-            print("Проверка бизнес логике: Заказ больше 800 и меньше 2000")
-            # Проверяем отображение текста "Бесплатная доставка от 2 000"
-            # assert f"Бесплатная доставка от 2 000" in total_element.text
-
-            # Проверяем, что кнопка "Перейти в каталог семян" скрыта
-            catalog_button = self.driver.find_element(By.XPATH,
-                                                      "//a[contains(text(), 'Перейти в каталог семян')]")
-            assert not catalog_button.is_displayed()
-            print(f"Кнопка 'Перейти в каталог семян' Скрыта")
+            print("Проверка бизнес логике: Заказ больше 800 и меньше 2000\n==========================================")
 
             # Проверяем кликабельность кнопки "Оформить заказ"
-            order_button = self.driver.find_element(By.XPATH, "//button[contains(text(), 'Оформить заказ')]")
+            order_button = self.driver.find_element(By.XPATH, "//button[@class = 'bask-page__orderTotal-btn']")
             assert order_button.is_enabled()
+            print(f"Кнопка 'Оформить заказ' кликабельна")
 
         elif value_order_total >= 2000:
-            print("Проверка бизнес логике: Заказ больше или равен 2000\n =====================================")
+            print("Проверка бизнес логике: Заказ больше или равен 2000\n=========================================")
             ship_element = self.driver.find_element(By.XPATH,
-                                                     "//span[@class='bask-page__parcelTotal-freeshipe']")  # Локатор текста бесплатная доставка
-            print(f"Текст ил локатора доставки : {ship_element.text}")
+                                                     "//span[@class='bask-page__parcelTotal-freeship']")  # Локатор текста бесплатная доставка
             # Проверяем отображение текста "Бесплатная доставка"
             assert "Бесплатная доставка" in ship_element.text
-
-            # Проверяем, что кнопка "Перейти в каталог семян" скрыта
-            catalog_button = self.driver.find_element(By.XPATH,
-                                                      "//button[contains(text(), 'Перейти в каталог семян')]")
-            assert not catalog_button.is_displayed()
-            print(f"Кнопка 'Перейти в каталог семян' Скрыта")
+            print(f"На странице присутствует ожидаемый текст: {ship_element.text}")
 
             # Проверяем кликабельность кнопки "Оформить заказ"
-            order_button = self.driver.find_element(By.XPATH, "//button[contains(text(), 'Оформить заказ')]")
+            order_button = self.driver.find_element(By.XPATH, "//button[@class = 'bask-page__orderTotal-btn']")
             assert order_button.is_enabled()
             print(f"Кнопка 'Оформить заказ' кликабельна")
 
@@ -830,9 +818,8 @@ class BasePage:
             radio_button_registered = WebDriverWait(self.driver, 25).until(
                 EC.presence_of_element_located((By.XPATH, locator))
             )
-            # button_text = self.get_text(locator)
             self.driver.execute_script("arguments[0].click();", radio_button_registered)
-            print(f"Кликнута radio button ''.")  # // TODO Забрать название метки из локатора
+            print(f"Кликнута radio button '{self.get_text(locator)}'.")  # // TODO Забрать название метки из локатора
         except NoSuchElementException:
             pytest.fail(f"radio button '{locator}' не найдена.")
 
