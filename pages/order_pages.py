@@ -28,10 +28,9 @@ class OrderPage(BasePage):
 
     header_order = "//div[@class = 'h2 pt_5 mb_15']"  # Заголовок странице
     radio_new = "//input[@id = 'showTypeNew']"  # Радио баттон 'Я новый покупатель'
-    label_radio_new = "//div[@class='user-type']//span[text()='Я новый покупатель']"    # Метка ради кнопки 'Я новый покупатель'
+    label_radio_new = "//div[@class='user-type']//span[text()='Я новый покупатель']"    # Метка радиo кнопки 'Я новый покупатель'
     radio_reg = "//input[@id = 'showTypeReg']"  # Радио баттон "Я уже зарегистрирован"
-    label_radio_reg = "//div[@class='user-type']//span[text()='Я уже зарегистрирован']"  # Метка ради кнопки 'Я уже зарегистрирован'
-
+    label_radio_reg = "//div[@class='user-type']//span[text()='Я уже зарегистрирован']"  # Метка радиo кнопки 'Я уже зарегистрирован'
 
     # +--------------------------------------------+
     # |         Локаторы 'Я новый покупатель'      |
