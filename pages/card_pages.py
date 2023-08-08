@@ -35,11 +35,11 @@ class CardPage(BasePage):
     button_order = "//button[@class = 'bask-page__orderTotal-btn']"  # Кнопка "Оформить заказ - активна"
     button_order_not = "//button[@class = 'bask-page__orderTotal-btn  bask-page__orderTotal-btn--disable']"  #
     # Кнопка Оформить заказ - не активна
-    min_price = "//span[@class = 'bask-page__parcelTotal-minPrice']"  # Локатор минимальной суммы для заказа.
+    min_price = "//div[@class = 'bask-page__parcelTotal-minPriceError']//span"  # Локатор минимальной суммы для заказа.
     value_price = "//span[@class = 'bask-page__orderTotal-price']"  # Локатор суммы заказа Семена.
     value_total_price = "//span[@class = 'bask-page__orderTotal-price']"  # Локатор общей суммы заказа
     free_shipping = "//span[@class = 'bask-page__parcelTotal-freeship']"  # Локатор текста бесплатной доставки
-    button_cat_seed = "//a[contains(text(), 'Перейти в каталог семян')]"
+    button_cat_seed = "//a[contains(text(), 'Перейти в каталог семян')]"  # Локатор Кнопки "Перейти в каталог семян"
 
 
     product_list = "//tr[contains(@class, 'bask-item')]"  # Локатор товаров козины
@@ -101,7 +101,7 @@ class CardPage(BasePage):
             print("Проверка бизнес логике: Заказ меньше 800\n==========================================")
             self.check_min_order_text(self.min_price)  # Проверяем наличия текста минимальной суммы
             self.check_catalog_button(self.button_cat_seed)  # Проверяем наличие и кликабельности кнопки "перейти в каталог"
-            self.check_order_button(self.url_order)   # Проверяем не кликабельности кнопки "Оформит заказ"
+            self.check_order_button(self.button_order)   # Проверяем не кликабельности кнопки "Оформит заказ"
             pytest.skip()   # Пока пропустим
         elif 800 < value_order_total < 2000:  # Если сумма заказа больше и меньше
             print("Проверка бизнес логике: Заказ больше 800 и меньше 2000\n==========================================")
@@ -111,6 +111,6 @@ class CardPage(BasePage):
             ship_element = self.get_element(self.free_shipping)    # Текст бесплатной доставки
             assert "Бесплатная доставка" in ship_element.text
             print(f"На странице присутствует ожидаемый текст: {ship_element.text}")
-            self.check_order_button()   # Проверяем не кликабельности кнопки "Оформит заказ"
+            self.check_order_button(self.button_order)   # Проверяем не кликабельности кнопки "Оформит заказ"
 
 
