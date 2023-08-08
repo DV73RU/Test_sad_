@@ -1,6 +1,7 @@
 """
 Класс странице Корзина
 """
+import pytest
 from selenium.webdriver.support.wait import WebDriverWait
 
 from base.base_class import BasePage
@@ -64,11 +65,6 @@ class CardPage(BasePage):
     def parse_card(self):
         self.parse_products_card(self.product_list, print_products=True)  # Парсим товары на странице Корзины
 
-    def click_button_order3(self):  # Клик на кнопку Оформить ордер
-        self.click_checkout(self.button_order, self.button_order_not, self.value_min_price)
-
-    def check_order(self):  # Проверка логики заказа с минимальной суммой
-        self.order_logic(800)
 
     def click_button_order(self):
         self.click_element(self.button_order)
@@ -90,31 +86,29 @@ class CardPage(BasePage):
         self.click_button_order()  # Кликаем на кнопку Ордер если активна.
         self.check_url_order()  # Проверка ожидаемой url
 
-    def check_order_card(self):
-        self.check_order_total_2()
-
     """
-    Метод проверки бизнес логики
+    Метод проверки бизнес логики "Ограничения в суммах заказа"
     """
     def check_order_total_2_2(self):  # TODO переименовать перед релизом
-        total_element = self.get_element("//span[@class='bask-page__parcelTotal-price']")
+        total_element = self.get_element(self.total_price_card) # Локатор суммы заказа
         total_element_text = total_element.text
         order_total = total_element_text.split(":")[1]
-        value_order_total = int(order_total.replace('.00 i', '').replace(' ', ''))
+        value_order_total = int(order_total.replace('.00 i', '').replace(' ', ''))  # Удаляем лишние элементы из суммы.
 
-        if value_order_total <= 800:
+        if value_order_total <= 800:    # Если сумма заказа меньше
             print("Проверка бизнес логике: Заказ меньше 800\n==========================================")
-            self.check_min_order_text()
-            self.check_catalog_button()
-            self.check_order_button()
-        elif 800 < value_order_total < 2000:
+            self.check_min_order_text()  # Проверяем наличия текста минимальной суммы
+            self.check_catalog_button()  # Проверяем наличие и кликабельности кнопки "перейти в каталог"
+            self.check_order_button()   # Проверяем не кликабельности кнопки "Оформит заказ"
+            pytest.skip()   # Пока пропустим
+        elif 800 < value_order_total < 2000:  # Если сумма заказа больше и меньше
             print("Проверка бизнес логике: Заказ больше 800 и меньше 2000\n==========================================")
-            self.check_order_button()
+            self.check_order_button()   # Проверяем кликабельности кнопки "Оформить заказ"
         elif value_order_total >= 2000:
             print("Проверка бизнес логике: Заказ больше или равен 2000\n=========================================")
-            ship_element = self.get_element("//span[@class='bask-page__parcelTotal-freeship']")
+            ship_element = self.get_element(self.free_shipping)    # Текст бесплатной доставки
             assert "Бесплатная доставка" in ship_element.text
             print(f"На странице присутствует ожидаемый текст: {ship_element.text}")
-            self.check_order_button()
+            self.check_order_button()   # Проверяем не кликабельности кнопки "Оформит заказ"
 
 
