@@ -52,7 +52,6 @@ class BasePage:
         except TimeoutException as e:
             raise NoSuchElementException(f"Элемент с локатором '{locator}' не найден {e}")
 
-
     """
     Метод проверки фактического заголовка странице с ожидаемым.
     header_locator - Значение спарсенного заголовок со странице.
@@ -65,13 +64,13 @@ class BasePage:
         header_text = header_element.text  # Фактический заголовок.
         assert header_text == expected_header, f"Ошибка: Заголовок страницы '{header_text}' не соответствует ожидаемому '{expected_header}'"
         print(f"Успех: Заголовок страницы '{header_text}' соответствует ожидаемому '{expected_header}'")
-            # return True
+        # return True
         # except TimeoutException:
         #     pytest.fail("Ошибка: Заголовок страницы не найден или не видим!")
-            # return False
+        # return False
         # except NoSuchElementException as e:
         #     pytest.fail(f"Ошибка: Элемент с локатором '{header_locator}' не найден на странице: {e}")
-            # return None
+        # return None
         # except Exception as e:
         #     print(f"Ошибка: Неожиданная ошибка при проверке заголовка страницы: {e}")
         #     return None
@@ -312,7 +311,8 @@ class BasePage:
             product_price_element = product.find_element(By.XPATH,
                                                          ".//td[@data-title='Цена']/span[@class='value nowrap']")  # Локатор цены продукта
             product_price = product_price_element.text.replace('.00 i',
-                                                               '').replace(' ', '') # Удаление лишних элементов в цене продукта.
+                                                               '').replace(' ',
+                                                                           '')  # Удаление лишних элементов в цене продукта.
             product_quantity = product.find_element(By.XPATH,
                                                     ".//td[@data-title='Количество']/div[@class='value']/div[@class='elem-counter']/input[@type='number']").get_attribute(
                 "value")  # Локатор количества добавленного продукта.
@@ -352,7 +352,8 @@ class BasePage:
         order_total_price_element = self.driver.find_element(By.XPATH,
                                                              "//span[@class='bask-page__orderTotal-price']/span")  # Локатор общей суммы заказа
 
-        order_total_price = order_total_price_element.text.replace(".00 i", "").replace(' ', '')    # Удаление пробела и лишних знаков после цены.
+        order_total_price = order_total_price_element.text.replace(".00 i", "").replace(' ',
+                                                                                        '')  # Удаление пробела и лишних знаков после цены.
         print(f"Общая стоимость заказа (на странице): {order_total_price}")
         print(f"Общая стоимость заказа (рассчитанная): {total_order_price}")
         # print(type(order_total_price))
@@ -372,7 +373,7 @@ class BasePage:
     max_cart_total=1000 - сумма по умолчанию добавления товара в корзину
     """
 
-    def add_to_cart(self, max_cart_total=1000): #// TODO можно удалять этот метод
+    def add_to_cart(self, max_cart_total=1000):  # // TODO можно удалять этот метод
 
         # Найти все кнопки "Добавить в корзину"
 
@@ -455,7 +456,7 @@ class BasePage:
     Ограничения в сумме заказа.
     """
 
-    def add_to_card2(self, max_card_total): #// TODO можно удалять этот метод
+    def add_to_card2(self, max_card_total):  # // TODO можно удалять этот метод
         max_card_total = 2000  # Здесь укажите нужное значение
 
         # Найти все кнопки "Добавить в корзину"
@@ -556,7 +557,8 @@ class BasePage:
             except TimeoutException:
                 print("Pop-up окно не появилось или не закрылось для товара:", product_name)
 
-    def add_to_card3(self, max_card_total, button_add_to_card_locator, info_wrapper_locator, product_name_locator, product_price_locator):
+    def add_to_card3(self, max_card_total, button_add_to_card_locator, info_wrapper_locator, product_name_locator,
+                     product_price_locator):
         # Найти все кнопки "Добавить в корзину"
         add_to_card_buttons = self.driver.find_elements(By.XPATH, button_add_to_card_locator)
 
@@ -604,7 +606,10 @@ class BasePage:
                     product_name_in_pop_up = product.find_element(By.XPATH, ".//span[@class='name']").text
                     # Когда не возвращает цену из POP-UP окна (не разобрался с причиной)
                     try:
-                        product_price_in_pop_up = int(product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 ', '').replace('i', ''))
+                        product_price_in_pop_up = int(
+                            product.find_element(By.XPATH, ".//span[@class='c_price']").text.replace('.00 ',
+                                                                                                     '').replace('i',
+                                                                                                                 ''))
                     except ValueError:
                         print("Ошибка: невозможно преобразовать цену товара в число")
                         continue
@@ -646,7 +651,8 @@ class BasePage:
 
                 # Если сумма в корзине + цена товара больше max_card_total, то остановить добавление в корзину
                 if cart_price_value + product_price > max_card_total:
-                    print(f"Следующие добавление товара в корзину превысит {max_card_total}, добавление товаров в корзину остановлено")
+                    print(
+                        f"Следующие добавление товара в корзину превысит {max_card_total}, добавление товаров в корзину остановлено")
                     print(f"Товары успешно добавлены в корзину на сумму: {cart_price_value}")
                     return
 
@@ -654,7 +660,6 @@ class BasePage:
                 print("Pop-up окно не появилось или не закрылось для товара:", product_name)
 
     # Пример использования:
-
 
     """
     Скролим до элемента
@@ -675,13 +680,16 @@ class BasePage:
     value_free_delivery - Сумма бесплатной доставки
 
     """
-    def check_order_total_2(self):  # TODO использовать написанные методы для поиска локаторов, что бы выводить мессеги о не найденном локторе
+
+    def check_order_total_2(
+            self):  # TODO использовать написанные методы для поиска локаторов, что бы выводить мессеги о не найденном локторе
         # Получаем элемент, содержащий информацию о стоимости заказа
-        total_element = self.driver.find_element(By.XPATH, "//span[@class='bask-page__parcelTotal-price']")  # Локатор суммы заказа
+        total_element = self.driver.find_element(By.XPATH,
+                                                 "//span[@class='bask-page__parcelTotal-price']")  # Локатор суммы заказа
 
         # Получаем текст элемента суммы заказа
         total_element = total_element.text
-        order_total = total_element.split(":")[1]   # Делим текст на список разделённым ':', берем 2 элем.(цену) списка
+        order_total = total_element.split(":")[1]  # Делим текст на список разделённым ':', берем 2 элем.(цену) списка
         value_order_total = int(order_total.replace('.00 i', '').replace(' ', ''))  # Удаляем всё лишнее из цены.
         # print(value_order_total, type(value_order_total))
 
@@ -690,15 +698,15 @@ class BasePage:
             print("Проверка бизнес логике: Заказ меньше 800\n==========================================")
             # Проверяем отображение текста "Минимальная стоимость посылки 800.0"
             label_min_element = self.driver.find_element(By.XPATH,
-                                                 "//div[@class='bask-page__parcelTotal-minPriceError']/span")  # Локатор текста мимимального заказа
-            label_min_element = label_min_element.text.replace(' i', '')    # Удаляем лишние элементы из текста
+                                                         "//div[@class='bask-page__parcelTotal-minPriceError']/span")  # Локатор текста мимимального заказа
+            label_min_element = label_min_element.text.replace(' i', '')  # Удаляем лишние элементы из текста
 
             assert f"Минимальная стоимость посылки 800.0" in label_min_element  # Проверяем присутствие текста в найденном label
             print(f"На странице присутствует ожидаемый текст: {label_min_element}")
 
             # Проверяем кликабельность кнопки "Перейти в каталог семян"
             catalog_button = self.driver.find_element(By.XPATH,
-                                                      "//a[contains(text(), 'Перейти в каталог семян')]")   # Локатор кнопки "Перейти в каталог семян"
+                                                      "//a[contains(text(), 'Перейти в каталог семян')]")  # Локатор кнопки "Перейти в каталог семян"
             assert catalog_button.is_enabled()
             print("Кнопка 'Перейти в каталог семя' кликабельна")
 
@@ -720,7 +728,7 @@ class BasePage:
         elif value_order_total >= 2000:
             print("Проверка бизнес логике: Заказ больше или равен 2000\n=========================================")
             ship_element = self.driver.find_element(By.XPATH,
-                                                     "//span[@class='bask-page__parcelTotal-freeship']")  # Локатор текста бесплатная доставка
+                                                    "//span[@class='bask-page__parcelTotal-freeship']")  # Локатор текста бесплатная доставка
             # Проверяем отображение текста "Бесплатная доставка"
             assert "Бесплатная доставка" in ship_element.text
             print(f"На странице присутствует ожидаемый текст: {ship_element.text}")
@@ -813,15 +821,19 @@ class BasePage:
     
     """
 
-    def click_radio(self, locator):
+    def click_radio(self, locator_button, label_button):
         try:
             radio_button_registered = WebDriverWait(self.driver, 25).until(
-                EC.presence_of_element_located((By.XPATH, locator))
+                EC.presence_of_element_located((By.XPATH, locator_button))
+            )
+            radio_button_label_registered = WebDriverWait(self.driver, 25).until(
+                EC.presence_of_element_located((By.XPATH, label_button))
             )
             self.driver.execute_script("arguments[0].click();", radio_button_registered)
-            print(f"Кликнута radio button '{self.get_text(locator)}'.")  # // TODO Забрать название метки из локатора
+            print(
+                f"Кликнута radio button '{self.get_text(radio_button_label_registered)}'.")  # // TODO Забрать название метки из локатора
         except NoSuchElementException:
-            pytest.fail(f"radio button '{locator}' не найдена.")
+            pytest.fail(f"radio button '{locator_button}' не найдена.")
 
     """
     +=====================================================+
@@ -845,3 +857,51 @@ class BasePage:
             print(f"Значение поля '{label_text}' соответствует ожидаемому: {expected_value}")
         except NoSuchElementException:
             pytest.fail(f"Поле не найдено: {input_locator}.")
+
+    # |-----------------------------------------------------------------------------------|
+    """
+    Разделил check_order_total_2 на разные методы
+    """
+    def check_min_order_text(self):
+        try:
+            label_min_element = self.driver.find_element(By.XPATH,
+                                                         "//div[@class='bask-page__parcelTotal-minPriceError']/span")
+            label_min_element = label_min_element.text.replace(' i', '')
+            assert f"Минимальная стоимость посылки 800.0" in label_min_element
+            print(f"На странице присутствует ожидаемый текст: {label_min_element}")
+        except NoSuchElementException:
+            print("Не найден текст 'Минимальная стоимость посылки 800.0'")
+
+    def check_catalog_button(self):
+        catalog_button = self.driver.find_element(By.XPATH, "//a[contains(text(), 'Перейти в каталог семян')]")
+        assert catalog_button.is_enabled()
+        print("Кнопка 'Перейти в каталог семян' кликабельна")
+
+    def check_order_button(self):
+        try:
+            self.driver.find_element(By.XPATH, "//form[@action='order/']")
+            print("Кнопка 'Оформить заказ' кликабельна")
+        except NoSuchElementException:
+            print("Кнопка 'Оформить заказ' не кликабельна\n Не доступен переход на страницу 'Оформить заказ'")
+
+    def check_order_total_2_2(self):    # TODO переименовать перед релизом
+        total_element = self.driver.find_element(By.XPATH, "//span[@class='bask-page__parcelTotal-price']")
+        total_element_text = total_element.text
+        order_total = total_element_text.split(":")[1]
+        value_order_total = int(order_total.replace('.00 i', '').replace(' ', ''))
+
+        if value_order_total <= 800:
+            print("Проверка бизнес логике: Заказ меньше 800\n==========================================")
+            self.check_min_order_text()
+            self.check_catalog_button()
+            self.check_order_button()
+        elif 800 < value_order_total < 2000:
+            print("Проверка бизнес логике: Заказ больше 800 и меньше 2000\n==========================================")
+            self.check_order_button()
+        elif value_order_total >= 2000:
+            print("Проверка бизнес логике: Заказ больше или равен 2000\n=========================================")
+            ship_element = self.driver.find_element(By.XPATH, "//span[@class='bask-page__parcelTotal-freeship']")
+            assert "Бесплатная доставка" in ship_element.text
+            print(f"На странице присутствует ожидаемый текст: {ship_element.text}")
+            self.check_order_button()
+
