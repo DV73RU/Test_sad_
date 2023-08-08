@@ -28,7 +28,10 @@ class OrderPage(BasePage):
 
     header_order = "//div[@class = 'h2 pt_5 mb_15']"  # Заголовок странице
     radio_new = "//input[@id = 'showTypeNew']"  # Радио баттон 'Я новый покупатель'
+    label_radio_new = "//div[@class='user-type']//span[text()='Я новый покупатель']"    # Метка ради кнопки 'Я новый покупатель'
     radio_reg = "//input[@id = 'showTypeReg']"  # Радио баттон "Я уже зарегистрирован"
+    label_radio_reg = "//div[@class='user-type']//span[text()='Я уже зарегистрирован']"  # Метка ради кнопки 'Я уже зарегистрирован'
+
 
     # +--------------------------------------------+
     # |         Локаторы 'Я новый покупатель'      |
@@ -59,10 +62,10 @@ class OrderPage(BasePage):
         self.check_page_header(self.header_order, expected_header)  # Проверяем значение заголовка странице Корзина.
 
     def click_radio_bt_reg(self):
-        self.click_radio(self.radio_reg)    # Клик радиобутнон "Я зарегистрирован"
+        self.click_radio(self.radio_reg, self.label_radio_reg)    # Клик радиобутнон "Я зарегистрирован"
 
     def click_radio_bt_new(self):
-        self.click_radio(self.radio_new)  # Клик радиобутон "Я новый покупатель"
+        self.click_radio(self.radio_new, self.label_radio_new)  # Клик радиобутон "Я новый покупатель"
 
     def check_input_name(self):
         self.get_text(self.input_name)  # Что введено в поле имя
