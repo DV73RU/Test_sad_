@@ -14,16 +14,20 @@ class CardPage(BasePage):
     url = 'https://sad-i-ogorod.ru/cart/'
     url_order = 'https://sad-i-ogorod.ru/cart/order/'
 
+    # min_cart_total = 800  # Минимальная сумма для оформления заказа
+    # free_shipping_total = 2000  # Сумма заказа бесплатной доставки
+
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
-        self.url_reg = 'https://sad-i-ogorod.ru/cart/?login=yes'  # Авторизованный url Корзины
-        self.url = 'https://sad-i-ogorod.ru/cart/'  # Не авторизованный url корзины
+        # self.url_reg = 'https://sad-i-ogorod.ru/cart/?login=yes'  # Авторизованный url Корзины
+        # self.url = 'https://sad-i-ogorod.ru/cart/'  # Не авторизованный url корзины
 
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
-    # max_total_price = 800    # Минимальная сумма для заказа.
+
+
 
     # +---------------------------------------------+
     # | Локаторы элементов страницы Корзина         |
@@ -80,37 +84,45 @@ class CardPage(BasePage):
     def check_card_page(self):
         self.check_card_header("Корзина")
 
-    """
-    Метод переход на станицу Оформление заказа.
-    """
 
     def go_to_order(self):
         self.click_button_order()  # Кликаем на кнопку Ордер если активна.
         self.check_url_order()  # Проверка ожидаемой url
 
-    """
-    Метод проверки бизнес логики "Ограничения в суммах заказа"
-    """
-    def check_order_total_2_2(self):  # TODO переименовать перед релизом
-        total_element = self.get_element(self.total_price_card)     # Локатор суммы заказа
-        total_element_text = total_element.text
-        order_total = total_element_text.split(":")[1]
-        value_order_total = int(order_total.replace('.00 i', '').replace(' ', ''))  # Удаляем лишние элементы из суммы.
+    def check_text_shiing(self):
+        self.check_text(self.free_shipping, "Бесплатная доставка")
 
-        if value_order_total <= 800:    # Если сумма заказа меньше
+    def check_text_min_order(self):
+        self.check_text(self.min_price, "Минимальная стоимость посылки 800.0")
+
+    def check_catalog_button_clickable(self):
+        self.check_button_clickable(self.button_cat_seed, "Перейти в каталог семян")
+
+    def check_order_button_not_clickable(self):
+        self.check_button_not_clickable(self.button_order, "Оформить заказ")    # Проверка на Не кликабельность
+
+    def check_order_button_clickable(self):
+        self.check_button_clickable(self.button_order, "Оформить заказ")    # Проверка на кликабельность
+
+
+
+    """
+    Метод проверки бизнес логики "Ограничения в суммах заказа"`
+    """
+    def check_logic_order(self, min_cart_total, free_shipping_total):
+        value_order_total = self.get_summ(self.total_price_card)  # Получаем сумму заказа
+        if value_order_total <= min_cart_total:    # Если сумма заказа меньше
             print("Проверка бизнес логике: Заказ меньше 800\n==========================================")
-            self.check_min_order_text(self.min_price)  # Проверяем наличия текста минимальной суммы
-            self.check_catalog_button(self.button_cat_seed)  # Проверяем наличие и кликабельности кнопки "перейти в каталог"
-            self.check_order_button(self.button_order)   # Проверяем не кликабельности кнопки "Оформит заказ"
+            self.check_text_min_order()  # Проверяем наличия текста минимальной суммы
+            self.check_catalog_button_clickable()  # Проверяем наличие и кликабельности кнопки "перейти в каталог"
+            self.check_order_button_not_clickable()   # Проверяем не кликабельности кнопки "Оформить заказ"
             pytest.skip()   # Пока пропустим
-        elif 800 < value_order_total < 2000:  # Если сумма заказа больше и меньше
+        elif min_cart_total < value_order_total < free_shipping_total:  # Если сумма заказа больше и меньше
             print("Проверка бизнес логике: Заказ больше 800 и меньше 2000\n==========================================")
-            self.check_order_button(self.button_order)   # Проверяем кликабельности кнопки "Оформить заказ"
-        elif value_order_total >= 2000:
+            self.check_order_button_clickable()   # Проверяем кликабельности кнопки "Оформить заказ"
+        elif value_order_total >= free_shipping_total:
             print("Проверка бизнес логике: Заказ больше или равен 2000\n=========================================")
-            ship_element = self.get_element(self.free_shipping)    # Текст бесплатной доставки
-            assert "Бесплатная доставка" in ship_element.text
-            print(f"На странице присутствует ожидаемый текст: {ship_element.text}")
-            self.check_order_button(self.button_order)   # Проверяем не кликабельности кнопки "Оформит заказ"
+            self.check_text_shiing()  # Текст бесплатной доставки
+            self.check_order_button_clickable()   # Проверяем не кликабельности кнопки "Оформит заказ"
 
 
