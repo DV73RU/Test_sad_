@@ -1,14 +1,7 @@
 """
 Класс авторизованной странице Оформление заказа
 '"""
-import time
-
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common import NoSuchElementException
-from selenium.webdriver.common.by import By
-# // TODO Разделить на отдельные классы 'Я новый покупатель' и 'Я уже зарегистрирован'
 from selenium.webdriver.support.wait import WebDriverWait
-
 from base.base_class import BasePage
 
 
