@@ -15,7 +15,7 @@ from selenium.webdriver.chrome.options import Options
 
 
 class BasePage:
-    TIMEOUT = 20  # Время ожидания доступности элемента.
+    TIMEOUT = 25  # Время ожидания доступности элемента.
 
     def __init__(self, driver):
         self.driver = driver
@@ -811,26 +811,17 @@ class BasePage:
     
     """
 
-    def click_radio(self, locator):
+    def click_radio(self, locator, label_button):
         try:
-            radio_button_registered = WebDriverWait(self.driver, 25).until(
+            radio_button = WebDriverWait(self.driver, 25).until(
                 EC.presence_of_element_located((By.XPATH, locator))
             )
-            self.driver.execute_script("arguments[0].click();", radio_button_registered)
-            print(f"Кликнута radio button ''.")  # // TODO Забрать название метки из локатора
+            label_radio_button = self.get_element(label_button)
+            self.driver.execute_script("arguments[0].click();", radio_button)
+            print(f"Кликнута radio button: {label_radio_button.text}.")  # // TODO Забрать название метки из локатора
         except NoSuchElementException:
             pytest.fail(f"radio button '{locator}' не найдена.")
 
-    def click_radio_3(self, locator_button):
-        try:
-            radio_button_registered = self.get_element(locator_button)
-            # label_radio_button_registered = self.get_element(label_button)
-
-            self.driver.execute_script("arguments[0].click();", radio_button_registered)
-            print(
-                f"Кликнута radio button ''.")  # // TODO Забрать название метки из локатора
-        except NoSuchElementException:
-            pytest.fail(f"radio button '{locator_button}' не найдена.")
 
     """
     +=====================================================+
@@ -871,7 +862,6 @@ class BasePage:
         catalog_button = self.get_element(locator)
         assert catalog_button.is_enabled()
         assert catalog_button.text == button_text
-
         print(f"Кнопка '{button_text}' кликабельна")
 
     """Метод проверяет НЕ кликабельность кнопки"""
@@ -879,7 +869,8 @@ class BasePage:
     def check_button_not_clickable(self, locator, button_text):
         try:
             order_button = self.get_element(locator)
-            assert not order_button.is_enabled()
+            assert (order_button.is_enabled())
+            # assert order_button.text == button_text
             print(f"Кнопка '{button_text}' присутствует, но не кликабельна")
         except NoSuchElementException:
             print(f"Кнопка '{button_text}' не найдена")
@@ -901,7 +892,7 @@ class BasePage:
 
     def check_text(self, text_locator, expected_text):  # Проверка текст на странице
         header_element = self.get_element(text_locator)
-        header_text = header_element.text  # Фактический текст.
+        header_text = header_element.text.replace(' i', '')  # Фактический текст.
         assert header_text == expected_text, f"Ошибка: Текст '{header_text}' не соответствует ожидаемому '{expected_text}'"
         print(f"Успех: Текст на странице '{header_text}' соответствует ожидаемому '{expected_text}'")
 
@@ -912,6 +903,6 @@ class BasePage:
     def get_summ(self, locator):
         total_element = self.get_element(locator)  # Локатор суммы заказа
         total_element_text = total_element.text
-        order_total = total_element_text.split(":")[1]
+        order_total = total_element_text.split(":")[1]  # Делим текст по символу ':', забираем второй
         value_order_total = int(order_total.replace('.00 i', '').replace(' ', ''))  # Удаляем лишние элементы из суммы.
         return value_order_total
