@@ -1,9 +1,8 @@
 """
 Класс странице Корзина
 """
-import pytest
-from selenium.webdriver.support.wait import WebDriverWait
 
+from selenium.webdriver.support.wait import WebDriverWait
 from base.base_class import BasePage
 
 
@@ -42,25 +41,15 @@ class CardPage(BasePage):
     free_shipping = "//span[@class = 'bask-page__parcelTotal-freeship']"  # Локатор текста бесплатной доставки
     button_cat_seed = "//a[contains(text(), 'Перейти в каталог семян')]"  # Локатор Кнопки "Перейти в каталог семян"
 
-
     product_list = "//tr[contains(@class, 'bask-item')]"  # Локатор товаров козины
 
-    # // TODO Перенести все локаторы корзины.
     # +--------------------------------------+
     # |            Actions                   |
     # +--------------------------------------+
 
-    """
-    +----------------------------------+
-    |       Методы корзины             |
-    +----------------------------------+
-    """
 
     def check_card_header(self, expected_header):
         self.check_page_header(self.header_card, expected_header)  # Проверяем значение заголовка странице Корзина.
-
-    def check_ur_card(self, url):
-        self.assert_url(self.url)  # Проверяем ulr корзины.
 
     def check_url_order(self):
         self.assert_url(self.url_order)
@@ -71,12 +60,6 @@ class CardPage(BasePage):
     def click_button_order(self):
         self.click_element(self.button_order)
 
-    def close_banner(self):
-        self.close_cookie_banner()
-
-    """
-    Метод проверки заголовка странице Корзина 
-    """
     def check_card_page(self):
         self.check_card_header("Корзина")
 
@@ -104,7 +87,11 @@ class CardPage(BasePage):
     def check_order_button_clickable(self):
         self.check_button_clickable(self.button_order, "Оформить заказ")    # Проверка кликабельность
 
-
+    """
+    +----------------------------------+
+    |       Методы корзины             |
+    +----------------------------------+
+    """
 
     """
     Метод проверки бизнес логики "Ограничения в суммах заказа"`
