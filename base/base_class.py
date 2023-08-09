@@ -64,16 +64,6 @@ class BasePage:
         header_text = header_element.text  # Фактический заголовок.
         assert header_text == expected_header, f"Ошибка: Заголовок страницы '{header_text}' не соответствует ожидаемому '{expected_header}'"
         print(f"Успех: Заголовок страницы '{header_text}' соответствует ожидаемому '{expected_header}'")
-        # return True
-        # except TimeoutException:
-        #     pytest.fail("Ошибка: Заголовок страницы не найден или не видим!")
-        # return False
-        # except NoSuchElementException as e:
-        #     pytest.fail(f"Ошибка: Элемент с локатором '{header_locator}' не найден на странице: {e}")
-        # return None
-        # except Exception as e:
-        #     print(f"Ошибка: Неожиданная ошибка при проверке заголовка страницы: {e}")
-        #     return None
 
     """
     Второй метод проверки url
@@ -784,14 +774,6 @@ class BasePage:
             assert order_button.is_enabled()
 
     """
-    Метод закрытия окна работа с куками JavaScript
-    """
-
-    def close_cookie_banner_javaScript(self):
-        self.driver.execute_script("arguments[0].style.visibility='hidden';", button)
-        print("Закрыто окно 'Работа с куками JavaScript'")
-
-    """
     Метод закрытия окна работа с куками
     """
 
@@ -885,15 +867,51 @@ class BasePage:
             print("Не найден текст 'Минимальная стоимость посылки 800.0'")
 
     # Метод ищёт и проверяет кликабельность кнопки
-    def check_catalog_button(self, locator):
+    def check_button_clickable(self, locator, button_text):
         catalog_button = self.get_element(locator)
         assert catalog_button.is_enabled()
-        print("Кнопка 'Перейти в каталог семян' кликабельна")
+        assert catalog_button.text == button_text
 
-    # Метод ищёт и проверяет кликабельность кнопки "Оформить заказ"
+        print(f"Кнопка '{button_text}' кликабельна")
+
+    """Метод проверяет НЕ кликабельность кнопки"""
+
+    def check_button_not_clickable(self, locator, button_text):
+        try:
+            order_button = self.get_element(locator)
+            assert not order_button.is_enabled()
+            print(f"Кнопка '{button_text}' присутствует, но не кликабельна")
+        except NoSuchElementException:
+            print(f"Кнопка '{button_text}' не найдена")
+
+    """
+    Метод ищёт и проверяет кликабельность кнопки "Оформить заказ"
+    """
+
     def check_order_button(self, locator):
         try:
             self.get_element(locator)
             print("Кнопка 'Оформить заказ' кликабельна")
         except NoSuchElementException:
-            print("Кнопка 'Оформить заказ' не кликабельна\n Не доступен переход на страницу 'Оформить заказ'")
+            print("Кнопка 'Оформить заказ' не кликабельна\nНе доступен переход на страницу 'Оформить заказ'")
+
+    """
+    Метод проверки текст
+    """
+
+    def check_text(self, text_locator, expected_text):  # Проверка текст на странице
+        header_element = self.get_element(text_locator)
+        header_text = header_element.text  # Фактический текст.
+        assert header_text == expected_text, f"Ошибка: Текст '{header_text}' не соответствует ожидаемому '{expected_text}'"
+        print(f"Успех: Текст на странице '{header_text}' соответствует ожидаемому '{expected_text}'")
+
+    """
+    Метод возвращает число суммы заказа
+    """
+
+    def get_summ(self, locator):
+        total_element = self.get_element(locator)  # Локатор суммы заказа
+        total_element_text = total_element.text
+        order_total = total_element_text.split(":")[1]
+        value_order_total = int(order_total.replace('.00 i', '').replace(' ', ''))  # Удаляем лишние элементы из суммы.
+        return value_order_total
