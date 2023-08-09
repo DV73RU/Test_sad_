@@ -498,7 +498,7 @@ class BasePage:
     ======================================================+
     """
 
-    def check_input_value_2(self, input_locator, label_locator, expected_value):
+    def check_input_value(self, input_locator, label_locator, expected_value):
         try:
             input_element = self.get_element(input_locator)  # Находим элемент поля ввода
             actual_value = input_element.get_attribute("value")  # Получаем значение поля ввода
