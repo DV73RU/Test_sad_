@@ -1,4 +1,5 @@
 # test_card.py
+"""Тест логики ограничения суммы заказа"""
 import pytest
 
 from pages.card_pages import CardPage
@@ -34,4 +35,5 @@ def test_add_to_card(driver, max_cart_total):
         order_page.authorization()  # Авторизация
         order_page_login = OrderPageLogin(driver)
         order_page_login.check_pages()
+
 
