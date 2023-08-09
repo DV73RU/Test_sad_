@@ -3,7 +3,6 @@
 Класс странице Семена
 """
 from selenium.webdriver.support.wait import WebDriverWait
-
 from base.base_class import BasePage
 from pages.product_page import ProductPage
 
@@ -14,7 +13,6 @@ class SeedsPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
-        # self.url = 'https://sad-i-ogorod.ru/catalog/semena.html'
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
         self.max_card_total = 2000
@@ -25,12 +23,6 @@ class SeedsPage(BasePage):
     card_button = "//span[@class ='price']"
 
     # Actions
-
-    def go_to_url_seeds(self):
-        self.go_to_pages(self.url)  # Переход на url странице Семена
-
-    def check_url_seeds(self, expected_url):
-        self.assert_url(self.url)  # Проверка url Семена с ожидаемым
 
     #
     def check_seeds_header(self, expected_header):
@@ -46,8 +38,8 @@ class SeedsPage(BasePage):
         self.check_seeds_header("Семена почтой в интернет магазине Сады России")
 
     def add_to_card_in_seed(self, max_card_total):
-        self.add_to_card3(max_card_total, ProductPage.button_add_to_card, ProductPage.info_wrapper, ProductPage.product_name, ProductPage.product_price)
-
+        self.add_to_card3(max_card_total, ProductPage.button_add_to_card, ProductPage.info_wrapper,
+                          ProductPage.product_name, ProductPage.product_price)
 
     def go_card_pages(self):
         self.click_to_card()  # Кликаем на кнопку корзины.
