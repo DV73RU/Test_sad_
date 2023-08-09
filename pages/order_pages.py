@@ -1,14 +1,9 @@
 """
 Класс странице Ордер
-# // TODO Разделить на отдельные классы 'Я новый покупатель' и 'Я уже зарегистрирован'"""
+"""
+
 import time
-
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common import NoSuchElementException
-from selenium.webdriver.common.by import By
-# // TODO Разделить на отдельные классы 'Я новый покупатель' и 'Я уже зарегистрирован'
 from selenium.webdriver.support.wait import WebDriverWait
-
 from base.base_class import BasePage
 
 
@@ -54,9 +49,6 @@ class OrderPage(BasePage):
 
     # Actions
 
-    def check_url_order(self):
-        self.assert_url(self.url)   # Проверяем url странице Ордер
-
     def check_order_header(self, expected_header):
         self.check_page_header(self.header_order, expected_header)  # Проверяем значение заголовка странице Корзина.
 
@@ -98,9 +90,6 @@ class OrderPage(BasePage):
 
     def close_pop_up_cooke(self):
         self.close_cookie_banner()
-
-    def check_url_order(self):
-        self.assert_url(self.url)
 
     def authorization(self):
         self.check_order_header('Оформление заказа')
