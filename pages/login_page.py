@@ -1,9 +1,11 @@
+# login_page.py
+"""
+Класс странице Авторизации
+"""
 from selenium.webdriver.support.wait import WebDriverWait
-
 from base.base_class import BasePage
 
 
-# // TODO написать описание
 class LoginPage(BasePage):
     url = 'https://sad-i-ogorod.ru/'
 
@@ -27,10 +29,9 @@ class LoginPage(BasePage):
     button_add_card = "//button[@class ='to-cart-btn elem-to_cart']"  # Кнопка добавить в корзину.
     agree_button = "//a[@class = 'cookie-msg__button']"  # Кнопка "Согласен" модального окна.
 
-    # Getters
-
-    # Actions (Действия)
-
+    # +--------------------------------------+
+    # |            Actions                   |
+    # +--------------------------------------+
     def click_login(self):  # Нажатие на кнопку "Личный кабинет"
         self.click_element(self.login_button_a)
 
