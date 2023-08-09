@@ -22,6 +22,8 @@ def driver():
     # """Методы обхода защиты от автоматизированного ПО в браузере Chrome под управлением Selenium в Python""
     options = webdriver.ChromeOptions()
     options.add_experimental_option("detach", True)
+    options.add_argument("--ignore-ssl-errors")     # Игнорировать ssl ошибки
+    options.add_argument("--ignore-certificate-errors")
     options.add_argument("start-maximized")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
@@ -45,4 +47,4 @@ def driver():
 
     # Закрытие браузера после выполнения всех тестов.
     driver.quit()
-    print("Закрываем браузер")
+    print("\nЗакрываем браузер")
