@@ -28,10 +28,10 @@ def test_add_to_card(driver, max_cart_total):
     card_page.check_card_page()  # Проверка заголовка старице корзина
     card_page.parse_card()  # Парсим товары в корзине
     card_page.check_logic_order(800, 2000)  # Проверяем логику ограничения суммы заказа
+    if max_cart_total > 800:  # Кликаем на кнопку "Оформить заказ" только если сумма больше 800
+        card_page.go_to_order()  # Переход на страницу оформления заказа
+        order_page = OrderPage(driver)
+        order_page.authorization()  # Авторизация
+        order_page_login = OrderPageLogin(driver)
+        order_page_login.check_pages()
 
-    card_page.close_banner()
-    card_page.go_to_order()     # Переход на страницу оформления заказа
-    order_page = OrderPage(driver)
-    order_page.authorization()  # Авторизация
-    order_page_login = OrderPageLogin(driver)
-    order_page_login.check_pages()
