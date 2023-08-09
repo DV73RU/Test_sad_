@@ -27,7 +27,7 @@ def test_add_to_card(driver, max_cart_total):
     card_page = CardPage(driver)
     card_page.check_card_page()  # Проверка заголовка старице корзина
     card_page.parse_card()  # Парсим товары в корзине
-    card_page.check_order_total_2_2()  # Проверяем логику ограничения суммы заказа
+    card_page.check_logic_order(800, 2000)  # Проверяем логику ограничения суммы заказа
 
     card_page.close_banner()
     card_page.go_to_order()     # Переход на страницу оформления заказа
