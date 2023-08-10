@@ -290,8 +290,8 @@ class BasePage:
     Ограничения в сумме заказа.
     """
 
-    def add_to_card3(self, max_card_total, button_add_to_card_locator, info_wrapper_locator, product_name_locator,
-                     product_price_locator):
+    def add_to_card(self, max_card_total, button_add_to_card_locator, info_wrapper_locator, product_name_locator,
+                    product_price_locator):
         # Найти все кнопки "Добавить в корзину"
         add_to_card_buttons = self.driver.find_elements(By.XPATH, button_add_to_card_locator)
 
