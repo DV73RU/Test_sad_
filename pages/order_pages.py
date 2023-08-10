@@ -13,7 +13,6 @@ class OrderPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
-        # self.url = 'https://sad-i-ogorod.ru/cart/order/'
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
@@ -47,7 +46,9 @@ class OrderPage(BasePage):
     label_pass = "//div[@class = 'form-pass form-group']//label[@class='form-label']"  # Название поля ввода Pass
     button_submit = "//button[@class = 'btn btn-blue']"  # Кнопка "Войти"
 
-    # Actions
+    # +--------------------------------------+
+    # |            Actions                   |
+    # +--------------------------------------+
 
     def check_order_header(self, expected_header):
         self.check_page_header(self.header_order, expected_header)  # Проверяем значение заголовка странице Корзина.
@@ -68,10 +69,10 @@ class OrderPage(BasePage):
         self.get_text(self.input_father)  # Что введено в поле отчество
 
     def check_input_email(self):
-        self.get_text(self.input_email)  # Что введено в поле отчество
+        self.get_text(self.input_email)  # Что введено в поле email
 
     def check_input_phone(self):
-        self.get_text(self.input_phone)  # Что введено в поле отчество
+        self.get_text(self.input_phone)  # Что введено в поле телефон
 
     def input_user_name(self, login):  # Ввод Логина
         self.input_in(self.input_login, self.label_login, login)  # Водим логин
@@ -82,15 +83,16 @@ class OrderPage(BasePage):
     def click_button_submit(self):
         self.click_element(self.button_submit)  # Кликаем на кнопку "Войти"
 
-    def click_radio_new(self):  # Кликаем на "Я новый покупатель"
-        self.click_element(self.radio_new)
-
-    def click_radio_reg(self):  # Кликаем на "Я уже зарегистрирован"
-        self.click_element(self.radio_reg)
-
     def close_pop_up_cooke(self):
-        self.close_cookie_banner()
+        self.close_cookie_banner()  # Закрытие pop-up окна "Работа с куками"
 
+    # +-----------------------------------------+
+    # |       Методы Оформления заказа          |
+    # +-----------------------------------------+
+
+    """
+    Метод авторизации
+    """
     def authorization(self):
         self.check_order_header('Оформление заказа')
         self.close_pop_up_cooke()
