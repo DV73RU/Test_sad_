@@ -4,15 +4,7 @@ import os
 from platform import system
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
 from selenium_stealth import stealth
-
-
-@pytest.fixture(scope="function")
-def set_up():
-    print("Start test")
-    yield
-    print("Finish test")
 
 
 @pytest.fixture(scope="function")  # После каждого теста
