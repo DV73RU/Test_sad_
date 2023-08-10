@@ -7,9 +7,8 @@ from pages.main_page import MainPage
 from pages.seeds_page import SeedsPage
 
 
-@pytest.mark.skip("Тест временно отключен")
+# @pytest.mark.skip("Тест пропущен")
 def test_authorization(driver):
     print("Старт теста Авторизации")
     login_page = LoginPage(driver)
     login_page.authorization()
-
