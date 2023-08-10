@@ -17,12 +17,16 @@ class SeedsPage(BasePage):
         self.wait = WebDriverWait(self.driver, wait_timeout)
         self.max_card_total = 2000
 
-    # Локаторы элементов страницы.
+    # +--------------------------------------------+
+    # |     Локаторы странице 'Семена'             |
+    # +--------------------------------------------+
     header_seeds = "//h1[@style='margin-bottom: 0px;']"  # Заголовок странице
     info_wrapper = "//a[@class='prod-name js-prod-link-list']"  # Локатор карточки товара на старание продуктов.
     card_button = "//span[@class ='price']"
 
-    # Actions
+    # +--------------------------------------+
+    # |            Actions                   |
+    # +--------------------------------------+
 
     #
     def check_seeds_header(self, expected_header):
@@ -36,11 +40,20 @@ class SeedsPage(BasePage):
 
     def check_page_seeds(self):
         self.check_seeds_header("Семена почтой в интернет магазине Сады России")
+    # +----------------------------------+
+    # |       Методы странице Семена     |
+    # +----------------------------------+
 
+    """
+    Метод добавления товаров в корзину со странице Семена
+    max_card_total - Ограничение заказа по сумме
+    """
     def add_to_card_in_seed(self, max_card_total):
-        self.add_to_card3(max_card_total, ProductPage.button_add_to_card, ProductPage.info_wrapper,
-                          ProductPage.product_name, ProductPage.product_price)
-
+        self.add_to_card(max_card_total, ProductPage.button_add_to_card, ProductPage.info_wrapper,
+                         ProductPage.product_name, ProductPage.product_price)
+    """
+    Метод переход на старицу корзина
+    """
     def go_card_pages(self):
         self.click_to_card()  # Кликаем на кнопку корзины.
         self.assert_url('https://sad-i-ogorod.ru/cart/')  # Проверка ожидаемой url Корзины
