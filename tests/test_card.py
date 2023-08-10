@@ -1,5 +1,10 @@
 # test_card.py
-"""Тест логики ограничения суммы заказа"""
+"""Тест логики ограничения суммы заказа.
+Сумма меньше 800 - Отсутствует возможность оформить заказ.
+Сумма больше или равной 800 - Доступно оформление заказа, присутствует текст с предложением дополнить заказа на сумму больше 2000.
+Сумма больше 2000 - Доступно оформление заказа, присутствует текст о бесплатной доставки.
+
+"""
 import pytest
 
 from pages.card_pages import CardPage
@@ -8,16 +13,19 @@ from pages.order_pages import OrderPage
 from pages.order_pages_login import OrderPageLogin
 from pages.seeds_page import SeedsPage
 
-"""Параметр max_cart_total - сумма ограничения добавленных товаров"""
+"""
+Параметр max_cart_total - Ограничение заказа по сумме
+"""
 
 
+# @pytest.mark.skip("Тест пропущен")
 @pytest.mark.parametrize("max_cart_total", [800, 1500, 2500])
 def test_add_to_card(driver, max_cart_total):
     print(f"Старт теста Добавление товаров в корзину с ограничением максимальной суммы: {max_cart_total}")
 
     main_page = MainPage(driver)
     main_page.check_main_page()  # Проверка URL главной станице
-    main_page.go_seeds_pages()  # Переход на страницу "Семена" // TODO ДУБЛЬ ПРОВЕРОК URL
+    main_page.go_seeds_pages()  # Переход на страницу "Семена"
 
     seed_page = SeedsPage(driver)
     seed_page.check_page_seeds()  # Проверка странице "Семена"
@@ -34,6 +42,4 @@ def test_add_to_card(driver, max_cart_total):
         order_page = OrderPage(driver)
         order_page.authorization()  # Авторизация
         order_page_login = OrderPageLogin(driver)
-        order_page_login.check_pages()
-
-
+        order_page_login.check_pages()  # Проверка странице авторизации
