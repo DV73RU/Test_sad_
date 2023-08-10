@@ -8,12 +8,9 @@ from base.base_class import BasePage
 class OrderPageLogin(BasePage):
     url = 'https://sad-i-ogorod.ru/cart/order/?login=yes'
 
-    # user_
-
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
-        self.url = 'https://sad-i-ogorod.ru/cart/order/?login=yes'
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
@@ -30,16 +27,15 @@ class OrderPageLogin(BasePage):
     input_phone = "//input[@name = 'phone']"  # Номер телефона
     input_email = "//input[@name = 'email']"  # email
     input_email_2 = "//div[@class='form-group form-group--tooltip row form-block']//input[@name = 'email']"
-
-    # // *[ @ id = "typeNew"] / div[3] / div[4] / input
-    # / html / body / section / div / div[2] / form[1] / div / div[3] / div[4] / input
-
     label_surname = "//div[@class='form-group row form-block '][1]//label[@class='form-label required']"  # Метка поля ввода Фамилия
     label_name = "//div[@class='form-group row form-block '][3]//label[@class='form-label required']"  # Метка поля Имя
     label_father = "//div[@class='form-group row form-block '][4]//label[@class='form-label required']"  # Метка поля Отчество
     label_phone = "//div[@class='form-group row form-block '][2]//label[@class='form-label required']"  # Метка поля Номер телефона
     label_email = "//div[@class='form-group form-group--tooltip row form-block']//label[@class='form-label required']"  # Метка поля email
 
+    # +--------------------------------------+
+    # |            Actions                   |
+    # +--------------------------------------+
     def check_order(self, expected_header):
         self.check_page_header(self.header_order, expected_header)  # Проверяем значение заголовка странице Корзина.
 
@@ -58,6 +54,9 @@ class OrderPageLogin(BasePage):
     def check_input_phone(self, expected_value):
         self.check_input_value(self.input_phone, self.label_phone, expected_value)  # Что введено в поле отчество
 
+    # +-----------------------------------------+
+    # |       Методы главной Оформления заказа  |
+    # +-----------------------------------------+
     def check_pages(self):
         self.check_order("Оформление заказа")
         self.check_input_father('Тестотчество')
