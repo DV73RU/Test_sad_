@@ -16,7 +16,9 @@ class LoginPage(BasePage):
         wait_timeout = 10  # Увеличьте время ожидания, если это необходимо
         self.wait = WebDriverWait(self.driver, wait_timeout)
 
-    # Локаторы элементов страницы.
+    # +---------------------------------------------+
+    # | Локаторы элементов страницы авторизации     |
+    # +---------------------------------------------+
     label_user = "//label[@class = 'form-label']"
     username_input = "//input[@name='USER_LOGIN']"  # Локатор поля ввода логина.
     password_input = "//input[@type='password']"  # Локатор поля ввода пароля.
@@ -35,24 +37,26 @@ class LoginPage(BasePage):
     def click_login(self):  # Нажатие на кнопку "Личный кабинет"
         self.click_element(self.login_button_a)
 
-    def input_user_name(self, user_name):
+    def input_user_name(self, user_name):  # Ввод в поле ввода Login
         self.input_in(self.username_input, self.label_login, user_name)
 
-    def input_user_password(self, password):
+    def input_user_password(self, password):  # Ввод в поле ввода password
         self.input_in(self.password_input, self.label_pass, password)
 
-    def click_submit_button(self):
+    def click_submit_button(self):  # Нажатие на кнопку "Войти"
         self.click_element(self.submit_button)
 
-    def check_button_text_before(self, value):
+    def check_button_text_before(self, value):  # Проверка название кнопки до авторизации
         self.get_button_text(self.login_button_a, value)
 
-    def check_button_text_after(self, value):
+    def check_button_text_after(self, value):  # Проверка название кнопки после авторизации
         self.get_button_text(self.login_button_b, value, before_auth=False)
 
-    # def
+    # +-----------------------------------------+
+    # |       Методы странице  Авторизация      |
+    # +-----------------------------------------+
 
-    def authorization(self):
+    def authorization(self):    # Авторизация
         self.driver.get(self.url)
         self.driver.maximize_window()
         self.assert_url(self.url)  # Проверка ожидаемой url
