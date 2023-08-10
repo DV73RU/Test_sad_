@@ -65,7 +65,7 @@ class BasePage:
         print(f"Успех: Заголовок страницы '{header_text}' соответствует ожидаемому '{expected_header}'")
 
     """
-    Второй метод проверки url
+    Mетод проверки url
     expected_url - Ожидаемое значение url
     current_url - Фактическое значение url
     """
@@ -79,7 +79,6 @@ class BasePage:
     Метод нажатия на элемент.
     """
 
-    # // TODO Написать сравнение ожидаемых названий и фактических.
     def click_element(self, locator):
         value_button = None
         try:
@@ -112,10 +111,6 @@ class BasePage:
         except NoSuchElementException as e:
             print(f"Ошибка: Элемент с локатором '{button_locator}' не найден на странице: {e}")
             # return None
-
-    """
-    Метод проверки условия активной кнопки 'Оформить заказ'
-    '"""
 
     """
     Метод возврата текста элемента.
@@ -290,7 +285,7 @@ class BasePage:
             return products_list  # Возвращаем список товаров
 
     """
-    Добавление товара в корзину V.3.0
+    Добавление товара в корзину V.3.1
     Проверка название и цены у карточки товара с названием и ценой в Pop-up окне.
     Ограничения в сумме заказа.
     """
@@ -397,7 +392,6 @@ class BasePage:
             except TimeoutException:
                 print("Pop-up окно не появилось или не закрылось для товара:", product_name)
 
-    # Пример использования:
 
     """
     Скролим до элемента
@@ -411,51 +405,6 @@ class BasePage:
             print(f"Скрол до элемента: {locator}")
         except NoSuchElementException:
             print(f"Элемент с локатором: {locator} не найден! ")
-
-    """
-    Чекаем сумму возможную для продолжения заказа
-    """
-
-    def check_order_total(self, locator_min_price):
-        min_price_element = self.driver.find_element(By.XPATH, locator_min_price)
-        min_price_text = min_price_element.text
-        min_price = int(min_price_text.replace('.00 i', ''))
-
-        return min_price
-
-    def order_logic(self, order_amount):
-
-        if order_amount < 800:
-            # Ожидание текста "Минимальная стоимость заказа 800.0 р"
-            min_price_text = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((By.XPATH, "//span[@class='bask-page__parcelTotal-minPrice']"))
-            )
-            assert min_price_text.text == "Минимальная стоимость заказа 800.0 р"
-
-            # Ожидание неактивной кнопки "Оформить заказ"
-            order_button = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located(
-                    (By.XPATH, "//button[@class='bask-page__orderTotal-btn bask-page__orderTotal-btn--disable']"))
-            )
-            assert not order_button.is_enabled()
-
-        else:
-            # Ожидание исчезновения текста "Минимальная стоимость заказа 800.0 р"
-            WebDriverWait(self.driver, 10).until_not(
-                EC.presence_of_element_located((By.XPATH, "//span[@class='bask-page__parcelTotal-minPrice']"))
-            )
-
-            # Ожидание появления текста "Бесплатная доставка от 2000 р."
-            free_shipping_text = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((By.XPATH, "//span[@class='bask-page__parcelTotal-freeship']"))
-            )
-            assert free_shipping_text.text == "Бесплатная доставка от 2000 р."
-
-            # Ожидание активной кнопки "Оформить заказ"
-            order_button = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((By.XPATH, "//button[@class='bask-page__orderTotal-btn']"))
-            )
-            assert order_button.is_enabled()
 
     """
     Метод закрытия окна работа с куками
@@ -512,7 +461,7 @@ class BasePage:
         except NoSuchElementException:
             pytest.fail(f"Поле не найдено: {input_locator}.")
 
-    # Метод ищёт и проверяет кликабельность кнопки
+    """Метод ищёт и проверяет кликабельность кнопки"""
     def check_button_clickable(self, locator, button_text):
         catalog_button = self.get_element(locator)
         assert catalog_button.is_enabled()
@@ -532,19 +481,9 @@ class BasePage:
         except NoSuchElementException:
             print(f"Кнопка '{button_text}' не найдена")
 
-    """
-    Метод ищёт и проверяет кликабельность кнопки "Оформить заказ"
-    """
-
-    def check_order_button(self, locator):
-        try:
-            self.get_element(locator)
-            print("Кнопка 'Оформить заказ' кликабельна")
-        except NoSuchElementException:
-            print("Кнопка 'Оформить заказ' не кликабельна\nНе доступен переход на страницу 'Оформить заказ'")
 
     """
-    Метод проверки текст
+    Метод проверки текста
     """
 
     def check_text(self, text_locator, expected_text):  # Проверка текст на странице
