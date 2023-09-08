@@ -12,6 +12,7 @@ from pages.main_page import MainPage
 from pages.order_pages import OrderPage
 from pages.order_pages_login import OrderPageLogin
 from pages.seeds_page import SeedsPage
+from utilities.logger import Logger
 
 """
 Параметр max_cart_total - Ограничение заказа по сумме
