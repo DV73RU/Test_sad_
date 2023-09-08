@@ -13,6 +13,7 @@ from pages.order_pages import OrderPage
 from pages.order_pages_login import OrderPageLogin
 from pages.seeds_page import SeedsPage
 from utilities.logger import Logger
+import allure
 
 """
 Параметр max_cart_total - Ограничение заказа по сумме
