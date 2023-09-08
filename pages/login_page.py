@@ -4,6 +4,7 @@
 """
 from selenium.webdriver.support.wait import WebDriverWait
 from base.base_class import BasePage
+from utilities.logger import Logger
 
 
 class LoginPage(BasePage):
@@ -57,6 +58,7 @@ class LoginPage(BasePage):
     # +-----------------------------------------+
 
     def authorization(self):    # Авторизация
+        Logger.add_start_step(method="authorization")   # Логирование
         self.driver.get(self.url)
         self.driver.maximize_window()
         self.assert_url(self.url)  # Проверка ожидаемой url
@@ -68,3 +70,4 @@ class LoginPage(BasePage):
         self.click_submit_button()  # Клик на кнопку "Войти"
         self.assert_url('https://sad-i-ogorod.ru/?login=yes')  # Проверка ожидаемой URL
         self.check_button_text_after("Тестимя Тестфамилия")  # Проверка текста кнопки Личный кабинет после авторизации
+        Logger.add_end_step(self.driver.current_url, method="authorization")
