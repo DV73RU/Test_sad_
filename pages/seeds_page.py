@@ -5,6 +5,7 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from base.base_class import BasePage
 from pages.product_page import ProductPage
+from utilities.logger import Logger
 
 
 class SeedsPage(BasePage):
@@ -33,13 +34,17 @@ class SeedsPage(BasePage):
         self.check_page_header(self.header_seeds, expected_header)  # Проверяем значение заголовка странице Семена.
 
     def parse_seeds(self):
+        Logger.add_start_step(method="Парсим товары на странице Семена")
         self.parse_product(self.info_wrapper)  # Парсим товары на странице
+        Logger.add_end_step(url=self.driver.current_url, method="Парсим товары на странице Семена")
 
     def click_to_card(self):
         self.click_element(self.card_button)  # Кликаем на кнопку корзины.
 
     def check_page_seeds(self):
+        Logger.add_start_step(method="Проверка заголовка странице Семена")
         self.check_seeds_header("Семена почтой в интернет магазине Сады России")
+        Logger.add_end_step(url=self.driver.current_url, method="Проверка заголовка странице семена")
     # +----------------------------------+
     # |       Методы странице Семена     |
     # +----------------------------------+
