@@ -4,6 +4,7 @@
 """
 from selenium.webdriver.support.wait import WebDriverWait
 from base.base_class import BasePage
+from utilities.logger import Logger
 
 
 class MainPage(BasePage):
@@ -64,9 +65,10 @@ class MainPage(BasePage):
     """
 
     def go_seeds_pages(self):  # Переход на страницу "Семена"
+        Logger.add_start_step(method="Переход на страницу Семена")
         self.click_butt_seeds()  # Кликаем на кнопку новинки.
         self.assert_url('https://sad-i-ogorod.ru/catalog/semena.html')  # Проверка ожидаемой url
-
+        Logger.add_end_step(url=self.driver.current_url, method="Переход на страницу Семена")
     """
     Метод перехода в корзину
     """
@@ -76,6 +78,8 @@ class MainPage(BasePage):
         self.assert_url('https://sad-i-ogorod.ru/cart/')  # Проверка ожидаемой url
 
     def check_main_page(self):  # Проверка перехода на главную страницу
+        Logger.add_start_step(method="check_main_page")
         self.go_to_url_main_pages(self.url)
         self.assert_url_main("https://sad-i-ogorod.ru/")
         self.check_main_header('Хиты продаж')
+        Logger.add_end_step(url=self.driver.current_url, method="check_main_page")
