@@ -3,6 +3,8 @@
 """
 
 import time
+
+import allure
 from selenium.webdriver.support.wait import WebDriverWait
 from base.base_class import BasePage
 
@@ -94,10 +96,11 @@ class OrderPage(BasePage):
     Метод авторизации
     """
     def authorization(self):
-        self.check_order_header('Оформление заказа')
-        self.close_pop_up_cooke()
-        time.sleep(2)
-        self.click_radio_bt_reg()
-        self.input_user_name('testlessdns@gmail.com')
-        self.input_password('zaqwsx123')
-        self.click_button_submit()
+        with allure.step("Авторизация"):
+            self.check_order_header('Оформление заказа')
+            self.close_pop_up_cooke()
+            time.sleep(2)
+            self.click_radio_bt_reg()
+            self.input_user_name('testlessdns@gmail.com')
+            self.input_password('zaqwsx123')
+            self.click_button_submit()

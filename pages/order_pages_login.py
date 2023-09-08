@@ -1,6 +1,7 @@
 """
 Класс авторизованной странице Оформление заказа
 '"""
+import allure
 from selenium.webdriver.support.wait import WebDriverWait
 from base.base_class import BasePage
 
@@ -58,9 +59,10 @@ class OrderPageLogin(BasePage):
     # |       Методы главной Оформления заказа  |
     # +-----------------------------------------+
     def check_pages(self):
-        self.check_order("Оформление заказа")
-        self.check_input_father('Тестотчество')
-        self.check_input_name('Тестимя')  # Проверяем что введено в поле ввода Имя
-        self.check_input_surname('Тестфамилия')
-        # self.check_input_email('testlessdns@gmail.com') #// TODO не наход локатор поля ввода :(
-        self.check_input_phone('+7 (927) 816-47-86')
+        with allure.step("Проверка введенных данных в поля ввода"):
+            self.check_order("Оформление заказа")
+            self.check_input_father('Тестотчество')
+            self.check_input_name('Тестимя')  # Проверяем что введено в поле ввода Имя
+            self.check_input_surname('Тестфамилия')
+            # self.check_input_email('testlessdns@gmail.com') #// TODO не наход локатор поля ввода :(
+            self.check_input_phone('+7 (927) 816-47-86')

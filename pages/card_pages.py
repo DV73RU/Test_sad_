@@ -4,6 +4,7 @@
 
 from selenium.webdriver.support.wait import WebDriverWait
 from base.base_class import BasePage
+import allure
 
 
 class CardPage(BasePage):
@@ -48,18 +49,20 @@ class CardPage(BasePage):
         self.assert_url(self.url_order)     # Проверка url "Оформление заказа"
 
     def parse_card(self):
-        self.parse_products_card(self.product_list, print_products=True)  # Парсим товары на странице Корзины
+        with allure.step("Парсим товары на станице"):
+            self.parse_products_card(self.product_list, print_products=True)  # Парсим товары на странице Корзины
 
     def click_button_order(self):
         self.click_element(self.button_order)   # Клик на кнопу "Оформить заказ"
 
     def go_to_order(self):  # Переход на страницу оформления заказа
-        self.close_cookie_banner()  # Зарыть банер работы с куками
+        self.close_cookie_banner()  # Закрыть банер работы с куками
         self.click_button_order()  # Кликаем на кнопку Ордер если активна.
         self.check_url_order()  # Проверка ожидаемой url
 
     def check_card_page(self):
-        self.check_card_header("Корзина")   # Проверка заголовка старице "Корзина"
+        with allure.step("Проверка заголовка странице"):
+            self.check_card_header("Корзина")   # Проверка заголовка старице "Корзина"
 
     def check_text_shiing(self):
         self.check_text(self.free_shipping, "Бесплатная доставка")  # Проверка на кликабельность
@@ -89,18 +92,19 @@ class CardPage(BasePage):
     """
 
     def check_logic_order(self, min_cart_total, free_shipping_total):
-        value_order_total = self.get_summ(self.total_price_card)  # Получаем сумму заказа
-        if value_order_total <= min_cart_total:  # Если сумма заказа меньше
-            print("Проверка бизнес логике: Заказ меньше 800\n==========================================")
-            self.check_text_min_order()  # Проверяем наличия текста минимальной суммы
-            self.check_catalog_button_clickable()  # Проверяем наличие и кликабельности кнопки "перейти в каталог"
-            self.check_order_button_not_clickable()  # Проверяем не кликабельности кнопки "Оформить заказ"
-            # pytest.skip()   # Пока пропустим
-        elif min_cart_total < value_order_total < free_shipping_total:  # Если сумма заказа больше и меньше
-            print("Проверка бизнес логике: Заказ больше 800 и меньше 2000\n==========================================")
-            self.check_text_shiing_min()  # Проверка теста с предложением заказать на сумму бесплатной доставки
-            self.check_order_button_clickable()  # Проверяем кликабельности кнопки "Оформить заказ"
-        elif value_order_total >= free_shipping_total:
-            print("Проверка бизнес логике: Заказ больше или равен 2000\n=========================================")
-            self.check_text_shiing()  # Текст бесплатной доставки
-            self.check_order_button_clickable()  # Проверяем не кликабельности кнопки "Оформит заказ"
+        with allure.step("Проверка логики добавления товара в корзину"):
+            value_order_total = self.get_summ(self.total_price_card)  # Получаем сумму заказа
+            if value_order_total <= min_cart_total:  # Если сумма заказа меньше
+                print("Проверка бизнес логике: Заказ меньше 800\n==========================================")
+                self.check_text_min_order()  # Проверяем наличия текста минимальной суммы
+                self.check_catalog_button_clickable()  # Проверяем наличие и кликабельности кнопки "перейти в каталог"
+                self.check_order_button_not_clickable()  # Проверяем не кликабельности кнопки "Оформить заказ"
+                # pytest.skip()   # Пока пропустим
+            elif min_cart_total < value_order_total < free_shipping_total:  # Если сумма заказа больше и меньше
+                print("Проверка бизнес логике: Заказ больше 800 и меньше 2000\n==========================================")
+                self.check_text_shiing_min()  # Проверка теста с предложением заказать на сумму бесплатной доставки
+                self.check_order_button_clickable()  # Проверяем кликабельности кнопки "Оформить заказ"
+            elif value_order_total >= free_shipping_total:
+                print("Проверка бизнес логике: Заказ больше или равен 2000\n=========================================")
+                self.check_text_shiing()  # Текст бесплатной доставки
+                self.check_order_button_clickable()  # Проверяем не кликабельности кнопки "Оформит заказ"

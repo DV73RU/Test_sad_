@@ -21,6 +21,7 @@ import allure
 
 
 # @pytest.mark.skip("Тест пропущен")
+@allure.description("Тест корзины")
 @pytest.mark.parametrize("max_cart_total", [800, 1500, 2500])
 def test_add_to_card(driver, max_cart_total):
     print(f"Старт теста Добавление товаров в корзину с ограничением максимальной суммы: {max_cart_total}")
