@@ -5,6 +5,7 @@ from pages.card_pages import CardPage
 from pages.login_page import LoginPage
 from pages.main_page import MainPage
 from pages.seeds_page import SeedsPage
+from utilities.logger import Logger
 
 
 # @pytest.mark.skip("Тест пропущен")
