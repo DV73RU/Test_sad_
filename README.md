@@ -50,3 +50,10 @@
 
 [![wakatime](https://wakatime.com/badge/user/5f6bd917-a873-40c5-b6dd-4ef1d5b0d747/project/f33a513f-b554-49db-9ebe-d25fdda53e9c.svg)](https://wakatime.com/badge/user/5f6bd917-a873-40c5-b6dd-4ef1d5b0d747/project/f33a513f-b554-49db-9ebe-d25fdda53e9c)
 
+
+-----------------------------------------
+
+
+![Сертификат](sertif.jpg)
+
+
