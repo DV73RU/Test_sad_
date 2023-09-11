@@ -5,22 +5,26 @@ from platform import system
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium_stealth import stealth
+import chromedriver_autoinstaller
 
+# Устанавливает и запускает актуальную версию ChromeDriver
+chromedriver_autoinstaller.install()
 
 @pytest.fixture(scope="function")  # После каждого теста
 # @pytest.fixture(scope="module") # После всего модуля
 def driver():
+
     """Инициализация драйвера браузера перед запуском тестов."""
     # """Методы обхода защиты от автоматизированного ПО в браузере Chrome под управлением Selenium в Python""
     options = webdriver.ChromeOptions()
     options.add_experimental_option("detach", True)
-    options.add_argument("--ignore-ssl-errors")     # Игнорировать ssl ошибки
+    options.add_argument("--ignore-ssl-errors")  # Игнорировать ssl ошибки
     options.add_argument("--ignore-certificate-errors")
     options.add_argument("start-maximized")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
     exec_path = os.path.join(os.getcwd(), 'driver', 'chromedriver.exe') if system() == "Windows" else \
-        os.path.join(os.getcwd(), 'driver', 'chromedriver')
+        os.path.join(os.getcwd(), 'driver', 'chromedriver')  # Директория в которой ожидается chromedriver.exe'
     driver = webdriver.Chrome(options=options, service=Service(log_path=os.devnull, executable_path=exec_path))
 
     stealth(driver=driver,
