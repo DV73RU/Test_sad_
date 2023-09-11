@@ -96,7 +96,7 @@ class OrderPage(BasePage):
     Метод авторизации
     """
     def authorization(self):
-        with allure.step("Авторизация"):
+        with allure.step("Авторизация"):    # Добавление отчета allure
             self.check_order_header('Оформление заказа')
             self.close_pop_up_cooke()
             time.sleep(2)
