@@ -6,6 +6,8 @@
 
 import time
 import pytest
+
+
 from selenium.common import TimeoutException, NoSuchElementException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
@@ -392,7 +394,6 @@ class BasePage:
             except TimeoutException:
                 print("Pop-up окно не появилось или не закрылось для товара:", product_name)
 
-
     """
     Скролим до элемента
     """
@@ -462,6 +463,7 @@ class BasePage:
             pytest.fail(f"Поле не найдено: {input_locator}.")
 
     """Метод ищёт и проверяет кликабельность кнопки"""
+
     def check_button_clickable(self, locator, button_text):
         catalog_button = self.get_element(locator)
         assert catalog_button.is_enabled()
@@ -480,7 +482,6 @@ class BasePage:
             print(f"Кнопка '{button_text}' присутствует, но не кликабельна")
         except NoSuchElementException:
             print(f"Кнопка '{button_text}' не найдена")
-
 
     """
     Метод проверки текста
