@@ -46,7 +46,9 @@
 Изменение текста на кнопки "Личный кабинет".  
 Изменение URL.  
 
-Запуск `python -m pytest -s -v`
+Запуск `python -m pytest -s -v`  
+Запуск отчёта allure `python -m pytest --alluredir=tets_results/ tests/test_card.py`  
+Генерация отчёта allure `allure serve tets_results/`    
 
 [![wakatime](https://wakatime.com/badge/user/5f6bd917-a873-40c5-b6dd-4ef1d5b0d747/project/f33a513f-b554-49db-9ebe-d25fdda53e9c.svg)](https://wakatime.com/badge/user/5f6bd917-a873-40c5-b6dd-4ef1d5b0d747/project/f33a513f-b554-49db-9ebe-d25fdda53e9c)
 
