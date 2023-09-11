@@ -59,7 +59,7 @@ class OrderPageLogin(BasePage):
     # |       Методы главной Оформления заказа  |
     # +-----------------------------------------+
     def check_pages(self):
-        with allure.step("Проверка введенных данных в поля ввода"):
+        with allure.step("Проверка введенных данных в поля ввода"):     # Добавление отчета allure
             self.check_order("Оформление заказа")
             self.check_input_father('Тестотчество')
             self.check_input_name('Тестимя')  # Проверяем что введено в поле ввода Имя
