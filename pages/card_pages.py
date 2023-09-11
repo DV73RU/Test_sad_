@@ -49,7 +49,7 @@ class CardPage(BasePage):
         self.assert_url(self.url_order)     # Проверка url "Оформление заказа"
 
     def parse_card(self):
-        with allure.step("Парсим товары на станице"):
+        with allure.step("Парсим товары на станице"):   # Добавление отчета allure
             self.parse_products_card(self.product_list, print_products=True)  # Парсим товары на странице Корзины
 
     def click_button_order(self):
@@ -61,7 +61,7 @@ class CardPage(BasePage):
         self.check_url_order()  # Проверка ожидаемой url
 
     def check_card_page(self):
-        with allure.step("Проверка заголовка странице"):
+        with allure.step("Проверка заголовка странице"):    # Добавление отчета allure
             self.check_card_header("Корзина")   # Проверка заголовка старице "Корзина"
 
     def check_text_shiing(self):
@@ -92,7 +92,7 @@ class CardPage(BasePage):
     """
 
     def check_logic_order(self, min_cart_total, free_shipping_total):
-        with allure.step("Проверка логики добавления товара в корзину"):
+        with allure.step("Проверка логики добавления товара в корзину"):    # Добавление отчета allure
             value_order_total = self.get_summ(self.total_price_card)  # Получаем сумму заказа
             if value_order_total <= min_cart_total:  # Если сумма заказа меньше
                 print("Проверка бизнес логике: Заказ меньше 800\n==========================================")
