@@ -35,7 +35,7 @@ class SeedsPage(BasePage):
         self.check_page_header(self.header_seeds, expected_header)  # Проверяем значение заголовка странице Семена.
 
     def parse_seeds(self):
-        with allure.step("Парсим товары на странице Семена"):
+        with allure.step("Парсим товары на странице Семена"): # Добавление отчета allure
             Logger.add_start_step(method="Парсим товары на странице Семена")
             self.parse_product(self.info_wrapper)  # Парсим товары на странице
             Logger.add_end_step(url=self.driver.current_url, method="Парсим товары на странице Семена")
@@ -44,7 +44,7 @@ class SeedsPage(BasePage):
         self.click_element(self.card_button)  # Кликаем на кнопку корзины.
 
     def check_page_seeds(self):
-        with allure.step("Проверка заголовка странице Семена"):
+        with allure.step("Проверка заголовка странице Семена"): # Добавление отчета allure
             Logger.add_start_step(method="Проверка заголовка странице Семена")
             self.check_seeds_header("Семена почтой в интернет магазине Сады России")
             Logger.add_end_step(url=self.driver.current_url, method="Проверка заголовка странице семена")
@@ -57,13 +57,13 @@ class SeedsPage(BasePage):
     max_card_total - Ограничение заказа по сумме
     """
     def add_to_card_in_seed(self, max_card_total):
-        with allure.step("Добавляем товар в корзину"):
+        with allure.step("Добавляем товар в корзину"):  # Добавление отчета allure
             self.add_to_card(max_card_total, ProductPage.button_add_to_card, ProductPage.info_wrapper,
                              ProductPage.product_name, ProductPage.product_price)
     """
     Метод переход на старицу корзина
     """
     def go_card_pages(self):
-        while allure.step("Переход в корзину"):
+        with allure.step("Переход в корзину"):  # Добавление отчета allure
             self.click_to_card()  # Кликаем на кнопку корзины.
             self.assert_url('https://sad-i-ogorod.ru/cart/')  # Проверка ожидаемой url Корзины
